@@ -415,6 +415,12 @@ function worldAtMouse() { return { x: cam.x + mouse.x / cam.z, y: cam.y + mouse.
 function updateHover() {
   if (!path) return;
   const w = worldAtMouse();
+  let hoverLines = [];
+  if (document.getElementById("tColl").checked) {
+    const tol = 6 / cam.z;
+    hoverLines = path.lines.filter(([x1, y1, x2, y2]) =>
+      segDist(w.x, w.y, dX(x1), dY(y1), dX(x2), dY(y2)) <= tol).slice(0, 4);
+  }
   hoverTlvs = path.tlvs.filter(t => {
     const c = typeCat[t.t];
     if (!c || !c.on) return false;
@@ -422,7 +428,7 @@ function updateHover() {
     const x2 = Math.max(x1 + (t.x2 - t.x1), x1 + 8), y2 = Math.max(y1 + (t.y2 - t.y1), y1 + 8);
     return w.x >= x1 - 4 && w.x <= x2 + 4 && w.y >= y1 - 4 && w.y <= y2 + 4;
   });
-  if (hoverTlvs.length) {
+  if (hoverTlvs.length || hoverLines.length) {
     tip.style.display = "block";
     const px = Math.min(mouse.x + 16, cv.clientWidth - 350);
     tip.style.left = px + "px";
@@ -434,7 +440,11 @@ function updateHover() {
       return `<div><span class="t">${t.name}</span> <span class="e">(${t.x1},${t.y1})–(${t.x2},${t.y2})</span>` +
              (ex ? `<br><span class="e">${ex}</span>` : "") +
              (d ? `<br><span class="f">➜ click to follow to ${d.lv} P${d.pa}${d.ca != null ? " C" + d.ca : ""}</span>` : "") + `</div>`;
-    }).join("<hr style='border:0;border-top:1px solid #32363f;margin:5px 0'>")
+    }).concat(hoverLines.map(([x1, y1, x2, y2, t]) => {
+      const len = Math.round(Math.hypot(x2 - x1, y2 - y1));
+      return `<div><span class="t" style="color:${LINE_COLORS[t] || '#999'}">${LINE_NAMES[t] || "Line type " + t}</span>` +
+             ` <span class="e">(${x1},${y1})→(${x2},${y2}) · ${len}u ≈ ${(len / 25).toFixed(1)} grid</span></div>`;
+    })).join("<hr style='border:0;border-top:1px solid #32363f;margin:5px 0'>")
       + (hoverTlvs.length > 8 ? `<div class="e">+${hoverTlvs.length - 8} more…</div>` : "");
     if (!panning) cv.style.cursor = hoverTlvs.some(t => destOf(t)) ? "pointer" : "";
   } else {
@@ -456,6 +466,14 @@ function img(src) {
 }
 
 const LINE_COLORS = { 0:"#43d94c", 1:"#ff5c5c", 2:"#ff9d3d", 3:"#5ca9ff", 4:"#2b8f33", 5:"#a33c3c", 6:"#a3702b" };
+const LINE_NAMES = { 0:"Floor", 1:"Wall (left)", 2:"Wall (right)", 3:"Ceiling",
+                     4:"Background floor", 5:"Background wall (left)", 6:"Background wall (right)" };
+
+function segDist(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / (dx * dx + dy * dy || 1)));
+  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+}
 
 const tintCache = {};
 function tintedImg(src) {
