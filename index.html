@@ -71,6 +71,7 @@
   <div id="toggles">
     <label><input type="checkbox" id="tGrid" checked> Camera grid + names</label>
     <label><input type="checkbox" id="tColl"> Collision lines</label>
+    <label><input type="checkbox" id="tFg"> Foreground masks (FG1)</label>
     <label><input type="checkbox" id="tLabels" checked> Object labels (zoomed)</label>
     <label><input type="checkbox" id="tDim"> Dim backgrounds</label>
   </div>
@@ -212,7 +213,7 @@ CATS.forEach(c => {
 });
 document.getElementById("fAll").onclick = e => { e.preventDefault(); CATS.forEach(c => { c.on = true; c._lab.style.opacity = 1; }); draw(); };
 document.getElementById("fNone").onclick = e => { e.preventDefault(); CATS.forEach(c => { c.on = false; c._lab.style.opacity = .45; }); draw(); };
-["tGrid","tColl","tLabels","tDim"].forEach(id => document.getElementById(id).onchange = draw);
+["tGrid","tColl","tFg","tLabels","tDim"].forEach(id => document.getElementById(id).onchange = draw);
 
 function updateCounts() {
   const counts = {};
@@ -456,6 +457,22 @@ function img(src) {
 
 const LINE_COLORS = { 0:"#43d94c", 1:"#ff5c5c", 2:"#ff9d3d", 3:"#5ca9ff", 4:"#2b8f33", 5:"#a33c3c", 6:"#a3702b" };
 
+const tintCache = {};
+function tintedImg(src) {
+  if (tintCache[src]) return tintCache[src];
+  const im = img(src);
+  if (!im.complete || !im.naturalWidth) return null;   // retried next draw
+  const oc = document.createElement("canvas");
+  oc.width = im.naturalWidth; oc.height = im.naturalHeight;
+  const octx = oc.getContext("2d");
+  octx.drawImage(im, 0, 0);
+  octx.globalCompositeOperation = "source-in";
+  octx.fillStyle = "#ff4fd8";
+  octx.fillRect(0, 0, oc.width, oc.height);
+  tintCache[src] = oc;
+  return oc;
+}
+
 function draw() {
   if (!path) { ctx.fillStyle = "#14161a"; ctx.fillRect(0, 0, cv.width, cv.height); return; }
   ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
@@ -482,6 +499,19 @@ function draw() {
     } else {
       ctx.fillStyle = "#1a1d22";
       ctx.fillRect(cx, cy, CELL_W, CELL_H);
+    }
+  }
+
+  // foreground occlusion masks, tinted so they stand out from the identical background art
+  if (document.getElementById("tFg").checked) {
+    for (const c of path.cams) {
+      if (!c.fg) continue;
+      const t = tintedImg(c.fg);
+      if (!t) continue;
+      const cx = (c.cell % path.w) * CELL_W, cy = Math.floor(c.cell / path.w) * CELL_H;
+      ctx.globalAlpha = 0.6;
+      ctx.drawImage(t, cx, cy, CELL_W, CELL_H);
+      ctx.globalAlpha = 1;
     }
   }
 

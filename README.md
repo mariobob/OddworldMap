@@ -13,6 +13,7 @@ Open **[index.html](index.html)** in a browser — the whole site is static, no 
 - **click** a door, path transition, travel portal or express well to follow it to its destination, including across levels
 - level and path buttons top-left; object category filters with counts below
 - **Collision lines**: floors green, walls red/orange, ceilings blue, dashed = background layer
+- **Foreground masks (FG1)**: highlights the scenery drawn in front of the player — every hideable/behind-walkable spot at a glance (pairs well with "Dim backgrounds")
 - the URL hash (`#LEVEL/path/x/y/zoom`) always reflects the current view — copy it to share an exact location; the browser back button retraces follows
 - **search** (sidebar) matches object names and decoded fields across the whole game — try `mudokon`, `lcdstatusboard` or `switch_id=70` — and clicking a result jumps straight to it
 
