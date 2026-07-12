@@ -291,13 +291,14 @@ def walk_obj_region(blob, obj_off, region_end):
 
 # --------------------------------------------------------------- PNG encoding
 
-def write_png(path, w, h, rgba):
+def write_png(path, w, h, rgba, keep_alpha=False):
     def chunk(tag, data):
         c = tag + data
         return struct.pack(">I", len(data)) + c + struct.pack(">I", zlib.crc32(c))
     rgba = bytearray(rgba)
-    for i in range(3, len(rgba), 4):
-        rgba[i] = 255
+    if not keep_alpha:
+        for i in range(3, len(rgba), 4):
+            rgba[i] = 255
     scan = b"".join(b"\x00" + bytes(rgba[y*w*4:(y+1)*w*4]) for y in range(h))
     png = (b"\x89PNG\r\n\x1a\n"
            + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0))
@@ -306,6 +307,79 @@ def write_png(path, w, h, rgba):
     Path(path).write_bytes(png)
     # lossless recompression (~30% smaller); pixel data is unchanged by design
     subprocess.run([OXIPNG, "-o", "2", "--strip", "safe", "-q", str(path)], check=True)
+
+def decompress_4or5(data):
+    """alive LZ variant: 0xxxxxxx = literals run, 1xxxxxyy yyyyyyyy = back-copy"""
+    dst_len = struct.unpack_from("<I", data, 0)[0]
+    out = bytearray()
+    pos = 4
+    while len(out) < dst_len and pos < len(data):
+        c = data[pos]; pos += 1
+        if c & 0x80:
+            n = ((c & 0x7C) >> 2) + 3
+            back = ((c & 0x03) << 8) + data[pos] + 1; pos += 1
+            start = len(out) - back
+            for i in range(n):
+                out.append(out[start + i])
+        else:
+            n = c + 1
+            out += data[pos:pos + n]
+            pos += n
+    return bytes(out)
+
+def rgb555(px):
+    r = (px & 0x1F) << 3; g = ((px >> 5) & 0x1F) << 3; b = ((px >> 10) & 0x1F) << 3
+    return bytes((r | r >> 5, g | g >> 5, b | b >> 5, 255))
+
+def decode_fg1(fg1, cam_rgba, w, h):
+    """walk AO FG1 chunk stream, return overlay RGBA (or None if empty)"""
+    overlay = bytearray(w * h * 4)
+    any_px = False
+    stack = []          # saved (buffer, pos) while inside compressed sub-streams
+    buf, pos = fg1, 4   # skip u32 count
+    while True:
+        if pos + 12 > len(buf):
+            if stack: buf, pos = stack.pop(); continue
+            break
+        typ, layer, x, y, cw, ch = struct.unpack_from("<HHhhHH", buf, pos)
+        if typ == 0xFFFF:            # end
+            if stack: buf, pos = stack.pop(); continue
+            break
+        if typ == 0xFFFC:            # end of compressed sub-stream
+            buf, pos = stack.pop(); continue
+        if typ == 0xFFFD:            # compressed sub-stream (layer=decomp size, x=comp size)
+            sub = decompress_4or5(buf[pos + 12:pos + 12 + (x & 0xFFFF)])
+            stack.append((buf, pos + 12 + (x & 0xFFFF)))
+            buf, pos = sub, 0
+            continue
+        if typ == 0xFFFE:            # full block: copy cam pixels
+            for j in range(ch):
+                yy = y + j
+                if not (0 <= yy < h): continue
+                x0 = max(0, x); x1 = min(w, x + cw)
+                if x1 > x0:
+                    o = (yy * w + x0) * 4
+                    overlay[o:o + (x1 - x0) * 4] = cam_rgba[o:o + (x1 - x0) * 4]
+                    any_px = True
+            pos += 12
+            continue
+        if typ == 0:                 # partial block: own RGB555 pixels follow
+            px_off = pos + 12
+            for j in range(ch):
+                yy = y + j
+                for i in range(cw):
+                    px = struct.unpack_from("<H", buf, px_off + (j * cw + i) * 2)[0]
+                    if px == 0: continue
+                    xx = x + i
+                    if 0 <= xx < w and 0 <= yy < h:
+                        overlay[(yy * w + xx) * 4:(yy * w + xx) * 4 + 4] = rgb555(px)
+                        any_px = True
+            pos = px_off + cw * ch * 2
+            continue
+        # unknown chunk type: bail out of this stream
+        if stack: buf, pos = stack.pop(); continue
+        break
+    return bytes(overlay) if any_px else None
 
 def decode_cam(lvl, cam_name, out_png, tmpdir):
     try:
@@ -333,6 +407,23 @@ def decode_cam(lvl, cam_name, out_png, tmpdir):
         rgba = b"".join(rgba[y*w*4:(y*w + VISIBLE_W)*4] for y in range(h))
         w = VISIBLE_W
     write_png(out_png, w, h, rgba)
+
+    # foreground occlusion overlay from the FG1 chunk(s)
+    fg_png = out_png.with_name(out_png.stem + "_fg.png")
+    fg_parts = [v for (tag, _), v in chunks.items() if tag == "FG1 "]
+    overlay = None
+    for part in fg_parts:
+        got = decode_fg1(part, rgba, w, h)
+        if got is None:
+            continue
+        if overlay is None:
+            overlay = bytearray(got)
+        else:
+            for px in range(0, len(got), 4):
+                if got[px + 3]:
+                    overlay[px:px + 4] = got[px:px + 4]
+    if overlay:
+        write_png(fg_png, w, h, bytes(overlay), keep_alpha=True)
     return True
 
 # ----------------------------------------------------------------------- main
@@ -432,7 +523,10 @@ def main():
                 png_rel = f"cams/ao/{short}/{nm}.png"
                 png_path = out / png_rel
                 ok = png_path.exists() or decode_cam(lvl, nm, png_path, tmpdir)
-                cams.append({"cell": i, "name": nm, "png": png_rel if ok else None})
+                entry = {"cell": i, "name": nm, "png": png_rel if ok else None}
+                if (out / f"cams/ao/{short}/{nm}_fg.png").exists():
+                    entry["fg"] = f"cams/ao/{short}/{nm}_fg.png"
+                cams.append(entry)
 
             print(f"  path {path_id}: {W}x{H} cams={sum(1 for c in cells if c)} tlvs={len(tlvs)} lines={len(lines)}")
             level_entry["paths"].append({
