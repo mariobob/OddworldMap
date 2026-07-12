@@ -247,6 +247,18 @@ def tlv_extra(t, blob, pos, length):
     elif t == 51:
         v = s16s(1)
         if v: e = {"movie": v[0]}
+    elif t == 45:  # WellExpress: off/on destinations (level/path/camera), switched by trigger id
+        v = s16s(13)
+        if len(v) >= 13:
+            def dest(lv, pa, ca):
+                # level 0 is the menu; wells never really go there (zeroed fields)
+                return {"to_level": LEVEL_SHORT.get(lv, lv), "to_path": pa, "to_cam": ca} \
+                    if 1 <= lv <= 15 else {}
+            e = dest(v[6], v[7], v[8])
+            on = dest(v[10], v[11], v[12])
+            if on and on != e:
+                e.update({"alt_level": on["to_level"], "alt_path": on["to_path"], "alt_cam": on["to_cam"]})
+            e["trigger_id"] = v[1]
     elif t == 52:  # BirdPortal: side, dest level/path/camera, scale, movie, type
         v = s16s(7)
         if len(v) >= 7:
