@@ -43,12 +43,26 @@
   #help { position: absolute; left: 10px; bottom: 8px; color: var(--dim); font-size: 11px;
           background: rgba(18,20,24,.7); padding: 3px 8px; border-radius: 5px; }
   .muted { color: var(--dim); padding: 2px 14px 8px; font-size: 11px; }
+  #searchBox { margin: 4px 12px 2px; }
+  #searchBox input { width: 100%; background: var(--panel2); border: 1px solid var(--line); border-radius: 6px;
+                     color: var(--text); padding: 6px 9px; font-size: 12px; outline: none; }
+  #searchBox input:focus { border-color: var(--accent); }
+  #searchResults { padding: 2px 6px 10px; }
+  #searchResults .hit { display: block; width: 100%; text-align: left; background: none; border: 0;
+                        color: var(--text); padding: 3px 8px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+  #searchResults .hit:hover { background: var(--panel2); }
+  #searchResults .hit .loc { color: var(--accent); }
+  #searchResults .hit .ex { color: var(--dim); }
+  #searchResults .more { color: var(--dim); font-size: 11px; padding: 3px 8px; }
 </style>
 </head>
 <body>
 <div id="sidebar">
   <h1>ODDWORLD MAP VIEWER</h1>
   <div class="muted" id="gameName"></div>
+  <h2>Search</h2>
+  <div id="searchBox"><input id="searchInput" type="search" placeholder="mudokon, lcdstatusboard, switch_id=70…" autocomplete="off"></div>
+  <div id="searchResults"></div>
   <h2>Level</h2>
   <div class="btnrow" id="levelBtns"></div>
   <h2>Path</h2>
@@ -265,6 +279,62 @@ function animateFlash() {
   if (performance.now() - flash.t0 > 1600) { flash = null; draw(); return; }
   draw();
   requestAnimationFrame(animateFlash);
+}
+
+// ---- global search ------------------------------------------------------
+const searchInput = document.getElementById("searchInput");
+const searchResults = document.getElementById("searchResults");
+let searchTimer = null;
+
+function tlvSearchText(t) {
+  const ex = Object.entries(t.extra || {}).map(([k, v]) => `${k}=${v}`).join(" ");
+  return (t.name + " " + ex).toLowerCase();
+}
+
+function runSearch(q) {
+  searchResults.innerHTML = "";
+  q = q.trim().toLowerCase();
+  if (q.length < 2) return;
+  const hits = [];
+  for (const L of DATA.levels)
+    for (const P of L.paths)
+      for (const t of P.tlvs) {
+        if (tlvSearchText(t).includes(q)) hits.push({ L, P, t });
+        if (hits.length > 400) break;
+      }
+  const MAX = 60;
+  for (const h of hits.slice(0, MAX)) {
+    const b = document.createElement("button");
+    b.className = "hit";
+    const ex = Object.entries(h.t.extra || {}).filter(([k, v]) => v !== null && v !== "")
+      .map(([k, v]) => `${k}=${v}`).join(" ");
+    b.innerHTML = `<span class="loc">${h.L.short} P${h.P.id}</span> ${h.t.name}` +
+                  (ex ? ` <span class="ex">${ex}</span>` : "");
+    b.onclick = () => jumpToTlv(h.L, h.P, h.t);
+    searchResults.appendChild(b);
+  }
+  const more = document.createElement("div");
+  more.className = "more";
+  more.textContent = hits.length ? `${hits.length}${hits.length > 400 ? "+" : ""} hit${hits.length === 1 ? "" : "s"}` + (hits.length > MAX ? `, showing ${MAX}` : "") : "no hits";
+  searchResults.appendChild(more);
+}
+
+searchInput.addEventListener("input", () => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => runSearch(searchInput.value), 160);
+});
+
+function jumpToTlv(L, P, t) {
+  if (lvl !== L) selectLevel(L, levelBtns.children[DATA.levels.indexOf(L)]);
+  if (path !== P) selectPathById(P.id);
+  const fx = dX(t.x1) + (t.x2 - t.x1) / 2, fy = dY(t.y1) + (t.y2 - t.y1) / 2;
+  cam.z = Math.max(0.5, Math.min(1.6, Math.min(cv.clientWidth / (2.6 * CELL_W), cv.clientHeight / (2.6 * CELL_H))));
+  cam.x = fx - cv.clientWidth / (2 * cam.z);
+  cam.y = fy - cv.clientHeight / (2 * cam.z);
+  camToken++;
+  flash = { x: fx, y: fy, t0: performance.now() };
+  animateFlash();
+  scheduleHash(true);
 }
 
 // ---- permalinks: #LEVEL/PATH/x/y/zoom ----------------------------------

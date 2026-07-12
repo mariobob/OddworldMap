@@ -14,6 +14,7 @@ Open **[index.html](index.html)** in a browser — the whole site is static, no 
 - level and path buttons top-left; object category filters with counts below
 - **Collision lines**: floors green, walls red/orange, ceilings blue, dashed = background layer
 - the URL hash (`#LEVEL/path/x/y/zoom`) always reflects the current view — copy it to share an exact location; the browser back button retraces follows
+- **search** (sidebar) matches object names and decoded fields across the whole game — try `mudokon`, `lcdstatusboard` or `switch_id=70` — and clicking a result jumps straight to it
 
 One grid cell = one in-game camera. Each camera occupies a 1024×480-unit cell in the game's world grid, but the visible screen is a 368×240-unit window centered at (cell·1024+440, cell·480+240) — world units map 1:1 to PS1 screen pixels. The viewer lays the visible windows out edge to edge and translates all object/collision coordinates accordingly, so markers land on the artwork.
 
