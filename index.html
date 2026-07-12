@@ -29,6 +29,9 @@
   .filters .cnt { margin-left: auto; color: var(--dim); font-size: 11px; }
   #toggles { padding: 0 12px 10px; }
   #toggles label { display: flex; align-items: center; gap: 7px; padding: 2.5px 2px; cursor: pointer; }
+  #exportBtn { margin: 6px 12px 2px; background: var(--panel2); color: var(--text); border: 1px solid var(--line);
+               border-radius: 6px; padding: 5px 10px; cursor: pointer; font-size: 12px; width: calc(100% - 24px); }
+  #exportBtn:hover { border-color: var(--accent); }
   #main { flex: 1; position: relative; }
   #cv { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; }
   #cv.panning { cursor: grabbing; }
@@ -75,6 +78,7 @@
     <label><input type="checkbox" id="tLabels" checked> Object labels (zoomed)</label>
     <label><input type="checkbox" id="tDim"> Dim backgrounds</label>
     <label><input type="checkbox" id="tRuler"> Ruler (drag to measure)</label>
+    <button id="exportBtn" title="save the current view as an image">Export view as PNG</button>
   </div>
   <h2>Objects <span style="float:right"><a href="#" id="fAll" style="color:var(--dim)">all</a> · <a href="#" id="fNone" style="color:var(--dim)">none</a></span></h2>
   <div class="filters" id="filterBox"></div>
@@ -217,6 +221,17 @@ CATS.forEach(c => {
 document.getElementById("fAll").onclick = e => { e.preventDefault(); CATS.forEach(c => { c.on = true; c._lab.style.opacity = 1; }); draw(); };
 document.getElementById("fNone").onclick = e => { e.preventDefault(); CATS.forEach(c => { c.on = false; c._lab.style.opacity = .45; }); draw(); };
 ["tGrid","tColl","tFg","tLabels","tDim"].forEach(id => document.getElementById(id).onchange = draw);
+document.getElementById("exportBtn").onclick = () => {
+  cv.toBlob(blob => {
+    if (!blob) return;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `oddworld-${lvl ? lvl.short : "map"}${path ? "-P" + path.id : ""}.png`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }, "image/png");
+};
+
 document.getElementById("tRuler").onchange = () => {
   if (!document.getElementById("tRuler").checked) ruler = null;
   cv.style.cursor = document.getElementById("tRuler").checked ? "crosshair" : "";
