@@ -2201,7 +2201,10 @@ window.MAP_DATA_AO = {
        "x2": 8773,
        "y2": 798,
        "extra": {
-        "raw": "1 1 15 6 0 0"
+        "portal": "travel",
+        "to_level": "R1",
+        "to_path": 15,
+        "to_cam": 6
        }
       },
       {
@@ -2443,7 +2446,7 @@ window.MAP_DATA_AO = {
        "x2": 9543,
        "y2": 797,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -2557,7 +2560,7 @@ window.MAP_DATA_AO = {
        "x2": 1603,
        "y2": 1283,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -2756,7 +2759,7 @@ window.MAP_DATA_AO = {
        "x2": 5447,
        "y2": 1280,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -2953,7 +2956,7 @@ window.MAP_DATA_AO = {
        "x2": 6722,
        "y2": 1281,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -3180,7 +3183,7 @@ window.MAP_DATA_AO = {
        "x2": 8771,
        "y2": 1279,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -4195,7 +4198,7 @@ window.MAP_DATA_AO = {
        "x2": 2551,
        "y2": 314,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -4713,7 +4716,7 @@ window.MAP_DATA_AO = {
        "x2": 5424,
        "y2": 315,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -5315,7 +5318,10 @@ window.MAP_DATA_AO = {
        "x2": 3376,
        "y2": 802,
        "extra": {
-        "raw": "0 1 16 3 0 0"
+        "portal": "travel",
+        "to_level": "R1",
+        "to_path": 16,
+        "to_cam": 3
        }
       },
       {
@@ -5359,7 +5365,7 @@ window.MAP_DATA_AO = {
        "x2": 3676,
        "y2": 1279,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -6087,7 +6093,7 @@ window.MAP_DATA_AO = {
        "x2": 1327,
        "y2": 323,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -7421,7 +7427,7 @@ window.MAP_DATA_AO = {
        "x2": 8794,
        "y2": 319,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -8615,7 +8621,7 @@ window.MAP_DATA_AO = {
        "x2": 2628,
        "y2": 716,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -10250,7 +10256,10 @@ window.MAP_DATA_AO = {
        "x2": 2651,
        "y2": 801,
        "extra": {
-        "raw": "1 5 1 8 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 1,
+        "to_cam": 8
        }
       },
       {
@@ -10314,7 +10323,10 @@ window.MAP_DATA_AO = {
        "x2": 4400,
        "y2": 1296,
        "extra": {
-        "raw": "0 5 1 5 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 1,
+        "to_cam": 5
        }
       },
       {
@@ -10336,7 +10348,7 @@ window.MAP_DATA_AO = {
        "x2": 4399,
        "y2": 1198,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -11867,7 +11879,10 @@ window.MAP_DATA_AO = {
        "x2": 1596,
        "y2": 726,
        "extra": {
-        "raw": "1 5 2 7 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 2,
+        "to_cam": 7
        }
       },
       {
@@ -12054,7 +12069,10 @@ window.MAP_DATA_AO = {
        "x2": 3673,
        "y2": 802,
        "extra": {
-        "raw": "1 5 2 10 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 2,
+        "to_cam": 10
        }
       },
       {
@@ -12109,7 +12127,10 @@ window.MAP_DATA_AO = {
        "x2": 4600,
        "y2": 803,
        "extra": {
-        "raw": "0 5 2 1 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 2,
+        "to_cam": 1
        }
       },
       {
@@ -12384,7 +12405,7 @@ window.MAP_DATA_AO = {
        "x2": 5723,
        "y2": 802,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -13389,7 +13410,7 @@ window.MAP_DATA_AO = {
        "x2": 303,
        "y2": 317,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -13576,7 +13597,10 @@ window.MAP_DATA_AO = {
        "x2": 1627,
        "y2": 334,
        "extra": {
-        "raw": "1 5 3 2 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 3,
+        "to_cam": 2
        }
       },
       {
@@ -14471,7 +14495,10 @@ window.MAP_DATA_AO = {
        "x2": 4649,
        "y2": 795,
        "extra": {
-        "raw": "1 5 3 7 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 3,
+        "to_cam": 7
        }
       },
       {
@@ -16151,7 +16178,10 @@ window.MAP_DATA_AO = {
        "x2": 1578,
        "y2": 779,
        "extra": {
-        "raw": "1 5 4 1 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 4,
+        "to_cam": 1
        }
       },
       {
@@ -16250,7 +16280,10 @@ window.MAP_DATA_AO = {
        "x2": 4675,
        "y2": 783,
        "extra": {
-        "raw": "1 5 4 9 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 4,
+        "to_cam": 9
        }
       },
       {
@@ -16261,7 +16294,10 @@ window.MAP_DATA_AO = {
        "x2": 5448,
        "y2": 816,
        "extra": {
-        "raw": "0 5 4 11 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 4,
+        "to_cam": 11
        }
       },
       {
@@ -16437,7 +16473,10 @@ window.MAP_DATA_AO = {
        "x2": 327,
        "y2": 1283,
        "extra": {
-        "raw": "0 5 4 1 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 4,
+        "to_cam": 1
        }
       },
       {
@@ -16485,7 +16524,7 @@ window.MAP_DATA_AO = {
        "x2": 1327,
        "y2": 1281,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -16518,7 +16557,10 @@ window.MAP_DATA_AO = {
        "x2": 2602,
        "y2": 1284,
        "extra": {
-        "raw": "0 5 4 1 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 4,
+        "to_cam": 1
        }
       },
       {
@@ -16599,7 +16641,7 @@ window.MAP_DATA_AO = {
        "x2": 3653,
        "y2": 1283,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -17699,7 +17741,10 @@ window.MAP_DATA_AO = {
        "x2": 1405,
        "y2": 241,
        "extra": {
-        "raw": "0 5 6 7 1 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 6,
+        "to_cam": 7
        }
       },
       {
@@ -18267,7 +18312,7 @@ window.MAP_DATA_AO = {
        "x2": 4399,
        "y2": 363,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -18612,7 +18657,10 @@ window.MAP_DATA_AO = {
        "x2": 1353,
        "y2": 1284,
        "extra": {
-        "raw": "0 5 6 2 0 0"
+        "portal": "travel",
+        "to_level": "E1",
+        "to_path": 6,
+        "to_cam": 2
        }
       },
       {
@@ -19086,7 +19134,7 @@ window.MAP_DATA_AO = {
        "x2": 5423,
        "y2": 1181,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -21435,7 +21483,10 @@ window.MAP_DATA_AO = {
        "x2": 4599,
        "y2": 782,
        "extra": {
-        "raw": "0 2 2 1 0 0"
+        "portal": "travel",
+        "to_level": "L1",
+        "to_path": 2,
+        "to_cam": 1
        }
       },
       {
@@ -23260,7 +23311,10 @@ window.MAP_DATA_AO = {
        "x2": 4649,
        "y2": 324,
        "extra": {
-        "raw": "1 6 4 7 1 2"
+        "portal": "travel",
+        "to_level": "E2",
+        "to_path": 4,
+        "to_cam": 7
        }
       }
      ],
@@ -28051,7 +28105,10 @@ window.MAP_DATA_AO = {
        "x2": 1494,
        "y2": 322,
        "extra": {
-        "raw": "1 4 1 1 1 37"
+        "portal": "travel",
+        "to_level": "F2",
+        "to_path": 1,
+        "to_cam": 1
        }
       },
       {
@@ -29633,7 +29690,10 @@ window.MAP_DATA_AO = {
        "x2": 6697,
        "y2": 322,
        "extra": {
-        "raw": "1 4 2 14 0 0"
+        "portal": "travel",
+        "to_level": "F2",
+        "to_path": 2,
+        "to_cam": 14
        }
       },
       {
@@ -29677,7 +29737,10 @@ window.MAP_DATA_AO = {
        "x2": 7471,
        "y2": 334,
        "extra": {
-        "raw": "0 4 2 13 0 0"
+        "portal": "travel",
+        "to_level": "F2",
+        "to_path": 2,
+        "to_cam": 13
        }
       },
       {
@@ -29688,7 +29751,7 @@ window.MAP_DATA_AO = {
        "x2": 7696,
        "y2": 231,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -35463,7 +35526,10 @@ window.MAP_DATA_AO = {
        "x2": 1564,
        "y2": 283,
        "extra": {
-        "raw": "1 2 5 4 1 -3"
+        "portal": "travel",
+        "to_level": "L1",
+        "to_path": 5,
+        "to_cam": 4
        }
       },
       {
@@ -45256,7 +45322,10 @@ window.MAP_DATA_AO = {
        "x2": 4633,
        "y2": 329,
        "extra": {
-        "raw": "1 9 1 1 0 49"
+        "portal": "travel",
+        "to_level": "D2",
+        "to_path": 1,
+        "to_cam": 1
        }
       },
       {
@@ -45789,7 +45858,7 @@ window.MAP_DATA_AO = {
        "x2": 303,
        "y2": 218,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -45954,7 +46023,10 @@ window.MAP_DATA_AO = {
        "x2": 1627,
        "y2": 321,
        "extra": {
-        "raw": "1 9 1 6 0 0"
+        "portal": "travel",
+        "to_level": "D2",
+        "to_path": 1,
+        "to_cam": 6
        }
       },
       {
@@ -46115,7 +46187,10 @@ window.MAP_DATA_AO = {
        "x2": 3400,
        "y2": 308,
        "extra": {
-        "raw": "0 9 1 7 0 0"
+        "portal": "travel",
+        "to_level": "D2",
+        "to_path": 1,
+        "to_cam": 7
        }
       },
       {
@@ -51403,7 +51478,7 @@ window.MAP_DATA_AO = {
        "x2": 600,
        "y2": 217,
        "extra": {
-        "raw": "1 9 6 9 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -51575,7 +51650,10 @@ window.MAP_DATA_AO = {
        "x2": 3400,
        "y2": 311,
        "extra": {
-        "raw": "0 9 6 10 0 0"
+        "portal": "travel",
+        "to_level": "D2",
+        "to_path": 6,
+        "to_cam": 10
        }
       },
       {
@@ -51820,7 +51898,10 @@ window.MAP_DATA_AO = {
        "x2": 328,
        "y2": 800,
        "extra": {
-        "raw": "0 9 6 9 0 0"
+        "portal": "travel",
+        "to_level": "D2",
+        "to_path": 6,
+        "to_cam": 9
        }
       },
       {
@@ -53594,7 +53675,7 @@ window.MAP_DATA_AO = {
        "x2": 577,
        "y2": 695,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -53689,7 +53770,10 @@ window.MAP_DATA_AO = {
        "x2": 1627,
        "y2": 803,
        "extra": {
-        "raw": "1 9 8 7 0 0"
+        "portal": "travel",
+        "to_level": "D2",
+        "to_path": 8,
+        "to_cam": 7
        }
       },
       {
@@ -53850,7 +53934,10 @@ window.MAP_DATA_AO = {
        "x2": 3400,
        "y2": 786,
        "extra": {
-        "raw": "0 9 8 8 0 0"
+        "portal": "travel",
+        "to_level": "D2",
+        "to_path": 8,
+        "to_cam": 8
        }
       },
       {
@@ -57183,7 +57270,10 @@ window.MAP_DATA_AO = {
        "x2": 7707,
        "y2": 1722,
        "extra": {
-        "raw": "1 2 5 4 1 -4"
+        "portal": "travel",
+        "to_level": "L1",
+        "to_path": 5,
+        "to_cam": 4
        }
       },
       {
@@ -58872,7 +58962,10 @@ window.MAP_DATA_AO = {
        "x2": 1602,
        "y2": 722,
        "extra": {
-        "raw": "1 13 19 3 0 17"
+        "portal": "travel",
+        "to_level": "R2",
+        "to_path": 19,
+        "to_cam": 3
        }
       },
       {
@@ -59491,7 +59584,10 @@ window.MAP_DATA_AO = {
        "x2": 4672,
        "y2": 800,
        "extra": {
-        "raw": "1 6 2 4 0 0"
+        "portal": "travel",
+        "to_level": "E2",
+        "to_path": 2,
+        "to_cam": 4
        }
       },
       {
@@ -62108,7 +62204,7 @@ window.MAP_DATA_AO = {
        "x2": 4699,
        "y2": 320,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -62641,7 +62737,7 @@ window.MAP_DATA_AO = {
        "x2": 2550,
        "y2": 798,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "shrykull"
        }
       },
       {
@@ -63497,7 +63593,7 @@ window.MAP_DATA_AO = {
        "x2": 1327,
        "y2": 796,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -64563,7 +64659,7 @@ window.MAP_DATA_AO = {
        "x2": 1328,
        "y2": 775,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -65896,7 +65992,7 @@ window.MAP_DATA_AO = {
        "x2": 353,
        "y2": 796,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -67089,7 +67185,7 @@ window.MAP_DATA_AO = {
        "x2": 602,
        "y2": 817,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "shrykull"
        }
       },
       {
@@ -68088,7 +68184,7 @@ window.MAP_DATA_AO = {
        "x2": 4698,
        "y2": 1275,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -68729,7 +68825,7 @@ window.MAP_DATA_AO = {
        "x2": 328,
        "y2": 319,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -70333,7 +70429,7 @@ window.MAP_DATA_AO = {
        "x2": 3675,
        "y2": 758,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -70998,7 +71094,7 @@ window.MAP_DATA_AO = {
        "x2": 3377,
        "y2": 323,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -72946,7 +73042,7 @@ window.MAP_DATA_AO = {
        "x2": 2652,
        "y2": 319,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -75355,7 +75451,7 @@ window.MAP_DATA_AO = {
        "x2": 302,
        "y2": 332,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -75487,7 +75583,10 @@ window.MAP_DATA_AO = {
        "x2": 1552,
        "y2": 320,
        "extra": {
-        "raw": "1 13 18 10 0 0"
+        "portal": "travel",
+        "to_level": "R2",
+        "to_path": 18,
+        "to_cam": 10
        }
       },
       {
@@ -76956,7 +77055,10 @@ window.MAP_DATA_AO = {
        "x2": 7495,
        "y2": 800,
        "extra": {
-        "raw": "0 13 15 6 0 0"
+        "portal": "travel",
+        "to_level": "R2",
+        "to_path": 15,
+        "to_cam": 6
        }
       },
       {
@@ -77147,7 +77249,7 @@ window.MAP_DATA_AO = {
        "x2": 8496,
        "y2": 797,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -77301,7 +77403,7 @@ window.MAP_DATA_AO = {
        "x2": 578,
        "y2": 1282,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -77378,7 +77480,7 @@ window.MAP_DATA_AO = {
        "x2": 4423,
        "y2": 1280,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -77795,7 +77897,7 @@ window.MAP_DATA_AO = {
        "x2": 5698,
        "y2": 1276,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -77945,7 +78047,7 @@ window.MAP_DATA_AO = {
        "x2": 7747,
        "y2": 1276,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -78626,7 +78728,7 @@ window.MAP_DATA_AO = {
        "x2": 304,
        "y2": 317,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -80109,7 +80211,10 @@ window.MAP_DATA_AO = {
        "x2": 3377,
        "y2": 798,
        "extra": {
-        "raw": "0 13 16 3 0 0"
+        "portal": "travel",
+        "to_level": "R2",
+        "to_path": 16,
+        "to_cam": 3
        }
       },
       {
@@ -80334,7 +80439,7 @@ window.MAP_DATA_AO = {
        "x2": 6446,
        "y2": 799,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "shrykull"
        }
       },
       {
@@ -80544,7 +80649,7 @@ window.MAP_DATA_AO = {
        "x2": 3648,
        "y2": 1280,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -81279,7 +81384,7 @@ window.MAP_DATA_AO = {
        "x2": 1327,
        "y2": 319,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -83157,7 +83262,7 @@ window.MAP_DATA_AO = {
        "x2": 1478,
        "y2": 318,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "portal": "rescue"
        }
       },
       {
@@ -85191,7 +85296,7 @@ window.MAP_DATA_AO = {
        "x2": 1627,
        "y2": 1764,
        "extra": {
-        "raw": "1 0 0 0 0 0"
+        "portal": "shrykull"
        }
       },
       {

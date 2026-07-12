@@ -247,6 +247,13 @@ def tlv_extra(t, blob, pos, length):
     elif t == 51:
         v = s16s(1)
         if v: e = {"movie": v[0]}
+    elif t == 52:  # BirdPortal: side, dest level/path/camera, scale, movie, type
+        v = s16s(7)
+        if len(v) >= 7:
+            kind = {0: "travel", 1: "rescue", 2: "shrykull"}.get(v[6], v[6])
+            e = {"portal": kind}
+            if v[6] == 0:  # only travel portals have a real destination
+                e.update({"to_level": LEVEL_SHORT.get(v[1], v[1]), "to_path": v[2], "to_cam": v[3]})
     if not e:
         v = s16s(6)
         e = {"raw": " ".join(str(x) for x in v)} if v else {}
