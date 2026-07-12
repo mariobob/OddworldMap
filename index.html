@@ -76,7 +76,7 @@
 const CELL_W = 368, CELL_H = 240;
 const WCELL_W = 1024, WCELL_H = 480;
 const WIN_X = 440 - 184, WIN_Y = 240 - 120;   // window top-left inside the world cell
-const DATA = window.MAP_DATA_AO;
+let DATA = null;   // assigned at boot (fresh fetch over http, script tag on file://)
 
 function dX(wx) { const c = Math.floor(wx / WCELL_W); return c * CELL_W + (wx - c * WCELL_W - WIN_X); }
 function dY(wy) { const c = Math.floor(wy / WCELL_H); return c * CELL_H + (wy - c * WCELL_H - WIN_Y); }
@@ -116,17 +116,8 @@ function resize() {
 window.addEventListener("resize", resize);
 
 // ---- UI build ---------------------------------------------------------
-document.getElementById("gameName").textContent = DATA.game;
 const levelBtns = document.getElementById("levelBtns");
 const pathBtns = document.getElementById("pathBtns");
-
-DATA.levels.forEach(L => {
-  const b = document.createElement("button");
-  b.textContent = L.short;
-  b.title = L.name;
-  b.onclick = () => selectLevel(L, b);
-  levelBtns.appendChild(b);
-});
 
 function selectLevel(L, btn) {
   lvl = L;
@@ -330,13 +321,31 @@ function draw() {
   ctx.restore();
 }
 
-// boot
-resize();
-if (DATA.levels.length) {
-  const r2 = DATA.levels.findIndex(L => L.short === "R2");
-  const i = r2 >= 0 ? r2 : 0;
-  selectLevel(DATA.levels[i], levelBtns.children[i]);
+// boot: over http(s), re-fetch map data with cache disabled so rebuilds show up
+// immediately; on file:// fall back to the <script> tag payload.
+async function loadData() {
+  if (location.protocol.startsWith("http")) {
+    try {
+      const t = await fetch("map_data_ao.js", { cache: "no-store" }).then(r => r.text());
+      return JSON.parse(t.slice(t.indexOf("=") + 1).trim().replace(/;$/, ""));
+    } catch (e) { /* fall through */ }
+  }
+  return window.MAP_DATA_AO;
 }
+
+loadData().then(d => {
+  DATA = d;
+  document.getElementById("gameName").textContent = DATA.game;
+  DATA.levels.forEach(L => {
+    const b = document.createElement("button");
+    b.textContent = L.short;
+    b.title = L.name;
+    b.onclick = () => selectLevel(L, b);
+    levelBtns.appendChild(b);
+  });
+  resize();
+  if (DATA.levels.length) selectLevel(DATA.levels[0], levelBtns.children[0]);
+});
 </script>
 </body>
 </html>
