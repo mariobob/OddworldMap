@@ -30,22 +30,23 @@ CAM2RGBA = HERE / "cam2rgba"
 SECTOR_RAW = 2352
 USER_OFF = 24
 
-# LevelIds order -> (short, display) ; gMapData rows resolved by short name
+# (LevelId, short, display), listed in game progression order
+# (id is the game's LevelIds enum value; the list order drives the viewer UI)
 LEVELS = [
-    (0, "S1", "Menu"),
     (1, "R1", "Rupture Farms"),
+    (5, "E1", "Stock Yards"),
     (2, "L1", "Monsaic Lines"),
     (3, "F1", "Paramonia"),
     (4, "F2", "Paramonian Temple"),
-    (5, "E1", "Stock Yards"),
-    (6, "E2", "Stock Yards Return"),
+    (14, "F4", "Paramonia Escape"),
     (8, "D1", "Scrabania"),
     (9, "D2", "Scrabanian Temple"),
-    (10, "C1", "Credits"),
-    (12, "R6", "Board Room"),
-    (13, "R2", "Rupture Farms Return"),
-    (14, "F4", "Paramonia Escape"),
     (15, "D7", "Scrabania Escape"),
+    (6, "E2", "Stock Yards Return"),
+    (13, "R2", "Rupture Farms Return"),
+    (12, "R6", "Board Room"),
+    (10, "C1", "Credits"),
+    (0, "S1", "Menu"),
 ]
 
 TLV_NAMES = {
