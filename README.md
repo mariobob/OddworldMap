@@ -1,4 +1,4 @@
-# Oddworld Map Viewer
+# Oddworld Map
 
 Interactive map of **Oddworld: Abe's Oddysee** (PS1, NTSC-U), extracted directly from the game disc: every camera background, every object (doors, levers, Mudokons, LCD status boards, hazards, enemies, ...) and every collision line, laid out on the game's real camera grid.
 
