@@ -1,5 +1,16 @@
 window.MAP_DATA_AO = {
+ "id": "AO",
  "game": "Oddworld: Abe's Oddysee (PS1 NTSC-U)",
+ "geometry": {
+  "cellW": 368,
+  "cellH": 240,
+  "worldW": 1024,
+  "worldH": 480,
+  "winX": 256,
+  "winY": 120,
+  "visW": 368,
+  "visH": 240
+ },
  "levels": [
   {
    "id": 1,

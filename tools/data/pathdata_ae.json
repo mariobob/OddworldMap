@@ -1,0 +1,1275 @@
+{
+ "levels": [
+  [
+   1,
+   "MI",
+   "Necrum Mines"
+  ],
+  [
+   2,
+   "NE",
+   "Necrum"
+  ],
+  [
+   3,
+   "PV",
+   "Mudomo Vault"
+  ],
+  [
+   4,
+   "SV",
+   "Mudanchee Vault"
+  ],
+  [
+   5,
+   "FD",
+   "FeeCo Depot"
+  ],
+  [
+   6,
+   "BA",
+   "Slig Barracks"
+  ],
+  [
+   8,
+   "BW",
+   "Bonewerkz"
+  ],
+  [
+   9,
+   "BR",
+   "SoulStorm Brewery"
+  ],
+  [
+   10,
+   "BM",
+   "Brewery Ender"
+  ],
+  [
+   16,
+   "CR",
+   "Credits"
+  ],
+  [
+   0,
+   "ST",
+   "Menu"
+  ],
+  [
+   15,
+   "TL",
+   "Test Level"
+  ]
+ ],
+ "tlv_names": {
+  "0": "ContinuePoint",
+  "1": "PathTransition",
+  "2": "Hoist",
+  "3": "Edge",
+  "4": "DeathDrop",
+  "5": "Door",
+  "6": "ShadowZone",
+  "7": "LiftPoint",
+  "8": "LocalWell",
+  "9": "Dove",
+  "10": "RockSack",
+  "11": "FallingItem",
+  "12": "PullRingRope",
+  "13": "BackgroundAnimation",
+  "14": "TimedMine",
+  "15": "Slig",
+  "16": "Slog",
+  "17": "Lever",
+  "18": "Null",
+  "19": "SecurityOrb",
+  "20": "Null",
+  "21": "Pulley",
+  "22": "AbeStart",
+  "23": "WellExpress",
+  "24": "Mine",
+  "25": "UXB",
+  "26": "Paramite",
+  "27": "MovieHandStone",
+  "28": "BirdPortal",
+  "29": "BirdPortalExit",
+  "30": "TrapDoor",
+  "31": "RollingRock",
+  "32": "SligBoundLeft",
+  "33": "InvisibleZone",
+  "34": "FootSwitch",
+  "35": "SecurityClaw",
+  "36": "MotionDetector",
+  "37": "SligSpawner",
+  "38": "ElectricWall",
+  "39": "LiftMover",
+  "40": "MeatSack",
+  "41": "Scrab",
+  "42": "Null",
+  "43": "ScrabLeftBound",
+  "44": "ScrabRightBound",
+  "45": "SligBoundRight",
+  "46": "SligPersist",
+  "47": "EnemyStopper",
+  "48": "InvisibleSwitch",
+  "49": "Mudokon",
+  "50": "ZSligCover",
+  "51": "DoorFlame",
+  "52": "MovingBomb",
+  "53": "MovingBombStopper",
+  "54": "MainMenuController",
+  "55": "Unknown",
+  "56": "Null",
+  "57": "TimerTrigger",
+  "58": "SecurityDoor",
+  "59": "BoomMachine",
+  "60": "LCD",
+  "61": "HandStone",
+  "62": "CreditsController",
+  "63": "Null",
+  "64": "LCDStatusBoard",
+  "65": "WheelSyncer",
+  "66": "MusicTrigger",
+  "67": "Light",
+  "68": "SlogSpawner",
+  "69": "GasCountdown",
+  "70": "Unknown",
+  "71": "GasEmitter",
+  "72": "ZzzSpawner",
+  "73": "Glukkon",
+  "74": "KillUnsavedMudokons",
+  "75": "SoftLanding",
+  "76": "ResetSwitchRange",
+  "77": "Water",
+  "78": "Null",
+  "79": "WorkWheel",
+  "80": "Null",
+  "81": "LaughingGas",
+  "82": "FlyingSlig",
+  "83": "Fleech",
+  "84": "Slurg",
+  "85": "SlamDoor",
+  "86": "LevelLoader",
+  "87": "DemoSpawnPoint",
+  "88": "Teleporter",
+  "89": "SlurgSpawner",
+  "90": "Drill",
+  "91": "ColourfulMeter",
+  "92": "FlyingSligSpawner",
+  "93": "MineCar",
+  "94": "BoneBag",
+  "95": "ExplosionSet",
+  "96": "MultiSwitchController",
+  "97": "StatusLight",
+  "98": "SlapLock",
+  "99": "ParamiteWebLine",
+  "100": "Alarm",
+  "101": "BrewMachine",
+  "102": "ScrabSpawner",
+  "103": "CrawlingSlig",
+  "104": "SligGetPants",
+  "105": "SligGetWings",
+  "106": "Greeter",
+  "107": "CrawlingSligButton",
+  "108": "GlukkonSwitch",
+  "109": "DoorBlocker",
+  "110": "TorturedMudokon",
+  "111": "TrainDoor"
+ },
+ "tables": {
+  "ST": {
+   "1": {
+    "bly": "STP1.BLY",
+    "w_units": 2625,
+    "h_units": 2340,
+    "obj_off": 504,
+    "idx_off": 660,
+    "coll_off": 504,
+    "coll_count": 0
+   }
+  },
+  "MI": {
+   "1": {
+    "bly": "MIP1.BLY",
+    "w_units": 5625,
+    "h_units": 2340,
+    "obj_off": 2980,
+    "idx_off": 11796,
+    "coll_off": 1080,
+    "coll_count": 95
+   },
+   "2": {
+    "bly": "MIP2.BLY",
+    "w_units": 4125,
+    "h_units": 2600,
+    "obj_off": 3860,
+    "idx_off": 8772,
+    "coll_off": 880,
+    "coll_count": 149
+   },
+   "3": {
+    "bly": "MIP3.BLY",
+    "w_units": 4500,
+    "h_units": 1820,
+    "obj_off": 1752,
+    "idx_off": 3652,
+    "coll_off": 672,
+    "coll_count": 54
+   },
+   "4": {
+    "bly": "MIP4.BLY",
+    "w_units": 4500,
+    "h_units": 3640,
+    "obj_off": 4404,
+    "idx_off": 15424,
+    "coll_off": 1344,
+    "coll_count": 153
+   },
+   "5": {
+    "bly": "MIP5.BLY",
+    "w_units": 4500,
+    "h_units": 1040,
+    "obj_off": 1384,
+    "idx_off": 5584,
+    "coll_off": 384,
+    "coll_count": 50
+   },
+   "6": {
+    "bly": "MIP6.BLY",
+    "w_units": 4875,
+    "h_units": 1820,
+    "obj_off": 2048,
+    "idx_off": 5212,
+    "coll_off": 728,
+    "coll_count": 66
+   },
+   "7": {
+    "bly": "MIP7.BLY",
+    "w_units": 2250,
+    "h_units": 1300,
+    "obj_off": 1320,
+    "idx_off": 3320,
+    "coll_off": 240,
+    "coll_count": 54
+   },
+   "8": {
+    "bly": "MIP8.BLY",
+    "w_units": 3375,
+    "h_units": 1300,
+    "obj_off": 1280,
+    "idx_off": 6580,
+    "coll_off": 360,
+    "coll_count": 46
+   },
+   "9": {
+    "bly": "MIP9.BLY",
+    "w_units": 2625,
+    "h_units": 1560,
+    "obj_off": 1536,
+    "idx_off": 3760,
+    "coll_off": 336,
+    "coll_count": 60
+   },
+   "10": {
+    "bly": "MIP10.BLY",
+    "w_units": 3375,
+    "h_units": 1040,
+    "obj_off": 1588,
+    "idx_off": 4792,
+    "coll_off": 288,
+    "coll_count": 65
+   },
+   "11": {
+    "bly": "MIP11.BLY",
+    "w_units": 1500,
+    "h_units": 1300,
+    "obj_off": 460,
+    "idx_off": 2160,
+    "coll_off": 160,
+    "coll_count": 15
+   },
+   "12": {
+    "bly": "MIP12.BLY",
+    "w_units": 3750,
+    "h_units": 780,
+    "obj_off": 1160,
+    "idx_off": 4816,
+    "coll_off": 240,
+    "coll_count": 46
+   }
+  },
+  "NE": {
+   "1": {
+    "bly": "NEP1.BLY",
+    "w_units": 1875,
+    "h_units": 1300,
+    "obj_off": 740,
+    "idx_off": 2268,
+    "coll_off": 200,
+    "coll_count": 27
+   },
+   "2": {
+    "bly": "NEP2.BLY",
+    "w_units": 2250,
+    "h_units": 2080,
+    "obj_off": 2404,
+    "idx_off": 5496,
+    "coll_off": 384,
+    "coll_count": 101
+   },
+   "3": {
+    "bly": "NEP3.BLY",
+    "w_units": 4500,
+    "h_units": 2600,
+    "obj_off": 1700,
+    "idx_off": 4628,
+    "coll_off": 960,
+    "coll_count": 37
+   },
+   "4": {
+    "bly": "NEP4.BLY",
+    "w_units": 1875,
+    "h_units": 2080,
+    "obj_off": 1020,
+    "idx_off": 3016,
+    "coll_off": 320,
+    "coll_count": 35
+   },
+   "5": {
+    "bly": "NEP5.BLY",
+    "w_units": 3375,
+    "h_units": 1820,
+    "obj_off": 1444,
+    "idx_off": 3852,
+    "coll_off": 504,
+    "coll_count": 47
+   },
+   "6": {
+    "bly": "NEP6.BLY",
+    "w_units": 3000,
+    "h_units": 1040,
+    "obj_off": 676,
+    "idx_off": 3448,
+    "coll_off": 256,
+    "coll_count": 21
+   },
+   "7": {
+    "bly": "NEP7.BLY",
+    "w_units": 2625,
+    "h_units": 780,
+    "obj_off": 588,
+    "idx_off": 3356,
+    "coll_off": 168,
+    "coll_count": 21
+   }
+  },
+  "PV": {
+   "1": {
+    "bly": "PVP1.BLY",
+    "w_units": 5250,
+    "h_units": 1560,
+    "obj_off": 3192,
+    "idx_off": 6548,
+    "coll_off": 672,
+    "coll_count": 126
+   },
+   "2": {
+    "bly": "PVP2.BLY",
+    "w_units": 1500,
+    "h_units": 260,
+    "obj_off": 212,
+    "idx_off": 772,
+    "coll_off": 32,
+    "coll_count": 9
+   },
+   "3": {
+    "bly": "PVP3.BLY",
+    "w_units": 3000,
+    "h_units": 1560,
+    "obj_off": 1384,
+    "idx_off": 3492,
+    "coll_off": 384,
+    "coll_count": 50
+   },
+   "4": {
+    "bly": "PVP4.BLY",
+    "w_units": 1875,
+    "h_units": 1040,
+    "obj_off": 1540,
+    "idx_off": 3488,
+    "coll_off": 160,
+    "coll_count": 69
+   },
+   "5": {
+    "bly": "PVP5.BLY",
+    "w_units": 2625,
+    "h_units": 780,
+    "obj_off": 1568,
+    "idx_off": 3376,
+    "coll_off": 168,
+    "coll_count": 70
+   },
+   "6": {
+    "bly": "PVP6.BLY",
+    "w_units": 1875,
+    "h_units": 520,
+    "obj_off": 560,
+    "idx_off": 2200,
+    "coll_off": 80,
+    "coll_count": 24
+   },
+   "7": {
+    "bly": "PVP7.BLY",
+    "w_units": 2250,
+    "h_units": 1560,
+    "obj_off": 1108,
+    "idx_off": 3568,
+    "coll_off": 288,
+    "coll_count": 41
+   },
+   "8": {
+    "bly": "PVP8.BLY",
+    "w_units": 1500,
+    "h_units": 780,
+    "obj_off": 736,
+    "idx_off": 2032,
+    "coll_off": 96,
+    "coll_count": 32
+   },
+   "9": {
+    "bly": "PVP9.BLY",
+    "w_units": 2250,
+    "h_units": 1040,
+    "obj_off": 932,
+    "idx_off": 3256,
+    "coll_off": 192,
+    "coll_count": 37
+   },
+   "10": {
+    "bly": "PVP10.BLY",
+    "w_units": 3375,
+    "h_units": 1300,
+    "obj_off": 1580,
+    "idx_off": 3408,
+    "coll_off": 360,
+    "coll_count": 61
+   },
+   "11": {
+    "bly": "PVP11.BLY",
+    "w_units": 2250,
+    "h_units": 520,
+    "obj_off": 576,
+    "idx_off": 2696,
+    "coll_off": 96,
+    "coll_count": 24
+   },
+   "12": {
+    "bly": "PVP12.BLY",
+    "w_units": 1125,
+    "h_units": 1560,
+    "obj_off": 1104,
+    "idx_off": 3444,
+    "coll_off": 144,
+    "coll_count": 48
+   },
+   "13": {
+    "bly": "PVP13.BLY",
+    "w_units": 4500,
+    "h_units": 2600,
+    "obj_off": 3060,
+    "idx_off": 6696,
+    "coll_off": 960,
+    "coll_count": 105
+   },
+   "14": {
+    "bly": "PVP14.BLY",
+    "w_units": 1125,
+    "h_units": 1040,
+    "obj_off": 656,
+    "idx_off": 3084,
+    "coll_off": 96,
+    "coll_count": 28
+   },
+   "15": {
+    "bly": "PVP15.BLY",
+    "w_units": 1500,
+    "h_units": 1040,
+    "obj_off": 648,
+    "idx_off": 2128,
+    "coll_off": 128,
+    "coll_count": 26
+   }
+  },
+  "SV": {
+   "1": {
+    "bly": "SVP1.BLY",
+    "w_units": 3000,
+    "h_units": 520,
+    "obj_off": 768,
+    "idx_off": 3076,
+    "coll_off": 128,
+    "coll_count": 32
+   },
+   "2": {
+    "bly": "SVP2.BLY",
+    "w_units": 1500,
+    "h_units": 1560,
+    "obj_off": 1872,
+    "idx_off": 5068,
+    "coll_off": 192,
+    "coll_count": 84
+   },
+   "3": {
+    "bly": "SVP3.BLY",
+    "w_units": 1875,
+    "h_units": 780,
+    "obj_off": 960,
+    "idx_off": 3544,
+    "coll_off": 120,
+    "coll_count": 42
+   },
+   "4": {
+    "bly": "SVP4.BLY",
+    "w_units": 2250,
+    "h_units": 520,
+    "obj_off": 776,
+    "idx_off": 3052,
+    "coll_off": 96,
+    "coll_count": 34
+   },
+   "5": {
+    "bly": "SVP5.BLY",
+    "w_units": 1500,
+    "h_units": 1300,
+    "obj_off": 1720,
+    "idx_off": 5440,
+    "coll_off": 160,
+    "coll_count": 78
+   },
+   "6": {
+    "bly": "SVP6.BLY",
+    "w_units": 4500,
+    "h_units": 1820,
+    "obj_off": 2532,
+    "idx_off": 8392,
+    "coll_off": 672,
+    "coll_count": 93
+   },
+   "7": {
+    "bly": "SVP7.BLY",
+    "w_units": 2250,
+    "h_units": 1300,
+    "obj_off": 1200,
+    "idx_off": 4808,
+    "coll_off": 240,
+    "coll_count": 48
+   },
+   "8": {
+    "bly": "SVP8.BLY",
+    "w_units": 1500,
+    "h_units": 1300,
+    "obj_off": 1420,
+    "idx_off": 4316,
+    "coll_off": 160,
+    "coll_count": 63
+   },
+   "9": {
+    "bly": "SVP9.BLY",
+    "w_units": 2250,
+    "h_units": 1300,
+    "obj_off": 1300,
+    "idx_off": 3172,
+    "coll_off": 240,
+    "coll_count": 53
+   },
+   "10": {
+    "bly": "SVP10.BLY",
+    "w_units": 1875,
+    "h_units": 780,
+    "obj_off": 800,
+    "idx_off": 3584,
+    "coll_off": 120,
+    "coll_count": 34
+   },
+   "11": {
+    "bly": "SVP11.BLY",
+    "w_units": 750,
+    "h_units": 260,
+    "obj_off": 156,
+    "idx_off": 1024,
+    "coll_off": 16,
+    "coll_count": 7
+   },
+   "12": {
+    "bly": "SVP12.BLY",
+    "w_units": 750,
+    "h_units": 520,
+    "obj_off": 332,
+    "idx_off": 1324,
+    "coll_off": 32,
+    "coll_count": 15
+   },
+   "13": {
+    "bly": "SVP13.BLY",
+    "w_units": 1875,
+    "h_units": 520,
+    "obj_off": 520,
+    "idx_off": 1700,
+    "coll_off": 80,
+    "coll_count": 22
+   },
+   "14": {
+    "bly": "SVP14.BLY",
+    "w_units": 2250,
+    "h_units": 780,
+    "obj_off": 1204,
+    "idx_off": 3024,
+    "coll_off": 144,
+    "coll_count": 53
+   }
+  },
+  "FD": {
+   "1": {
+    "bly": "FDP1.BLY",
+    "w_units": 3000,
+    "h_units": 1560,
+    "obj_off": 1124,
+    "idx_off": 3992,
+    "coll_off": 384,
+    "coll_count": 37
+   },
+   "2": {
+    "bly": "FDP2.BLY",
+    "w_units": 3000,
+    "h_units": 2080,
+    "obj_off": 2372,
+    "idx_off": 7184,
+    "coll_off": 512,
+    "coll_count": 93
+   },
+   "3": {
+    "bly": "FDP3.BLY",
+    "w_units": 3375,
+    "h_units": 2600,
+    "obj_off": 2920,
+    "idx_off": 7080,
+    "coll_off": 720,
+    "coll_count": 110
+   },
+   "4": {
+    "bly": "FDP4.BLY",
+    "w_units": 3750,
+    "h_units": 1820,
+    "obj_off": 3200,
+    "idx_off": 8196,
+    "coll_off": 560,
+    "coll_count": 132
+   },
+   "5": {
+    "bly": "FDP5.BLY",
+    "w_units": 3000,
+    "h_units": 1820,
+    "obj_off": 2308,
+    "idx_off": 5968,
+    "coll_off": 448,
+    "coll_count": 93
+   },
+   "6": {
+    "bly": "FDP6.BLY",
+    "w_units": 1500,
+    "h_units": 520,
+    "obj_off": 284,
+    "idx_off": 1348,
+    "coll_off": 64,
+    "coll_count": 11
+   },
+   "7": {
+    "bly": "FDP7.BLY",
+    "w_units": 1875,
+    "h_units": 1040,
+    "obj_off": 1580,
+    "idx_off": 3680,
+    "coll_off": 160,
+    "coll_count": 71
+   },
+   "8": {
+    "bly": "FDP8.BLY",
+    "w_units": 1875,
+    "h_units": 1040,
+    "obj_off": 960,
+    "idx_off": 2940,
+    "coll_off": 160,
+    "coll_count": 40
+   },
+   "9": {
+    "bly": "FDP9.BLY",
+    "w_units": 2250,
+    "h_units": 1300,
+    "obj_off": 1240,
+    "idx_off": 3260,
+    "coll_off": 240,
+    "coll_count": 50
+   },
+   "10": {
+    "bly": "FDP10.BLY",
+    "w_units": 1875,
+    "h_units": 1040,
+    "obj_off": 740,
+    "idx_off": 2096,
+    "coll_off": 160,
+    "coll_count": 29
+   },
+   "11": {
+    "bly": "FDP11.BLY",
+    "w_units": 2625,
+    "h_units": 1560,
+    "obj_off": 2436,
+    "idx_off": 7148,
+    "coll_off": 336,
+    "coll_count": 105
+   },
+   "12": {
+    "bly": "FDP12.BLY",
+    "w_units": 1875,
+    "h_units": 780,
+    "obj_off": 1540,
+    "idx_off": 3684,
+    "coll_off": 120,
+    "coll_count": 71
+   },
+   "13": {
+    "bly": "FDP13.BLY",
+    "w_units": 1500,
+    "h_units": 260,
+    "obj_off": 1732,
+    "idx_off": 4316,
+    "coll_off": 32,
+    "coll_count": 85
+   },
+   "14": {
+    "bly": "FDP14.BLY",
+    "w_units": 1500,
+    "h_units": 780,
+    "obj_off": 396,
+    "idx_off": 1256,
+    "coll_off": 96,
+    "coll_count": 15
+   }
+  },
+  "BA": {
+   "1": {
+    "bly": "BAP1.BLY",
+    "w_units": 2250,
+    "h_units": 2080,
+    "obj_off": 2444,
+    "idx_off": 7612,
+    "coll_off": 384,
+    "coll_count": 103
+   },
+   "2": {
+    "bly": "BAP2.BLY",
+    "w_units": 1125,
+    "h_units": 1040,
+    "obj_off": 336,
+    "idx_off": 1536,
+    "coll_off": 96,
+    "coll_count": 12
+   },
+   "3": {
+    "bly": "BAP3.BLY",
+    "w_units": 1500,
+    "h_units": 1300,
+    "obj_off": 1820,
+    "idx_off": 4464,
+    "coll_off": 160,
+    "coll_count": 83
+   },
+   "4": {
+    "bly": "BAP4.BLY",
+    "w_units": 1125,
+    "h_units": 780,
+    "obj_off": 1772,
+    "idx_off": 5320,
+    "coll_off": 72,
+    "coll_count": 85
+   },
+   "5": {
+    "bly": "BAP5.BLY",
+    "w_units": 4875,
+    "h_units": 2600,
+    "obj_off": 5240,
+    "idx_off": 12220,
+    "coll_off": 1040,
+    "coll_count": 210
+   },
+   "7": {
+    "bly": "BAP7.BLY",
+    "w_units": 2250,
+    "h_units": 1040,
+    "obj_off": 2312,
+    "idx_off": 8224,
+    "coll_off": 192,
+    "coll_count": 106
+   },
+   "9": {
+    "bly": "BAP9.BLY",
+    "w_units": 2250,
+    "h_units": 780,
+    "obj_off": 964,
+    "idx_off": 3008,
+    "coll_off": 144,
+    "coll_count": 41
+   },
+   "10": {
+    "bly": "BAP10.BLY",
+    "w_units": 2625,
+    "h_units": 780,
+    "obj_off": 3848,
+    "idx_off": 8624,
+    "coll_off": 168,
+    "coll_count": 184
+   },
+   "11": {
+    "bly": "BAP11.BLY",
+    "w_units": 2250,
+    "h_units": 1820,
+    "obj_off": 1136,
+    "idx_off": 5136,
+    "coll_off": 336,
+    "coll_count": 40
+   },
+   "13": {
+    "bly": "BAP13.BLY",
+    "w_units": 750,
+    "h_units": 780,
+    "obj_off": 288,
+    "idx_off": 1644,
+    "coll_off": 48,
+    "coll_count": 12
+   },
+   "14": {
+    "bly": "BAP14.BLY",
+    "w_units": 2250,
+    "h_units": 1820,
+    "obj_off": 4016,
+    "idx_off": 7480,
+    "coll_off": 336,
+    "coll_count": 184
+   },
+   "15": {
+    "bly": "BAP15.BLY",
+    "w_units": 750,
+    "h_units": 780,
+    "obj_off": 368,
+    "idx_off": 2964,
+    "coll_off": 48,
+    "coll_count": 16
+   },
+   "16": {
+    "bly": "BAP16.BLY",
+    "w_units": 750,
+    "h_units": 260,
+    "obj_off": 156,
+    "idx_off": 936,
+    "coll_off": 16,
+    "coll_count": 7
+   }
+  },
+  "BW": {
+   "1": {
+    "bly": "BWP1.BLY",
+    "w_units": 3750,
+    "h_units": 1820,
+    "obj_off": 1820,
+    "idx_off": 4412,
+    "coll_off": 560,
+    "coll_count": 63
+   },
+   "2": {
+    "bly": "BWP2.BLY",
+    "w_units": 3750,
+    "h_units": 2080,
+    "obj_off": 3160,
+    "idx_off": 9076,
+    "coll_off": 640,
+    "coll_count": 126
+   },
+   "3": {
+    "bly": "BWP3.BLY",
+    "w_units": 3750,
+    "h_units": 1300,
+    "obj_off": 2820,
+    "idx_off": 7724,
+    "coll_off": 400,
+    "coll_count": 121
+   },
+   "4": {
+    "bly": "BWP4.BLY",
+    "w_units": 3375,
+    "h_units": 2080,
+    "obj_off": 2696,
+    "idx_off": 9732,
+    "coll_off": 576,
+    "coll_count": 106
+   },
+   "7": {
+    "bly": "BWP7.BLY",
+    "w_units": 3375,
+    "h_units": 1560,
+    "obj_off": 1512,
+    "idx_off": 6184,
+    "coll_off": 432,
+    "coll_count": 54
+   },
+   "9": {
+    "bly": "BWP9.BLY",
+    "w_units": 2625,
+    "h_units": 1040,
+    "obj_off": 1364,
+    "idx_off": 4980,
+    "coll_off": 224,
+    "coll_count": 57
+   },
+   "11": {
+    "bly": "BWP11.BLY",
+    "w_units": 1875,
+    "h_units": 520,
+    "obj_off": 300,
+    "idx_off": 1396,
+    "coll_off": 80,
+    "coll_count": 11
+   },
+   "12": {
+    "bly": "BWP12.BLY",
+    "w_units": 1500,
+    "h_units": 520,
+    "obj_off": 244,
+    "idx_off": 1104,
+    "coll_off": 64,
+    "coll_count": 9
+   },
+   "13": {
+    "bly": "BWP13.BLY",
+    "w_units": 1500,
+    "h_units": 520,
+    "obj_off": 604,
+    "idx_off": 2348,
+    "coll_off": 64,
+    "coll_count": 27
+   },
+   "14": {
+    "bly": "BWP14.BLY",
+    "w_units": 3000,
+    "h_units": 780,
+    "obj_off": 832,
+    "idx_off": 2180,
+    "coll_off": 192,
+    "coll_count": 32
+   }
+  },
+  "BR": {
+   "1": {
+    "bly": "BRP1.BLY",
+    "w_units": 3000,
+    "h_units": 1040,
+    "obj_off": 1836,
+    "idx_off": 6272,
+    "coll_off": 256,
+    "coll_count": 79
+   },
+   "2": {
+    "bly": "BRP2.BLY",
+    "w_units": 4500,
+    "h_units": 1820,
+    "obj_off": 2512,
+    "idx_off": 5592,
+    "coll_off": 672,
+    "coll_count": 92
+   },
+   "3": {
+    "bly": "BRP3.BLY",
+    "w_units": 3375,
+    "h_units": 1040,
+    "obj_off": 1768,
+    "idx_off": 4284,
+    "coll_off": 288,
+    "coll_count": 74
+   },
+   "4": {
+    "bly": "BRP4.BLY",
+    "w_units": 3750,
+    "h_units": 1820,
+    "obj_off": 1380,
+    "idx_off": 5704,
+    "coll_off": 560,
+    "coll_count": 41
+   },
+   "5": {
+    "bly": "BRP5.BLY",
+    "w_units": 3375,
+    "h_units": 1300,
+    "obj_off": 1200,
+    "idx_off": 4272,
+    "coll_off": 360,
+    "coll_count": 42
+   },
+   "6": {
+    "bly": "BRP6.BLY",
+    "w_units": 2625,
+    "h_units": 1820,
+    "obj_off": 2552,
+    "idx_off": 5360,
+    "coll_off": 392,
+    "coll_count": 108
+   },
+   "7": {
+    "bly": "BRP7.BLY",
+    "w_units": 2250,
+    "h_units": 780,
+    "obj_off": 1344,
+    "idx_off": 4328,
+    "coll_off": 144,
+    "coll_count": 60
+   },
+   "8": {
+    "bly": "BRP8.BLY",
+    "w_units": 2625,
+    "h_units": 520,
+    "obj_off": 852,
+    "idx_off": 2340,
+    "coll_off": 112,
+    "coll_count": 37
+   },
+   "9": {
+    "bly": "BRP9.BLY",
+    "w_units": 3000,
+    "h_units": 1820,
+    "obj_off": 3128,
+    "idx_off": 6272,
+    "coll_off": 448,
+    "coll_count": 134
+   },
+   "10": {
+    "bly": "BRP10.BLY",
+    "w_units": 3750,
+    "h_units": 1820,
+    "obj_off": 1860,
+    "idx_off": 7256,
+    "coll_off": 560,
+    "coll_count": 65
+   },
+   "11": {
+    "bly": "BRP11.BLY",
+    "w_units": 3375,
+    "h_units": 3120,
+    "obj_off": 2364,
+    "idx_off": 5328,
+    "coll_off": 864,
+    "coll_count": 75
+   },
+   "12": {
+    "bly": "BRP12.BLY",
+    "w_units": 2625,
+    "h_units": 780,
+    "obj_off": 768,
+    "idx_off": 3344,
+    "coll_off": 168,
+    "coll_count": 30
+   },
+   "13": {
+    "bly": "BRP13.BLY",
+    "w_units": 3000,
+    "h_units": 260,
+    "obj_off": 684,
+    "idx_off": 2568,
+    "coll_off": 64,
+    "coll_count": 31
+   },
+   "14": {
+    "bly": "BRP14.BLY",
+    "w_units": 4125,
+    "h_units": 780,
+    "obj_off": 1224,
+    "idx_off": 3928,
+    "coll_off": 264,
+    "coll_count": 48
+   },
+   "15": {
+    "bly": "BRP15.BLY",
+    "w_units": 2625,
+    "h_units": 780,
+    "obj_off": 748,
+    "idx_off": 3052,
+    "coll_off": 168,
+    "coll_count": 29
+   },
+   "16": {
+    "bly": "BRP16.BLY",
+    "w_units": 2250,
+    "h_units": 1300,
+    "obj_off": 760,
+    "idx_off": 2492,
+    "coll_off": 240,
+    "coll_count": 26
+   },
+   "17": {
+    "bly": "BRP17.BLY",
+    "w_units": 2250,
+    "h_units": 2600,
+    "obj_off": 2820,
+    "idx_off": 10656,
+    "coll_off": 480,
+    "coll_count": 117
+   },
+   "18": {
+    "bly": "BRP18.BLY",
+    "w_units": 2625,
+    "h_units": 1040,
+    "obj_off": 824,
+    "idx_off": 3776,
+    "coll_off": 224,
+    "coll_count": 30
+   },
+   "19": {
+    "bly": "BRP19.BLY",
+    "w_units": 2250,
+    "h_units": 1040,
+    "obj_off": 1712,
+    "idx_off": 5260,
+    "coll_off": 192,
+    "coll_count": 76
+   },
+   "20": {
+    "bly": "BRP20.BLY",
+    "w_units": 3000,
+    "h_units": 1560,
+    "obj_off": 884,
+    "idx_off": 4436,
+    "coll_off": 384,
+    "coll_count": 25
+   },
+   "21": {
+    "bly": "BRP21.BLY",
+    "w_units": 1500,
+    "h_units": 520,
+    "obj_off": 304,
+    "idx_off": 1284,
+    "coll_off": 64,
+    "coll_count": 12
+   },
+   "23": {
+    "bly": "BRP23.BLY",
+    "w_units": 1125,
+    "h_units": 1040,
+    "obj_off": 196,
+    "idx_off": 1364,
+    "coll_off": 96,
+    "coll_count": 5
+   },
+   "24": {
+    "bly": "BRP24.BLY",
+    "w_units": 1125,
+    "h_units": 1040,
+    "obj_off": 476,
+    "idx_off": 1756,
+    "coll_off": 96,
+    "coll_count": 19
+   },
+   "25": {
+    "bly": "BRP25.BLY",
+    "w_units": 1125,
+    "h_units": 1040,
+    "obj_off": 576,
+    "idx_off": 1616,
+    "coll_off": 96,
+    "coll_count": 24
+   },
+   "26": {
+    "bly": "BRP26.BLY",
+    "w_units": 2250,
+    "h_units": 1040,
+    "obj_off": 712,
+    "idx_off": 3928,
+    "coll_off": 192,
+    "coll_count": 26
+   },
+   "27": {
+    "bly": "BRP27.BLY",
+    "w_units": 3000,
+    "h_units": 2340,
+    "obj_off": 1076,
+    "idx_off": 2644,
+    "coll_off": 576,
+    "coll_count": 25
+   },
+   "28": {
+    "bly": "BRP28.BLY",
+    "w_units": 1500,
+    "h_units": 520,
+    "obj_off": 384,
+    "idx_off": 1964,
+    "coll_off": 64,
+    "coll_count": 16
+   },
+   "29": {
+    "bly": "BRP29.BLY",
+    "w_units": 3000,
+    "h_units": 780,
+    "obj_off": 552,
+    "idx_off": 3284,
+    "coll_off": 192,
+    "coll_count": 18
+   }
+  },
+  "BM": {
+   "1": {
+    "bly": "BMP1.BLY",
+    "w_units": 2625,
+    "h_units": 2600,
+    "obj_off": 2560,
+    "idx_off": 8488,
+    "coll_off": 560,
+    "coll_count": 100
+   }
+  },
+  "TL": {
+   "1": {
+    "bly": "TLP1.BLY",
+    "w_units": 1125,
+    "h_units": 260,
+    "obj_off": 424,
+    "idx_off": 740,
+    "coll_off": 24,
+    "coll_count": 20
+   },
+   "2": {
+    "bly": "TLP2.BLY",
+    "w_units": 1875,
+    "h_units": 1820,
+    "obj_off": 860,
+    "idx_off": 1672,
+    "coll_off": 280,
+    "coll_count": 29
+   }
+  },
+  "CR": {
+   "1": {
+    "bly": "CRP1.BLY",
+    "w_units": 3750,
+    "h_units": 1820,
+    "obj_off": 560,
+    "idx_off": 592,
+    "coll_off": 560,
+    "coll_count": 0
+   },
+   "2": {
+    "bly": "CRP2.BLY",
+    "w_units": 3750,
+    "h_units": 1300,
+    "obj_off": 400,
+    "idx_off": 416,
+    "coll_off": 400,
+    "coll_count": 0
+   }
+  }
+ }
+}
