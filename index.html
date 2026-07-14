@@ -66,6 +66,8 @@
   <h2>Search</h2>
   <div id="searchBox"><input id="searchInput" type="search" placeholder="mudokon, lcdstatusboard, switch_id=70…" autocomplete="off"></div>
   <div id="searchResults"></div>
+  <h2>Game</h2>
+  <div class="btnrow" id="gameBtns"></div>
   <h2>Level</h2>
   <div class="btnrow" id="levelBtns"></div>
   <h2>Path</h2>
@@ -90,17 +92,26 @@
   <div id="hud"></div>
 </div>
 
-<script src="map_data_ao.js"></script>
+<script src="map_data_ao.js" onerror="this.remove()"></script>
+<script src="map_data_ae.js" onerror="this.remove()"></script>
 <script>
-// One camera cell occupies 1024x480 *world* units, but the visible screen is a
-// 368x240 window centered at (cell*1024+440, cell*480+240)  [Map.cpp: SetActiveCam,
-// ScreenManager: field_14_xpos=184/field_16_ypos=120]. We lay screens out edge to
-// edge at 368x240 pitch and translate coordinates by the per-cell window offset.
-const CELL_W = 368, CELL_H = 240;
-const WCELL_W = 1024, WCELL_H = 480;
-const WIN_X = 440 - 184, WIN_Y = 240 - 120;   // window top-left inside the world cell
-let DATA = null;   // assigned at boot (fresh fetch over http, script tag on file://)
-let ENTRY = {};    // level short -> Set of path ids that other levels arrive into
+// Each game maps world coordinates to screen artwork differently (data.geometry):
+// AO cameras occupy 1024x480-unit world cells with a 368x240 window at +256/+120
+// (1:1 world:pixel; Map.cpp SetActiveCam + ScreenManager xpos/ypos); AE cameras
+// are 375x260-unit cells shown scaled into 368x240. Screens are laid out edge to
+// edge at cellW x cellH pitch either way.
+let CELL_W = 368, CELL_H = 240;
+let GEO = null, SX = 1, SY = 1;
+
+function setGeometry(g) {
+  GEO = g;
+  CELL_W = g.cellW; CELL_H = g.cellH;
+  SX = g.cellW / g.visW; SY = g.cellH / g.visH;
+}
+
+let GAMES_DATA = [];   // one dataset per available game
+let DATA = null;       // current game's dataset
+let ENTRY = {};        // per game: level short -> Set of path ids arrived into from other levels
 
 function computeEntryPaths(data) {
   const entries = {};
@@ -111,31 +122,33 @@ function computeEntryPaths(data) {
         const e = t.extra || {};
         if (e.to_level && e.to_level !== L.short) add(e.to_level, e.to_path);
         if (e.alt_level && e.alt_level !== L.short) add(e.alt_level, e.alt_path);
-        if (t.t === 37) add(L.short, P.id);   // AbeStart (game start / re-entry)
+        if (t.t === (data.id === "AE" ? 22 : 37)) add(L.short, P.id);   // AbeStart (game start / re-entry)
       }
   return entries;
 }
 
-function dX(wx) { const c = Math.floor(wx / WCELL_W); return c * CELL_W + (wx - c * WCELL_W - WIN_X); }
-function dY(wy) { const c = Math.floor(wy / WCELL_H); return c * CELL_H + (wy - c * WCELL_H - WIN_Y); }
-function wX(dx) { const c = Math.floor(dx / CELL_W); return c * WCELL_W + WIN_X + (dx - c * CELL_W); }
-function wY(dy) { const c = Math.floor(dy / CELL_H); return c * WCELL_H + WIN_Y + (dy - c * CELL_H); }
+function dX(wx) { const c = Math.floor(wx / GEO.worldW); return c * CELL_W + (wx - c * GEO.worldW - GEO.winX) * SX; }
+function dY(wy) { const c = Math.floor(wy / GEO.worldH); return c * CELL_H + (wy - c * GEO.worldH - GEO.winY) * SY; }
+function wX(dx) { const c = Math.floor(dx / CELL_W); return c * GEO.worldW + GEO.winX + (dx - c * CELL_W) / SX; }
+function wY(dy) { const c = Math.floor(dy / CELL_H); return c * GEO.worldH + GEO.winY + (dy - c * CELL_H) / SY; }
 
-// ---- categories -------------------------------------------------------
+// ---- categories (matched by TLV name so both games share the buckets) ----
 const CATS = [
-  { key:"board",  label:"LCD Status Boards", color:"#ff3860", types:[103], on:true },
-  { key:"mud",    label:"Mudokons",          color:"#3ec6ff", types:[82,41,50,32,89], on:true },
-  { key:"door",   label:"Doors / Transitions", color:"#ffd23e", types:[6,1,52,53,11,45], on:true },
-  { key:"cont",   label:"Continue points",   color:"#ffffff", types:[0,37,38], on:true },
-  { key:"switch", label:"Switches / levers", color:"#5dde75", types:[26,81,60,27,100,94,61,29,95,54,69], on:true },
-  { key:"hazard", label:"Hazards",           color:"#ff8b3d", types:[5,22,46,47,67,84,86,88,97,108,110,55,15,56,14], on:true },
-  { key:"enemy",  label:"Enemies / spawners", color:"#c85dff", types:[24,25,48,49,43,66,72,107,111,112], on:true },
-  { key:"screen", label:"LCD marquees / stones", color:"#3effc8", types:[98,51,92,96,20,36,42,34,71,13,12], on:false },
-  { key:"nav",    label:"Hoists / edges / lifts", color:"#8f9bb3", types:[3,4,8,68,35,18,40,93,59,73,58], on:false },
-  { key:"meta",   label:"Meta / bounds / fx", color:"#5b6270", types:[2,7,19,28,57,74,75,76,77,79,83,87,90,99,101,102,105,106,109,113,114,115,62], on:false },
+  { key:"board",  label:"LCD Status Boards", color:"#ff3860", on:true, names:["LCDStatusBoard"] },
+  { key:"mud",    label:"Mudokons",          color:"#3ec6ff", on:true, names:["Mudokon","SlingMudokon","RingMudokon","LiftMudokon","MudokonPathTrans","TorturedMudokon"] },
+  { key:"door",   label:"Doors / Transitions", color:"#ffd23e", on:true, names:["Door","PathTransition","BirdPortal","BirdPortalExit","WellLocal","LocalWell","WellExpress","Teleporter","TrainDoor","SlamDoor","MineCar"] },
+  { key:"cont",   label:"Continue points",   color:"#ffffff", on:true, names:["ContinuePoint","AbeStart","ElumStart"] },
+  { key:"switch", label:"Switches / levers", color:"#5dde75", on:true, names:["Switch","Lever","InvisibleSwitch","FootSwitch","BellHammer","HandStone","IdSplitter","SecurityOrb","SecurityDoor","BellSongStone","ChimeLock","MovieHandStone","GlukkonSwitch","CrawlingSligButton","MultiSwitchController","WheelSyncer","WorkWheel","SlapLock"] },
+  { key:"hazard", label:"Hazards",           color:"#ff8b3d", on:true, names:["DeathDrop","TimedMine","Mine","UXB","ElectricWall","DoorFlame","MovingBomb","MeatSaw","BoomMachine","DeathClock","GasEmitter","GasCountdown","TrapDoor","FallingItem","RollingBall","RollingRock","ZBall","Drill","LaughingGas","ExplosionSet","BrewMachine","Water"] },
+  { key:"enemy",  label:"Enemies / spawners", color:"#c85dff", on:true, names:["Slig","Slog","Paramite","Scrab","Bat","Bees","SligSpawner","SlogSpawner","ScrabSpawner","Glukkon","SlogHut","FlyingSlig","FlyingSligSpawner","CrawlingSlig","Fleech","Slurg","SlurgSpawner","ZzzSpawner","Greeter","SligGetPants","SligGetWings","BeeSwarmHole"] },
+  { key:"screen", label:"Screens / pickups", color:"#3effc8", on:false, names:["LCDScreen","LCD","MovieStone","HintFly","DemoPlaybackStone","Honey","HoneySack","HoneyDripTarget","MeatSack","RockSack","BoneBag","Dove","StatusLight","ColourfulMeter"] },
+  { key:"nav",    label:"Hoists / edges / lifts", color:"#8f9bb3", on:false, names:["Hoist","Edge","LiftPoint","LiftMover","Pulley","PullRingRope","ElumWall","ScrabNoFall","RollingBallStopper","FlintLockFire","ParamiteWebLine"] },
+  { key:"meta",   label:"Meta / bounds / fx", color:"#5b6270", on:false, names:[] },   // fallback for everything else
 ];
-const typeCat = {};
-CATS.forEach(c => c.types.forEach(t => typeCat[t] = c));
+const NAME_CAT = {};
+CATS.forEach(c => c.names.forEach(n => NAME_CAT[n] = c));
+const META_CAT = CATS[CATS.length - 1];
+const catOf = t => NAME_CAT[t.name] || META_CAT;
 
 // ---- state ------------------------------------------------------------
 let lvl = null, path = null;
@@ -158,8 +171,27 @@ function resize() {
 window.addEventListener("resize", resize);
 
 // ---- UI build ---------------------------------------------------------
+const gameBtns = document.getElementById("gameBtns");
 const levelBtns = document.getElementById("levelBtns");
 const pathBtns = document.getElementById("pathBtns");
+
+function selectGame(G, btn, keepView) {
+  DATA = G;
+  setGeometry(G.geometry);
+  [...gameBtns.children].forEach(x => x.classList.remove("on"));
+  if (btn) btn.classList.add("on");
+  document.getElementById("gameName").textContent = G.game;
+  ENTRY = computeEntryPaths(G);
+  levelBtns.innerHTML = "";
+  G.levels.forEach(L => {
+    const b = document.createElement("button");
+    b.textContent = L.short;
+    b.title = L.name;
+    b.onclick = () => selectLevel(L, b);
+    levelBtns.appendChild(b);
+  });
+  if (!keepView && G.levels.length) selectLevel(G.levels[0], levelBtns.children[0]);
+}
 
 function selectLevel(L, btn) {
   lvl = L;
@@ -226,7 +258,7 @@ document.getElementById("exportBtn").onclick = () => {
     if (!blob) return;
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = `oddworld-${lvl ? lvl.short : "map"}${path ? "-P" + path.id : ""}.png`;
+    a.download = `oddworld-${DATA.id.toLowerCase()}${lvl ? "-" + lvl.short : ""}${path ? "-P" + path.id : ""}.png`;
     a.click();
     URL.revokeObjectURL(a.href);
   }, "image/png");
@@ -240,7 +272,7 @@ document.getElementById("tRuler").onchange = () => {
 
 function updateCounts() {
   const counts = {};
-  path.tlvs.forEach(t => { const c = typeCat[t.t]; if (c) counts[c.key] = (counts[c.key] || 0) + 1; });
+  path.tlvs.forEach(t => { const c = catOf(t); counts[c.key] = (counts[c.key] || 0) + 1; });
   CATS.forEach(c => c._lab.querySelector(".cnt").textContent = counts[c.key] || "");
 }
 
@@ -279,7 +311,7 @@ function navigateToDest(d) {
   let fx = null, fy = null;
   if (d.door != null) {
     const inCell = t => cell == null ||
-      (Math.floor(t.x1 / WCELL_W) === cell % path.w && Math.floor(t.y1 / WCELL_H) === Math.floor(cell / path.w));
+      (Math.floor(t.x1 / GEO.worldW) === cell % path.w && Math.floor(t.y1 / GEO.worldH) === Math.floor(cell / path.w));
     const tgt = path.tlvs.find(t => t.t === 6 && (t.extra || {})["door#"] === d.door && inCell(t));
     if (tgt) { fx = dX(tgt.x1) + (tgt.x2 - tgt.x1) / 2; fy = dY(tgt.y1) + (tgt.y2 - tgt.y1) / 2; }
   }
@@ -320,21 +352,22 @@ function runSearch(q) {
   q = q.trim().toLowerCase();
   if (q.length < 2) return;
   const hits = [];
-  for (const L of DATA.levels)
-    for (const P of L.paths)
-      for (const t of P.tlvs) {
-        if (tlvSearchText(t).includes(q)) hits.push({ L, P, t });
-        if (hits.length > 400) break;
-      }
+  for (const G of GAMES_DATA)
+    for (const L of G.levels)
+      for (const P of L.paths)
+        for (const t of P.tlvs) {
+          if (tlvSearchText(t).includes(q)) hits.push({ G, L, P, t });
+          if (hits.length > 400) break;
+        }
   const MAX = 60;
   for (const h of hits.slice(0, MAX)) {
     const b = document.createElement("button");
     b.className = "hit";
     const ex = Object.entries(h.t.extra || {}).filter(([k, v]) => v !== null && v !== "")
       .map(([k, v]) => `${k}=${v}`).join(" ");
-    b.innerHTML = `<span class="loc">${h.L.short} P${h.P.id}</span> ${h.t.name}` +
+    b.innerHTML = `<span class="loc">${GAMES_DATA.length > 1 ? h.G.id + " · " : ""}${h.L.short} P${h.P.id}</span> ${h.t.name}` +
                   (ex ? ` <span class="ex">${ex}</span>` : "");
-    b.onclick = () => jumpToTlv(h.L, h.P, h.t);
+    b.onclick = () => jumpToTlv(h.G, h.L, h.P, h.t);
     searchResults.appendChild(b);
   }
   const more = document.createElement("div");
@@ -348,8 +381,9 @@ searchInput.addEventListener("input", () => {
   searchTimer = setTimeout(() => runSearch(searchInput.value), 160);
 });
 
-function jumpToTlv(L, P, t) {
-  if (lvl !== L) selectLevel(L, levelBtns.children[DATA.levels.indexOf(L)]);
+function jumpToTlv(G, L, P, t) {
+  if (DATA !== G) selectGame(G, gameBtns.children[GAMES_DATA.indexOf(G)], true);
+  if (lvl !== L) selectLevel(L, levelBtns.children[G.levels.indexOf(L)]);
   if (path !== P) selectPathById(P.id);
   const fx = dX(t.x1) + (t.x2 - t.x1) / 2, fy = dY(t.y1) + (t.y2 - t.y1) / 2;
   cam.z = Math.max(0.5, Math.min(1.6, Math.min(cv.clientWidth / (2.6 * CELL_W), cv.clientHeight / (2.6 * CELL_H))));
@@ -365,7 +399,7 @@ function jumpToTlv(L, P, t) {
 let applyingHash = false, hashTimer = null;
 
 function hashFor() {
-  return `#${lvl.short}/${path.id}/${Math.round(cam.x)}/${Math.round(cam.y)}/${cam.z.toFixed(2)}`;
+  return `#${DATA.id}/${lvl.short}/${path.id}/${Math.round(cam.x)}/${Math.round(cam.y)}/${cam.z.toFixed(2)}`;
 }
 
 function scheduleHash(push) {
@@ -380,16 +414,21 @@ function scheduleHash(push) {
 }
 
 function applyHash() {
-  const m = location.hash.match(/^#(\w+)\/(\d+)(?:\/(-?\d+)\/(-?\d+)\/([\d.]+))?$/);
-  if (!m) return false;
-  const L = DATA.levels.find(l => l.short === m[1].toUpperCase());
+  let h = location.hash.replace(/^#/, "");
+  if (!h) return false;
+  let parts = h.split("/");
+  const G = GAMES_DATA.find(g => g.id === parts[0].toUpperCase());
+  if (!G) return false;
+  parts = parts.slice(1);
+  const L = G.levels.find(l => l.short === (parts[0] || "").toUpperCase());
   if (!L) return false;
   applyingHash = true;
-  if (lvl !== L) selectLevel(L, levelBtns.children[DATA.levels.indexOf(L)]);
-  if (!selectPathById(+m[2])) { applyingHash = false; return false; }
-  if (m[3] != null) {
-    cam.x = +m[3]; cam.y = +m[4];
-    cam.z = Math.max(0.02, Math.min(4, +m[5]));
+  if (DATA !== G) selectGame(G, gameBtns.children[GAMES_DATA.indexOf(G)], true);
+  if (lvl !== L) selectLevel(L, levelBtns.children[G.levels.indexOf(L)]);
+  if (!selectPathById(+parts[1])) { applyingHash = false; return false; }
+  if (parts[2] != null && parts.length >= 5) {
+    cam.x = +parts[2]; cam.y = +parts[3];
+    cam.z = Math.max(0.02, Math.min(4, +parts[4]));
     camToken++;   // cancel any fit still waiting on layout
   }
   applyingHash = false;
@@ -458,8 +497,8 @@ function updateHover() {
       segDist(w.x, w.y, dX(x1), dY(y1), dX(x2), dY(y2)) <= tol).slice(0, 4);
   }
   hoverTlvs = path.tlvs.filter(t => {
-    const c = typeCat[t.t];
-    if (!c || !c.on) return false;
+    const c = catOf(t);
+    if (!c.on) return false;
     const x1 = dX(t.x1), y1 = dY(t.y1);
     const x2 = Math.max(x1 + (t.x2 - t.x1), x1 + 8), y2 = Math.max(y1 + (t.y2 - t.y1), y1 + 8);
     return w.x >= x1 - 4 && w.x <= x2 + 4 && w.y >= y1 - 4 && w.y <= y2 + 4;
@@ -602,12 +641,12 @@ function draw() {
   const showLabels = document.getElementById("tLabels").checked && cam.z > 0.45;
   ctx.font = `${11 / cam.z}px sans-serif`;
   for (const t of path.tlvs) {
-    const c = typeCat[t.t];
-    if (!c || !c.on) continue;
+    const c = catOf(t);
+    if (!c.on) continue;
     const x1 = dX(t.x1), y1 = dY(t.y1);
     const w = Math.max(t.x2 - t.x1, 10), h = Math.max(t.y2 - t.y1, 10);
     ctx.strokeStyle = c.color;
-    ctx.lineWidth = (t.t === 103 ? 3.5 : 2) / cam.z;
+    ctx.lineWidth = (t.name === "LCDStatusBoard" ? 3.5 : 2) / cam.z;
     ctx.strokeRect(x1, y1, w, h);
     ctx.fillStyle = c.color + "26";
     ctx.fillRect(x1, y1, w, h);
@@ -651,30 +690,31 @@ function draw() {
 }
 
 // boot: over http(s), re-fetch map data with cache disabled so rebuilds show up
-// immediately; on file:// fall back to the <script> tag payload.
-async function loadData() {
+// immediately; on file:// fall back to the <script> tag payloads.
+async function loadOne(file, fallback) {
   if (location.protocol.startsWith("http")) {
     try {
-      const t = await fetch("map_data_ao.js", { cache: "no-store" }).then(r => r.text());
-      return JSON.parse(t.slice(t.indexOf("=") + 1).trim().replace(/;$/, ""));
+      const t = await fetch(file, { cache: "no-store" }).then(r => r.ok ? r.text() : null);
+      if (t) return JSON.parse(t.slice(t.indexOf("=") + 1).trim().replace(/;$/, ""));
     } catch (e) { /* fall through */ }
   }
-  return window.MAP_DATA_AO;
+  return fallback;
 }
 
-loadData().then(d => {
-  DATA = d;
-  ENTRY = computeEntryPaths(DATA);
-  document.getElementById("gameName").textContent = DATA.game;
-  DATA.levels.forEach(L => {
+Promise.all([
+  loadOne("map_data_ao.js", window.MAP_DATA_AO),
+  loadOne("map_data_ae.js", window.MAP_DATA_AE),
+]).then(datasets => {
+  GAMES_DATA = datasets.filter(d => d && d.levels && d.levels.length);
+  GAMES_DATA.forEach(G => {
     const b = document.createElement("button");
-    b.textContent = L.short;
-    b.title = L.name;
-    b.onclick = () => selectLevel(L, b);
-    levelBtns.appendChild(b);
+    b.textContent = G.id;
+    b.title = G.game;
+    b.onclick = () => selectGame(G, b);
+    gameBtns.appendChild(b);
   });
   resize();
-  if (!applyHash() && DATA.levels.length) selectLevel(DATA.levels[0], levelBtns.children[0]);
+  if (!applyHash() && GAMES_DATA.length) selectGame(GAMES_DATA[0], gameBtns.children[0]);
 });
 </script>
 </body>
