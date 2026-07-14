@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Mudokon head, in the spirit of the PS1 memory card save icon -->
+  <rect width="64" height="64" rx="12" fill="#14161a"/>
+  <path d="M31 12 C30 8 33 4 38 4 C36 6 36 8 37 10 C40 6 45 6 47 9 C43 9 40 11 38 14 Z" fill="#6e9a63"/>
+  <path d="M32 10 C46 10 54 20 52 31 C50 43 42 53 32 58 C22 53 14 43 12 31 C10 20 18 10 32 10 Z" fill="#8cbb7f"/>
+  <path d="M14 27 C19 20 26 17 32 17 C38 17 45 20 50 27 C45 23 38 21 32 21 C26 21 19 23 14 27 Z" fill="#6e9a63"/>
+  <ellipse cx="23.5" cy="31" rx="7.5" ry="9.5" fill="#0f1113"/>
+  <ellipse cx="40.5" cy="31" rx="7.5" ry="9.5" fill="#0f1113"/>
+  <circle cx="21.5" cy="27.5" r="2.4" fill="#cfe6c8"/>
+  <circle cx="38.5" cy="27.5" r="2.4" fill="#cfe6c8"/>
+  <ellipse cx="29.5" cy="44" rx="1.5" ry="2.1" fill="#4f7347"/>
+  <ellipse cx="34.5" cy="44" rx="1.5" ry="2.1" fill="#4f7347"/>
+  <path d="M26 50.5 Q32 54 38 50.5" stroke="#3f5c39" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,14 @@
+{
+  "name": "Oddworld Map",
+  "short_name": "Oddworld Map",
+  "description": "Interactive PS1 map of Oddworld: Abe's Oddysee & Exoddus.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#14161a",
+  "theme_color": "#14161a",
+  "icons": [
+    { "src": "favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "favicon-96.png", "type": "image/png", "sizes": "96x96" },
+    { "src": "apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
+  ]
+}

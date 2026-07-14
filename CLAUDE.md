@@ -27,6 +27,8 @@ Guidance for AI agents working in this repo. User-facing docs (controls, rebuild
 - Both Exoddus discs list every level, but each disc carries full content only for its half — the other half are stubs with path data and no cam files. Always pick the largest copy of a level across discs (the builder does).
 - AE ender level ids reuse their base level's archive; the table parser deduplicates so each LVL file appears once in the level list.
 
+- Static site files that are not the viewer or its data: `favicon.svg` (source of truth for the icon; `favicon-96.png` and `apple-touch-icon.png` are rasterized from it), `og-image.png` (1200×630 social card), `site.webmanifest`, `robots.txt`, `sitemap.xml`, `CNAME` (oddworldmap.com). Regenerate the PNGs from the SVG if the icon changes (a CoreGraphics Swift script was used; any SVG rasterizer works).
+
 ## Conventions
 
 - One concern per commit; split bundled diffs before committing.

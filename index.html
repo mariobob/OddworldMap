@@ -2,7 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Oddworld Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#14161a">
+<title>Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus</title>
+<meta name="description" content="Interactive map of Oddworld: Abe's Oddysee and Abe's Exoddus (PS1). Every camera screen, object and collision line, extracted straight from the game discs — pan, zoom, follow doors, search.">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-96.png" sizes="96x96" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="canonical" href="https://oddworldmap.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://oddworldmap.com/">
+<meta property="og:title" content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus">
+<meta property="og:description" content="Every camera screen, object and collision line, extracted straight from the game discs — pan, zoom, follow doors, search.">
+<meta property="og:site_name" content="Oddworld Map">
+<meta property="og:image" content="https://oddworldmap.com/og-image.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus">
+<meta name="twitter:description" content="Every camera screen, object and collision line, extracted straight from the game discs — pan, zoom, follow doors, search.">
+<meta name="twitter:image" content="https://oddworldmap.com/og-image.png">
+<meta name="twitter:image:alt" content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus">
 <style>
   :root {
     --bg: #14161a; --panel: #1d2026; --panel2: #23262e; --text: #d8dbe2;
@@ -68,6 +95,7 @@
   #searchResults .showmore { display: block; width: 100%; text-align: left; background: none; border: 0;
                              color: var(--accent); padding: 2px 8px 4px; cursor: pointer; font-size: 11px; }
   #searchResults .showmore:hover { text-decoration: underline; }
+
 </style>
 </head>
 <body>
@@ -628,6 +656,7 @@ cv.addEventListener("wheel", e => {
 }, { passive: false });
 
 function worldAtMouse() { return { x: cam.x + mouse.x / cam.z, y: cam.y + mouse.y / cam.z }; }
+
 
 function updateHover() {
   if (!path) return;
