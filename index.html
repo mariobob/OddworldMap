@@ -57,6 +57,11 @@
   #searchResults .hit .loc { color: var(--accent); }
   #searchResults .hit .ex { color: var(--dim); }
   #searchResults .more { color: var(--dim); font-size: 11px; padding: 3px 8px; }
+  #scopeBar { display: flex; gap: 4px; margin: 6px 12px 0; }
+  #scopeBar button { background: var(--panel2); color: var(--dim); border: 1px solid var(--line); border-radius: 5px;
+                     padding: 2px 8px; cursor: pointer; font-size: 11px; }
+  #scopeBar button.on { background: var(--accent); color: #14161a; border-color: var(--accent); font-weight: 600; }
+  #searchResults .widen { color: var(--accent); cursor: pointer; text-decoration: underline; }
   #searchResults .shead { display: flex; justify-content: space-between; color: var(--dim); font-size: 10px;
                           text-transform: uppercase; letter-spacing: .07em; padding: 7px 8px 2px; }
   #searchResults .showmore { display: block; width: 100%; text-align: left; background: none; border: 0;
@@ -70,6 +75,7 @@
   <div class="muted" id="gameName"></div>
   <h2>Search</h2>
   <div id="searchBox"><input id="searchInput" type="search" placeholder="mudokon, lcdstatusboard, switch_id=70…" autocomplete="off"></div>
+  <div id="scopeBar"></div>
   <div id="searchResults"></div>
   <h2>Game</h2>
   <div class="btnrow" id="gameBtns"></div>
@@ -222,6 +228,7 @@ function selectPath(P, btn) {
   if (btn) btn.classList.add("on");
   fitView();
   updateCounts();
+  updateScopeBar();
   draw();
   scheduleHash(true);
 }
@@ -353,6 +360,32 @@ function tlvSearchText(t) {
 }
 
 const HIT_CAP = 1500, GROUP_MAX = 8;
+const scopeBar = document.getElementById("scopeBar");
+let searchScope = "all";   // all | game | level | path (relative to the current selection)
+
+function scopeAccepts(h) {
+  if (searchScope === "game") return h.G === DATA;
+  if (searchScope === "level") return h.G === DATA && h.L === lvl;
+  if (searchScope === "path") return h.G === DATA && h.L === lvl && h.P === path;
+  return true;
+}
+
+function scopeLabel() {
+  return { all: "everywhere", game: DATA.id, level: `${DATA.id} · ${lvl.short}`,
+           path: `${DATA.id} · ${lvl.short} P${path.id}` }[searchScope];
+}
+
+function updateScopeBar() {
+  if (!DATA || !lvl || !path) return;
+  scopeBar.innerHTML = "";
+  for (const [key, label] of [["all", "All"], ["game", DATA.id], ["level", lvl.short], ["path", "P" + path.id]]) {
+    const b = document.createElement("button");
+    b.textContent = label;
+    if (searchScope === key) b.classList.add("on");
+    b.onclick = () => { searchScope = key; updateScopeBar(); runSearch(searchInput.value); };
+    scopeBar.appendChild(b);
+  }
+}
 
 function hitButton(h) {
   const b = document.createElement("button");
@@ -368,7 +401,7 @@ function hitButton(h) {
 function runSearch(q) {
   searchResults.innerHTML = "";
   q = q.trim().toLowerCase();
-  if (q.length < 2) return;
+  if (q.length < 2) { searchScope = "all"; updateScopeBar(); return; }
 
   const hits = [];
   outer:
@@ -377,7 +410,9 @@ function runSearch(q) {
       for (const P of L.paths)
         for (const t of P.tlvs)
           if (tlvSearchText(t).includes(q)) {
-            hits.push({ G, L, P, t });
+            const h = { G, L, P, t };
+            if (!scopeAccepts(h)) continue;
+            hits.push(h);
             if (hits.length >= HIT_CAP) break outer;
           }
 
@@ -415,9 +450,18 @@ function runSearch(q) {
   const more = document.createElement("div");
   more.className = "more";
   const perGame = GAMES_DATA.map(G => `${G.id} ${hits.filter(h => h.G === G).length}`).join(" · ");
-  more.textContent = hits.length
-    ? `${hits.length}${hits.length >= HIT_CAP ? "+" : ""} hit${hits.length === 1 ? "" : "s"} — ${perGame}`
-    : "no hits";
+  const summary = hits.length
+    ? `${hits.length}${hits.length >= HIT_CAP ? "+" : ""} hit${hits.length === 1 ? "" : "s"}` +
+      (searchScope === "all" ? ` — ${perGame}` : ` in ${scopeLabel()}`)
+    : (searchScope === "all" ? "no hits" : `no hits in ${scopeLabel()}`);
+  more.textContent = summary + (searchScope === "all" ? "" : " — ");
+  if (searchScope !== "all") {
+    const widen = document.createElement("span");
+    widen.className = "widen";
+    widen.textContent = "search everywhere";
+    widen.onclick = () => { searchScope = "all"; updateScopeBar(); runSearch(searchInput.value); };
+    more.appendChild(widen);
+  }
   searchResults.appendChild(more);
 }
 
