@@ -33,13 +33,25 @@ int main(int argc, char** argv)
     std::vector<std::vector<uint8_t>> strips;
     PSXMDECDecoder decoder;
 
-    long pos = 0;
-    while (pos + 2 <= size)
+    // Strip length prefix is u16 in Abe's Oddysee, u32 in Abe's Exoddus.
+    // Detect by checking where the BS magic (0x3800) lands for the first strip.
+    int lenSize = 2;
+    if (size >= 10)
     {
-        uint16_t stripLen;
-        memcpy(&stripLen, &bits[pos], 2);
-        pos += 2;
-        if (stripLen == 0 || pos + stripLen > size + 64)
+        uint16_t m16, m32;
+        memcpy(&m16, &bits[2 + 2], 2);  // u16 framing: header {len,magic,...} after 2-byte prefix
+        memcpy(&m32, &bits[4 + 2], 2);  // u32 framing
+        if (m16 != 0x3800 && m32 == 0x3800)
+            lenSize = 4;
+    }
+
+    long pos = 0;
+    while (pos + lenSize <= size)
+    {
+        uint32_t stripLen = 0;
+        memcpy(&stripLen, &bits[pos], lenSize);
+        pos += lenSize;
+        if (stripLen == 0 || pos + (long)stripLen > size + 64)
             break;
 
         // BS frame: decode STRIP_W x CAM_H RGBA.
