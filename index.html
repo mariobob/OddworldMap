@@ -292,10 +292,14 @@ function updateCounts() {
 // ---- follow (click a door/portal/well to jump to its destination) -----
 function destOf(t) {
   const e = t.extra || {};
-  const mk = (lv, pa, ca, door) => (lv != null && pa != null) ? { lv, pa, ca, door } : null;
-  const a = mk(e.to_level, e.to_path, e.to_cam, e["target_door#"]);
+  // paired objects land on their counterpart, matched by field within the destination camera
+  let target = null;
+  if (e["target_door#"] != null) target = { name: "Door", field: "door#", value: e["target_door#"] };
+  else if (e["target_tp#"] != null) target = { name: "Teleporter", field: "tp#", value: e["target_tp#"] };
+  const mk = (lv, pa, ca, tgt) => (lv != null && pa != null) ? { lv, pa, ca, target: tgt } : null;
+  const a = mk(e.to_level, e.to_path, e.to_cam, target);
   const b = mk(e.alt_level, e.alt_path, e.alt_cam, null);
-  const differs = d => d && !(lvl && path && d.lv === lvl.short && d.pa === path.id && d.door == null);
+  const differs = d => d && !(lvl && path && d.lv === lvl.short && d.pa === path.id && d.target == null);
   return differs(a) ? a : (differs(b) ? b : (a || b));
 }
 
@@ -322,11 +326,12 @@ function navigateToDest(d) {
     if (cm) cell = cm.cell;
   }
   let fx = null, fy = null;
-  if (d.door != null) {
+  if (d.target != null) {
     const inCell = t => cell == null ||
       (Math.floor(t.x1 / GEO.worldW) === cell % path.w && Math.floor(t.y1 / GEO.worldH) === Math.floor(cell / path.w));
-    const tgt = path.tlvs.find(t => t.t === 6 && (t.extra || {})["door#"] === d.door && inCell(t));
-    if (tgt) { fx = dX(tgt.x1) + (tgt.x2 - tgt.x1) / 2; fy = dY(tgt.y1) + (tgt.y2 - tgt.y1) / 2; }
+    const tgt = path.tlvs.find(t => t.name === d.target.name && (t.extra || {})[d.target.field] === d.target.value && inCell(t)) ||
+                path.tlvs.find(t => t.name === d.target.name && (t.extra || {})[d.target.field] === d.target.value);
+    if (tgt) { fx = (dX(tgt.x1) + dX(tgt.x2)) / 2; fy = (dY(tgt.y1) + dY(tgt.y2)) / 2; }
   }
   if (fx == null && cell != null) {
     fx = (cell % path.w) * CELL_W + CELL_W / 2;

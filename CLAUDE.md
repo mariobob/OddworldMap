@@ -22,6 +22,7 @@ Guidance for AI agents working in this repo. User-facing docs (controls, rebuild
 - PS1 cam images are 12 MDEC strips: `u16` length prefix + BS v3 frames in AO, `u32` prefix + BS v2 in AE; `cam2rgba` auto-detects the framing. Decoded strips assemble to 384×240 but only 368 columns are real (macroblock padding, cropped at build time).
 - FG1 foreground blocks: AO partial chunks carry their own RGB555 pixels and whole sub-streams can be LZ-compressed; AE partial chunks are per-row `u32` bitmasks selecting camera-bitmap pixels and are never compressed.
 - TLV records: 0x18-byte header with payload at +0x18 in AO; 0x10-byte header with payload at +0x10 in AE. Door numbers are only unique **per camera** — a target door must be resolved inside the destination camera or same-screen door pairs cross-wire.
+- TLV type ids are per-game (Door is 6 in AO, 5 in AE; numbers overlap with unrelated types). Match objects by `name` in shared code, never by numeric id.
 - Exoddus disc 1 ships `TL.LVL` as a 68-byte boot-config stub, not a LVL archive; the builder skips it. Archive reads are guarded (EOF raises, directories must fit their file) because a garbage header otherwise spins disc reads forever at end of image.
 - Both Exoddus discs list every level, but each disc carries full content only for its half — the other half are stubs with path data and no cam files. Always pick the largest copy of a level across discs (the builder does).
 - AE ender level ids reuse their base level's archive; the table parser deduplicates so each LVL file appears once in the level list.
