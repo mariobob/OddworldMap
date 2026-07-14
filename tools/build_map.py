@@ -545,6 +545,7 @@ def decode_cam(lvl, cam_name, out_png, tmpdir, bitmask_fg1):
     try:
         cam = lvl.read(cam_name + ".CAM")
     except KeyError:
+        print(f"    ! cam file missing: {cam_name}.CAM")
         return False
     chunks = parse_chunks(cam)
     bits = next((v for (tag, _), v in chunks.items() if tag == "Bits"), None)
@@ -687,10 +688,13 @@ def main():
         if short not in tables:
             continue
         lvl_file = f"{short}.LVL"
-        disc = next((d for d in discs if lvl_file.upper() in d.files), None)
-        if disc is None:
+        # multi-disc games carry stub copies of the other disc's levels
+        # (paths present, cam files absent), so pick the largest instance
+        having = [d for d in discs if lvl_file.upper() in d.files]
+        if not having:
             print(f"{short}: no {lvl_file} on disc, skipping")
             continue
+        disc = max(having, key=lambda d: d.files[lvl_file.upper()][1])
         print(f"=== {short} ({display}) ===")
         try:
             lvl = Lvl(disc, lvl_file)
