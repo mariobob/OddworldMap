@@ -395,6 +395,13 @@ def tlv_extra_ae(t, blob, pos, length, level_short):
             if on and on != e:
                 e.update({"alt_level": on["to_level"], "alt_path": on["to_path"], "alt_cam": on["to_cam"]})
             e["switch_id"] = v[1]
+    elif t == 88:  # Teleporter: own id, other id, camera, path, level, switch id
+        v = s16s(6)
+        if len(v) >= 6:
+            e = {"tp#": v[0], "target_tp#": v[1]}
+            e.update(dest(v[4], v[3], v[2]))
+            if v[5]:
+                e["switch_id"] = v[5]
     elif t == 28:  # BirdPortal: side, dest level/path/camera, scale, movie, type
         v = s16s(7)
         if len(v) >= 7:
