@@ -53,7 +53,8 @@
   #searchResults { padding: 2px 6px 10px; }
   #searchResults .hit { display: block; width: 100%; text-align: left; background: none; border: 0;
                         color: var(--text); padding: 3px 8px; border-radius: 5px; cursor: pointer; font-size: 12px; }
-  #searchResults .hit:hover { background: var(--panel2); }
+  #searchResults .hit:hover, #searchResults .hit.active { background: var(--panel2); }
+  #searchResults .hit mark { background: none; color: var(--accent); font-weight: 600; }
   #searchResults .hit .loc { color: var(--accent); }
   #searchResults .hit .ex { color: var(--dim); }
   #searchResults .more { color: var(--dim); font-size: 11px; padding: 3px 8px; }
@@ -387,13 +388,30 @@ function updateScopeBar() {
   }
 }
 
-function hitButton(h) {
+function esc(t) { return t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+function highlight(text, q) {
+  const i = text.toLowerCase().indexOf(q);
+  if (i < 0) return esc(text);
+  return esc(text.slice(0, i)) + "<mark>" + esc(text.slice(i, i + q.length)) + "</mark>" + esc(text.slice(i + q.length));
+}
+
+// match quality: exact name, name prefix, name substring, extras-only
+function matchRank(t, q) {
+  const n = t.name.toLowerCase();
+  if (n === q) return 0;
+  if (n.startsWith(q)) return 1;
+  if (n.includes(q)) return 2;
+  return 3;
+}
+
+function hitButton(h, q) {
   const b = document.createElement("button");
   b.className = "hit";
   const ex = Object.entries(h.t.extra || {}).filter(([k, v]) => v !== null && v !== "")
     .map(([k, v]) => `${k}=${v}`).join(" ");
-  b.innerHTML = `<span class="loc">${h.L.short} P${h.P.id}</span> ${h.t.name}` +
-                (ex ? ` <span class="ex">${ex}</span>` : "");
+  b.innerHTML = `<span class="loc">${h.L.short} P${h.P.id}</span> ${highlight(h.t.name, q)}` +
+                (ex ? ` <span class="ex">${highlight(ex, q)}</span>` : "");
   b.onclick = () => jumpToTlv(h.G, h.L, h.P, h.t);
   return b;
 }
@@ -432,17 +450,18 @@ function runSearch(q) {
 
   for (const g of groups) {
     if (!g.hits.length) continue;
+    g.hits.sort((a, b) => matchRank(a.t, q) - matchRank(b.t, q));
     const head = document.createElement("div");
     head.className = "shead";
     head.innerHTML = `<span>${g.label}</span><span>${g.hits.length}</span>`;
     searchResults.appendChild(head);
-    g.hits.slice(0, GROUP_MAX).forEach(h => searchResults.appendChild(hitButton(h)));
+    g.hits.slice(0, GROUP_MAX).forEach(h => searchResults.appendChild(hitButton(h, q)));
     if (g.hits.length > GROUP_MAX) {
       const rest = g.hits.slice(GROUP_MAX);
       const btn = document.createElement("button");
       btn.className = "showmore";
       btn.textContent = `show ${rest.length} more`;
-      btn.onclick = () => { rest.forEach(h => searchResults.insertBefore(hitButton(h), btn)); btn.remove(); };
+      btn.onclick = () => { rest.forEach(h => searchResults.insertBefore(hitButton(h, q), btn)); btn.remove(); };
       searchResults.appendChild(btn);
     }
   }
@@ -468,6 +487,35 @@ function runSearch(q) {
 searchInput.addEventListener("input", () => {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(() => runSearch(searchInput.value), 160);
+});
+
+// keyboard: "/" focuses search, Esc clears, arrows walk results, Enter jumps
+let activeHit = -1;
+function visibleHits() { return [...searchResults.querySelectorAll(".hit")]; }
+function setActiveHit(i) {
+  const hits = visibleHits();
+  hits.forEach(b => b.classList.remove("active"));
+  activeHit = Math.max(-1, Math.min(i, hits.length - 1));
+  if (activeHit >= 0) {
+    hits[activeHit].classList.add("active");
+    hits[activeHit].scrollIntoView({ block: "nearest" });
+  }
+}
+window.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement !== searchInput) {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+    return;
+  }
+  if (document.activeElement !== searchInput) return;
+  if (e.key === "Escape") { searchInput.value = ""; runSearch(""); searchInput.blur(); setActiveHit(-1); }
+  else if (e.key === "ArrowDown") { e.preventDefault(); setActiveHit(activeHit + 1); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); setActiveHit(activeHit - 1); }
+  else if (e.key === "Enter") {
+    const hits = visibleHits();
+    (hits[activeHit] || hits[0])?.click();
+  } else { activeHit = -1; }
 });
 
 function jumpToTlv(G, L, P, t) {
