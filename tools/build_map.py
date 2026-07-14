@@ -103,7 +103,10 @@ class Disc:
     def read(self, lba, size):
         out = bytearray()
         while len(out) < size:
-            out += self.sector(lba)
+            sec = self.sector(lba)
+            if not sec:
+                raise EOFError(f"read past end of image at LBA {lba}")
+            out += sec
             lba += 1
         return bytes(out[:size])
 
@@ -135,6 +138,8 @@ class Lvl:
         self.lba, self.size = disc.files[name.upper()]
         hdr = disc.sector(self.lba)
         num_files = struct.unpack_from("<I", hdr, 16)[0]
+        if 32 + num_files * 24 > self.size:
+            raise ValueError(f"{name}: directory does not fit the file, not a LVL archive")
         dir_bytes = disc.read(self.lba, 32 + num_files * 24)
         self.files = {}
         for i in range(num_files):
@@ -687,7 +692,11 @@ def main():
             print(f"{short}: no {lvl_file} on disc, skipping")
             continue
         print(f"=== {short} ({display}) ===")
-        lvl = Lvl(disc, lvl_file)
+        try:
+            lvl = Lvl(disc, lvl_file)
+        except (ValueError, EOFError) as ex:
+            print(f"  skipping: {ex}")
+            continue
         bnd_name = f"{short}PATH.BND"
         if bnd_name not in lvl.files:
             print(f"  no {bnd_name}, skipping")
