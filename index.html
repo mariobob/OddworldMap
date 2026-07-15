@@ -39,7 +39,9 @@
   html, body { height: 100%; overflow: hidden; }
   body { background: var(--bg); color: var(--text); font: 13px/1.45 -apple-system, "Segoe UI", sans-serif; display: flex; }
   #sidebar { width: 250px; min-width: 250px; background: var(--panel); border-right: 1px solid var(--line);
-             display: flex; flex-direction: column; overflow-y: auto; }
+             display: flex; flex-direction: column; overflow-y: auto;
+             --collapsed: -250px; transition: margin-left .18s ease; }
+  body:not(.menu-open) #sidebar { margin-left: var(--collapsed); }
   #sidebar h1 { font-size: 14px; padding: 12px 14px 8px; color: var(--accent); letter-spacing: .04em; }
   #sidebar h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--dim);
                 padding: 12px 14px 4px; }
@@ -96,16 +98,17 @@
                              color: var(--accent); padding: 2px 8px 4px; cursor: pointer; font-size: 11px; }
   #searchResults .showmore:hover { text-decoration: underline; }
 
-  /* menu toggle: hidden on desktop, shown on narrow screens */
-  #menuBtn { display: none; position: absolute; top: 10px; left: 10px; z-index: 20;
+  /* menu toggle sits at the map's top-left corner, clear of the sidebar when it is open */
+  #menuBtn { position: absolute; top: 10px; left: 10px; z-index: 20;
              background: rgba(18,20,24,.85); color: var(--text); border: 1px solid var(--line);
              border-radius: 8px; width: 40px; height: 40px; font-size: 20px; cursor: pointer; }
+  #menuBtn:hover { border-color: var(--accent); }
   #scrim { display: none; }
 
+  /* narrow: the sidebar leaves the flow and slides over the map instead of shrinking it */
   @media (max-width: 720px) {
-    #menuBtn { display: block; }
     #sidebar { position: absolute; z-index: 15; height: 100%; width: 82vw; max-width: 320px;
-               transform: translateX(-100%); transition: transform .2s ease;
+               --collapsed: 0; transform: translateX(-100%); transition: transform .2s ease;
                box-shadow: 4px 0 24px rgba(0,0,0,.5); }
     body.menu-open #sidebar { transform: none; }
     body.menu-open #scrim { display: block; position: absolute; inset: 0; z-index: 12;
@@ -118,7 +121,6 @@
 </style>
 </head>
 <body>
-<button id="menuBtn" aria-label="Toggle menu">☰</button>
 <div id="scrim"></div>
 <div id="sidebar">
   <h1>ODDWORLD MAP</h1>
@@ -148,6 +150,7 @@
 </div>
 <div id="main">
   <canvas id="cv"></canvas>
+  <button id="menuBtn" aria-label="Toggle menu">☰</button>
   <div id="tip"></div>
   <div id="help">drag = pan · wheel = zoom · hover = inspect</div>
   <div id="hud"></div>
@@ -222,8 +225,9 @@ let ruler = null;          // {x1, y1, x2, y2} in draw space
 let measuring = false;
 
 const menuBtn = document.getElementById("menuBtn"), scrim = document.getElementById("scrim");
-const isMobile = () => window.matchMedia("(max-width: 720px)").matches;
-function toggleMenu(open) { document.body.classList.toggle("menu-open", open ?? !document.body.classList.contains("menu-open")); resize(); }
+const isNarrow = () => window.matchMedia("(max-width: 720px)").matches;
+document.body.classList.toggle("menu-open", !isNarrow());   // set before first paint: open on wide, out of the way on narrow
+function toggleMenu(open) { document.body.classList.toggle("menu-open", open ?? !document.body.classList.contains("menu-open")); }
 menuBtn.onclick = () => toggleMenu();
 scrim.onclick = () => toggleMenu(false);
 
@@ -235,7 +239,8 @@ function resize() {
   cv.height = cv.clientHeight * devicePixelRatio;
   draw();
 }
-window.addEventListener("resize", resize);
+window.addEventListener("resize", resize);   // catches devicePixelRatio changes, which leave the map box untouched
+new ResizeObserver(resize).observe(document.getElementById("main"));   // the sidebar slide resizes the map without a window resize
 
 // ---- UI build ---------------------------------------------------------
 const gameBtns = document.getElementById("gameBtns");
@@ -282,7 +287,7 @@ function selectPath(P, btn) {
   path = P;
   [...pathBtns.children].forEach(x => x.classList.remove("on"));
   if (btn) btn.classList.add("on");
-  if (isMobile() && !applyingHash) toggleMenu(false);   // reveal the map after picking
+  if (isNarrow() && !applyingHash) toggleMenu(false);   // reveal the map after picking
   fitView();
   updateCounts();
   updateScopeBar();
