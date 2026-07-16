@@ -1,10 +1,13 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { computeEntryPaths, destOf, formatHash, parseHash, zoomAt } from "../../js/model.js";
+import { camCell, computeEntryPaths, destOf, formatHash, parseHash, resolveTarget, zoomAt } from "../../js/model.js";
 import { ZOOM_MIN, ZOOM_MAX } from "../../js/config.js";
-import { dataset, level, path, tlv } from "./fixtures.js";
+import { SYNTH_GEOMETRY, dataset, level, path, tlv } from "./fixtures.js";
 
 const HERE = [{ short: "R1" }, { id: 15 }];   // current level/path stubs
+
+// a TLV moved to world position (x, y); SYNTH_GEOMETRY cells are 400x200 units
+const at = (t, x, y) => ({ ...t, x1: x, y1: y, x2: x + 10, y2: y + 10 });
 
 test("destOf: primary destination wins when it leads elsewhere", () => {
   const t = tlv("Door", { to_level: "R2", to_path: 1, to_cam: 3 });
@@ -32,6 +35,37 @@ test("destOf: both destinations self -> primary still returned", () => {
 test("destOf: no or incomplete destination -> null", () => {
   assert.equal(destOf(tlv("Slig"), ...HERE), null);
   assert.equal(destOf(tlv("Door", { to_level: "R2" }), ...HERE), null);   // path missing
+});
+
+test("camCell: zero-padded C## suffix lookup, null for unknown or missing ids", () => {
+  const P = path(1, [], [{ cell: 0, name: "XXP01C01" }, { cell: 3, name: "XXP01C12" }], 2, 2);
+  assert.equal(camCell(P, 1), 0);
+  assert.equal(camCell(P, 12), 3);
+  assert.equal(camCell(P, 7), null);
+  assert.equal(camCell(P, null), null);
+});
+
+test("resolveTarget: matches inside the destination camera before anything else", () => {
+  // same door# in two cameras: the destination camera's copy must win
+  const a = at(tlv("Door", { "door#": 1 }), 50, 20);     // cell 0 -> C01
+  const b = at(tlv("Door", { "door#": 1 }), 450, 20);    // cell 1 -> C02
+  const P = path(1, [a, b], [{ cell: 0, name: "XXP01C01" }, { cell: 1, name: "XXP01C02" }], 2, 1);
+  const target = { name: "Door", field: "door#", value: 1 };
+  assert.equal(resolveTarget({ ca: 2, target }, P, SYNTH_GEOMETRY), b);
+  assert.equal(resolveTarget({ ca: 1, target }, P, SYNTH_GEOMETRY), a);
+});
+
+test("resolveTarget: path-wide fallback when the destination camera has no match", () => {
+  const a = at(tlv("Door", { "door#": 5 }), 50, 20);     // cell 0, not the target cam
+  const P = path(1, [a], [{ cell: 0, name: "XXP01C01" }, { cell: 1, name: "XXP01C02" }], 2, 1);
+  assert.equal(resolveTarget({ ca: 2, target: { name: "Door", field: "door#", value: 5 } }, P, SYNTH_GEOMETRY), a);
+  assert.equal(resolveTarget({ ca: 2, target: { name: "Door", field: "door#", value: 9 } }, P, SYNTH_GEOMETRY), null);
+});
+
+test("resolveTarget: no paired target -> null", () => {
+  const P = path(1, [at(tlv("Door", { "door#": 1 }), 50, 20)], [], 1, 1);
+  assert.equal(resolveTarget({ ca: 1, target: null }, P, SYNTH_GEOMETRY), null);
+  assert.equal(resolveTarget(null, P, SYNTH_GEOMETRY), null);
 });
 
 test("computeEntryPaths: cross-level links and AbeStart mark entries", () => {

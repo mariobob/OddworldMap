@@ -28,7 +28,7 @@ for (const [file, id, geometry] of [["map_data_ao.json", "AO", AO_GEOMETRY],
         assert.ok(Number.isInteger(P.id) && P.w > 0 && P.h > 0, `${L.short} P${P.id} dimensions`);
         for (const c of P.cams) {
           assert.ok(c.cell >= 0 && c.cell < P.w * P.h, `${L.short} P${P.id} cam cell in range`);
-          assert.match(c.name, /C\d\d$/, "navigateToDest resolves cameras by this suffix");
+          assert.match(c.name, /C\d\d$/, "camCell resolves cameras by this suffix");
         }
         for (const t of P.tlvs) {
           assert.equal(typeof t.name, "string");

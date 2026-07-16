@@ -14,6 +14,6 @@ export const SYNTH_GEOMETRY = { cellW: 100, cellH: 50, worldW: 400, worldH: 200,
 // minimal dataset builders, shaped like the generated map data
 export const tlv = (name, extra = null) =>
   ({ t: 0, name, x1: 0, y1: 0, x2: 10, y2: 10, ...(extra ? { extra } : {}) });
-export const path = (id, tlvs) => ({ id, w: 1, h: 1, cams: [], tlvs, lines: [] });
+export const path = (id, tlvs, cams = [], w = 1, h = 1) => ({ id, w, h, cams, tlvs, lines: [] });
 export const level = (short, ...paths) => ({ short, name: short, paths });
 export const dataset = levels => ({ id: "XX", levels });

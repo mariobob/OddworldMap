@@ -35,6 +35,25 @@ export function destOf(t, lvl = state.lvl, path = state.path) {
   return differs(a) ? a : (differs(b) ? b : (a || b));
 }
 
+// camera id -> grid cell within a path (cam names end in C##)
+export function camCell(path, camId) {
+  if (camId == null) return null;
+  const suffix = "C" + String(camId).padStart(2, "0");
+  const cm = path.cams.find(c => c.name && c.name.endsWith(suffix));
+  return cm ? cm.cell : null;
+}
+
+// the paired TLV a destination lands on: door numbers are only unique per
+// camera, so match inside the destination camera first, path-wide as a fallback
+export function resolveTarget(d, path, geo) {
+  if (!d || !d.target) return null;
+  const cell = camCell(path, d.ca);
+  const inCell = t => cell == null ||
+    (Math.floor(t.x1 / geo.worldW) === cell % path.w && Math.floor(t.y1 / geo.worldH) === Math.floor(cell / path.w));
+  const match = t => t.name === d.target.name && (t.extra || {})[d.target.field] === d.target.value;
+  return path.tlvs.find(t => match(t) && inCell(t)) || path.tlvs.find(match) || null;
+}
+
 // zoom the camera by factor about a fixed canvas point: the world spot under
 // (px, py) stays put
 export function zoomAt(cam, factor, px, py) {

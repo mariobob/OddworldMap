@@ -6,7 +6,7 @@ import { ZOOM_MIN, ZOOM_MAX, FOCUS_ZOOM_MIN, FOCUS_ZOOM_MAX, FOCUS_SCREENS } fro
 import { $, cv, gameBtns, levelBtns, pathBtns } from "./dom.js";
 import { state, GEO, CELL_W, CELL_H, setGeometry, dX, dY } from "./state.js";
 import { draw, flashAt } from "./render.js";
-import { computeEntryPaths, formatHash, parseHash } from "./model.js";
+import { camCell, computeEntryPaths, formatHash, parseHash, resolveTarget } from "./model.js";
 
 // highlight the button whose data-key matches, clear the rest
 function markOn(box, key) {
@@ -114,22 +114,10 @@ export function navigateToDest(d) {
   if (state.lvl !== L) selectLevel(L);
   if (!selectPathById(d.pa)) return;
 
-  // door numbers are only unique per camera, so resolve the destination
-  // camera cell first and match the target door inside it
-  let cell = null;
-  if (d.ca != null) {
-    const suffix = "C" + String(d.ca).padStart(2, "0");
-    const cm = state.path.cams.find(c => c.name && c.name.endsWith(suffix));
-    if (cm) cell = cm.cell;
-  }
   let fx = null, fy = null;
-  if (d.target != null) {
-    const inCell = t => cell == null ||
-      (Math.floor(t.x1 / GEO.worldW) === cell % state.path.w && Math.floor(t.y1 / GEO.worldH) === Math.floor(cell / state.path.w));
-    const tgt = state.path.tlvs.find(t => t.name === d.target.name && (t.extra || {})[d.target.field] === d.target.value && inCell(t)) ||
-                state.path.tlvs.find(t => t.name === d.target.name && (t.extra || {})[d.target.field] === d.target.value);
-    if (tgt) { fx = (dX(tgt.x1) + dX(tgt.x2)) / 2; fy = (dY(tgt.y1) + dY(tgt.y2)) / 2; }
-  }
+  const tgt = resolveTarget(d, state.path, GEO);
+  if (tgt) { fx = (dX(tgt.x1) + dX(tgt.x2)) / 2; fy = (dY(tgt.y1) + dY(tgt.y2)) / 2; }
+  const cell = camCell(state.path, d.ca);
   if (fx == null && cell != null) {
     fx = (cell % state.path.w) * CELL_W + CELL_W / 2;
     fy = Math.floor(cell / state.path.w) * CELL_H + CELL_H / 2;
