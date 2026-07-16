@@ -31,6 +31,10 @@
 <meta name="twitter:image" content="https://oddworldmap.com/og-image.png">
 <meta name="twitter:image:alt" content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus">
 <link rel="stylesheet" href="css/main.css">
+<!-- start the data downloads during HTML parse instead of after the module graph;
+     crossorigin matches fetch()'s cors/same-origin mode so the preload is consumed -->
+<link rel="preload" href="map_data_ao.json" as="fetch" crossorigin>
+<link rel="preload" href="map_data_ae.json" as="fetch" crossorigin>
 </head>
 <body>
 <div id="scrim"></div>
