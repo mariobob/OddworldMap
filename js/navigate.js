@@ -6,20 +6,7 @@ import { ZOOM_MIN, ZOOM_MAX, FOCUS_ZOOM_MIN, FOCUS_ZOOM_MAX, FOCUS_SCREENS } fro
 import { $, cv, gameBtns, levelBtns, pathBtns } from "./dom.js";
 import { state, GEO, CELL_W, CELL_H, setGeometry, dX, dY } from "./state.js";
 import { draw, flashAt } from "./render.js";
-
-function computeEntryPaths(data) {
-  const entries = {};
-  const add = (lv, pa) => { if (lv != null && pa != null) (entries[lv] ??= new Set()).add(pa); };
-  for (const L of data.levels)
-    for (const P of L.paths)
-      for (const t of P.tlvs) {
-        const e = t.extra || {};
-        if (e.to_level && e.to_level !== L.short) add(e.to_level, e.to_path);
-        if (e.alt_level && e.alt_level !== L.short) add(e.alt_level, e.alt_path);
-        if (t.name === "AbeStart") add(L.short, P.id);   // game start / re-entry
-      }
-  return entries;
-}
+import { computeEntryPaths, formatHash, parseHash } from "./model.js";
 
 // highlight the button whose data-key matches, clear the rest
 function markOn(box, key) {
@@ -120,19 +107,6 @@ function focusOn(fx, fy) {
 }
 
 // ---- follow (click a door/portal/well to jump to its destination) -----
-export function destOf(t) {
-  const e = t.extra || {};
-  // paired objects land on their counterpart, matched by field within the destination camera
-  let target = null;
-  if (e["target_door#"] != null) target = { name: "Door", field: "door#", value: e["target_door#"] };
-  else if (e["target_tp#"] != null) target = { name: "Teleporter", field: "tp#", value: e["target_tp#"] };
-  const mk = (lv, pa, ca, tgt) => (lv != null && pa != null) ? { lv, pa, ca, target: tgt } : null;
-  const a = mk(e.to_level, e.to_path, e.to_cam, target);
-  const b = mk(e.alt_level, e.alt_path, e.alt_cam, null);
-  const differs = d => d && !(state.lvl && state.path && d.lv === state.lvl.short && d.pa === state.path.id && d.target == null);
-  return differs(a) ? a : (differs(b) ? b : (a || b));
-}
-
 export function navigateToDest(d) {
   if (!cv.clientWidth) { requestAnimationFrame(() => navigateToDest(d)); return; }
   const L = state.data.levels.find(l => l.short === d.lv);
@@ -171,11 +145,11 @@ export function jumpToTlv(G, L, P, t) {
   focusOn((dX(t.x1) + dX(t.x2)) / 2, (dY(t.y1) + dY(t.y2)) / 2);
 }
 
-// ---- permalinks: #GAME/LEVEL/PATH/x/y/zoom -----------------------------
+// ---- permalinks ---------------------------------------------------------
 let applyingHash = false, hashTimer = null;
 
 function hashFor() {
-  return `#${state.data.id}/${state.lvl.short}/${state.path.id}/${Math.round(state.cam.x)}/${Math.round(state.cam.y)}/${state.cam.z.toFixed(2)}`;
+  return formatHash(state.data.id, state.lvl.short, state.path.id, state.cam);
 }
 
 export function scheduleHash(push) {
@@ -190,21 +164,19 @@ export function scheduleHash(push) {
 }
 
 export function applyHash() {
-  let h = location.hash.replace(/^#/, "");
-  if (!h) return false;
-  let parts = h.split("/");
-  const G = state.games.find(g => g.id === parts[0].toUpperCase());
+  const p = parseHash(location.hash);
+  if (!p) return false;
+  const G = state.games.find(g => g.id === p.game);
   if (!G) return false;
-  parts = parts.slice(1);
-  const L = G.levels.find(l => l.short === (parts[0] || "").toUpperCase());
+  const L = G.levels.find(l => l.short === p.level);
   if (!L) return false;
   applyingHash = true;
   if (state.data !== G) selectGame(G, true);
   if (state.lvl !== L) selectLevel(L);
-  if (!selectPathById(+parts[1])) { applyingHash = false; return false; }
-  if (parts[2] != null && parts.length >= 5) {
-    state.cam.x = +parts[2]; state.cam.y = +parts[3];
-    state.cam.z = clamp(+parts[4], ZOOM_MIN, ZOOM_MAX);
+  if (!selectPathById(p.path)) { applyingHash = false; return false; }
+  if (p.view) {
+    state.cam.x = p.view.x; state.cam.y = p.view.y;
+    state.cam.z = clamp(p.view.z, ZOOM_MIN, ZOOM_MAX);
     camToken++;   // cancel any fit still waiting on layout
   }
   applyingHash = false;

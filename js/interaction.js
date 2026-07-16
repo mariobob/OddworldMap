@@ -5,7 +5,8 @@ import { ZOOM_MIN, ZOOM_MAX, TIP_MAX_W, catOf, LINE_COLORS, LINE_NAMES } from ".
 import { cv, tip, hud, menuBtn, scrim, narrowMQ } from "./dom.js";
 import { state, dX, dY, wX, wY } from "./state.js";
 import { draw, scheduleDraw } from "./render.js";
-import { destOf, navigateToDest, scheduleHash } from "./navigate.js";
+import { destOf } from "./model.js";
+import { navigateToDest, scheduleHash } from "./navigate.js";
 
 let hoverTlvs = [], mouse = {x:0,y:0};
 let panMoved = false;
