@@ -1,6 +1,6 @@
 // Canvas rendering: cameras, overlays, markers, and the image caches.
 
-import { FLASH_MS, LINE_COLORS, catOf } from "./config.js";
+import { CACHE_MAX_IMAGES, FLASH_MS, LINE_COLORS, catOf } from "./config.js";
 import { $, cv, ctx, cssVar } from "./dom.js";
 import { state, CELL_W, CELL_H, dX, dY } from "./state.js";
 
@@ -34,6 +34,20 @@ function tintedImg(src) {
   tintCache[src] = oc;
   return oc;
 }
+
+// a long browse would pin every visited cam's compressed PNG (and tint canvas)
+// for the session; once past the cap, drop what the new path doesn't reference
+window.addEventListener("selection-changed", () => {
+  if (Object.keys(images).length <= CACHE_MAX_IMAGES) return;
+  const keep = new Set();
+  for (const c of state.path.cams) { if (c.png) keep.add(c.png); if (c.fg) keep.add(c.fg); }
+  for (const src of Object.keys(images)) {
+    if (keep.has(src)) continue;
+    images[src].onload = null;   // in-flight loads must not repaint after eviction
+    delete images[src];
+    delete tintCache[src];
+  }
+});
 
 // follow-destination highlight: a fading ring at (x, y) in draw space
 let flash = null;   // {x, y, t0}
