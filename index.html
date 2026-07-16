@@ -138,12 +138,14 @@
   <div class="btnrow" id="pathBtns"></div>
   <h2>Display</h2>
   <div id="toggles">
-    <label><input type="checkbox" id="tGrid" checked> Camera grid + names</label>
-    <label><input type="checkbox" id="tColl"> Collision lines</label>
-    <label><input type="checkbox" id="tFg"> Foreground masks (FG1)</label>
-    <label><input type="checkbox" id="tLabels" checked> Object labels (zoomed)</label>
-    <label><input type="checkbox" id="tDim"> Dim backgrounds</label>
-    <label><input type="checkbox" id="tRuler"> Ruler (drag to measure)</label>
+    <!-- autocomplete=off: the script mirrors .checked into state, so form-state
+         restoration (which fires no change events) must not flip these -->
+    <label><input type="checkbox" id="tGrid" autocomplete="off" checked> Camera grid + names</label>
+    <label><input type="checkbox" id="tColl" autocomplete="off"> Collision lines</label>
+    <label><input type="checkbox" id="tFg" autocomplete="off"> Foreground masks (FG1)</label>
+    <label><input type="checkbox" id="tLabels" autocomplete="off" checked> Object labels (zoomed)</label>
+    <label><input type="checkbox" id="tDim" autocomplete="off"> Dim backgrounds</label>
+    <label><input type="checkbox" id="tRuler" autocomplete="off"> Ruler (drag to measure)</label>
     <button id="exportBtn" title="save the current view as an image">Export view as PNG</button>
   </div>
   <h2>Objects <span style="float:right"><a href="#" id="fAll" style="color:var(--dim)">all</a> · <a href="#" id="fNone" style="color:var(--dim)">none</a></span></h2>
@@ -339,7 +341,18 @@ CATS.forEach(c => {
 });
 document.getElementById("fAll").onclick = e => { e.preventDefault(); CATS.forEach(c => { c.on = true; c._lab.style.opacity = 1; }); draw(); };
 document.getElementById("fNone").onclick = e => { e.preventDefault(); CATS.forEach(c => { c.on = false; c._lab.style.opacity = .45; }); draw(); };
-["tGrid","tColl","tFg","tLabels","tDim"].forEach(id => document.getElementById(id).onchange = draw);
+// display toggles: `show` mirrors the sidebar checkboxes (initial state comes from the HTML)
+const show = {};
+for (const [key, id] of Object.entries({ grid: "tGrid", coll: "tColl", fg: "tFg",
+                                         labels: "tLabels", dim: "tDim", ruler: "tRuler" })) {
+  const cb = document.getElementById(id);
+  show[key] = cb.checked;
+  cb.onchange = () => {
+    show[key] = cb.checked;
+    if (key === "ruler") { if (!show.ruler) ruler = null; cv.style.cursor = show.ruler ? "crosshair" : ""; }
+    draw();
+  };
+}
 document.getElementById("exportBtn").onclick = () => {
   cv.toBlob(blob => {
     if (!blob) return;
@@ -349,12 +362,6 @@ document.getElementById("exportBtn").onclick = () => {
     a.click();
     URL.revokeObjectURL(a.href);
   }, "image/png");
-};
-
-document.getElementById("tRuler").onchange = () => {
-  if (!document.getElementById("tRuler").checked) ruler = null;
-  cv.style.cursor = document.getElementById("tRuler").checked ? "crosshair" : "";
-  draw();
 };
 
 function updateCounts() {
@@ -657,7 +664,7 @@ window.addEventListener("hashchange", () => { if (!applyingHash) applyHash(); })
 // ---- interaction ------------------------------------------------------
 let panning = false, panStart = null;
 cv.addEventListener("mousedown", e => {
-  if (document.getElementById("tRuler").checked) {
+  if (show.ruler) {
     const w = worldAtMouse();
     ruler = { x1: w.x, y1: w.y, x2: w.x, y2: w.y };
     measuring = true;
@@ -667,7 +674,7 @@ cv.addEventListener("mousedown", e => {
   panning = true; panMoved = false; cv.classList.add("panning"); panStart = { x: e.clientX, y: e.clientY, cx: cam.x, cy: cam.y };
 });
 cv.addEventListener("click", () => {
-  if (panMoved || document.getElementById("tRuler").checked) return;
+  if (panMoved || show.ruler) return;
   for (const t of hoverTlvs) {
     const d = destOf(t);
     if (d) { navigateToDest(d); return; }
@@ -756,7 +763,7 @@ function updateHover() {
   if (!path) return;
   const w = worldAtMouse();
   let hoverLines = [];
-  if (document.getElementById("tColl").checked) {
+  if (show.coll) {
     const tol = 6 / cam.z;
     hoverLines = path.lines.filter(([x1, y1, x2, y2]) =>
       segDist(w.x, w.y, dX(x1), dY(y1), dX(x2), dY(y2)) <= tol).slice(0, 4);
@@ -847,8 +854,6 @@ function draw() {
   ctx.scale(cam.z, cam.z);
   ctx.translate(-cam.x, -cam.y);
 
-  const dim = document.getElementById("tDim").checked;
-
   // cameras
   ctx.imageSmoothingEnabled = cam.z < 1;
   for (const c of path.cams) {
@@ -856,7 +861,7 @@ function draw() {
     if (c.png) {
       const im = img(c.png);
       if (im.complete && im.naturalWidth) {
-        ctx.globalAlpha = dim ? 0.35 : 1;
+        ctx.globalAlpha = show.dim ? 0.35 : 1;
         // source is 384px wide (24 MDEC macroblocks); only the first 368 columns are real
         ctx.drawImage(im, 0, 0, CELL_W, CELL_H, cx, cy, CELL_W, CELL_H);
         ctx.globalAlpha = 1;
@@ -868,7 +873,7 @@ function draw() {
   }
 
   // foreground occlusion masks, tinted so they stand out from the identical background art
-  if (document.getElementById("tFg").checked) {
+  if (show.fg) {
     for (const c of path.cams) {
       if (!c.fg) continue;
       const t = tintedImg(c.fg);
@@ -881,7 +886,7 @@ function draw() {
   }
 
   // grid + names
-  if (document.getElementById("tGrid").checked) {
+  if (show.grid) {
     ctx.strokeStyle = "rgba(255,255,255,.18)";
     ctx.lineWidth = 1.5 / cam.z;
     for (let gx = 0; gx <= path.w; gx++) { ctx.beginPath(); ctx.moveTo(gx * CELL_W, 0); ctx.lineTo(gx * CELL_W, path.h * CELL_H); ctx.stroke(); }
@@ -899,7 +904,7 @@ function draw() {
   }
 
   // collision lines
-  if (document.getElementById("tColl").checked) {
+  if (show.coll) {
     ctx.lineWidth = 2.5 / cam.z;
     for (const [x1, y1, x2, y2, t] of path.lines) {
       ctx.strokeStyle = LINE_COLORS[t] || "#999";
@@ -910,7 +915,7 @@ function draw() {
   }
 
   // TLVs
-  const showLabels = document.getElementById("tLabels").checked && cam.z > 0.45;
+  const showLabels = show.labels && cam.z > 0.45;
   ctx.font = `${11 / cam.z}px sans-serif`;
   for (const t of path.tlvs) {
     const c = catOf(t);
