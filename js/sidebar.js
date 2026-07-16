@@ -6,18 +6,19 @@ import { state } from "./state.js";
 import { draw } from "./render.js";
 
 // filters
+const catUI = new Map();   // category -> its checkbox and count elements
 CATS.forEach(c => {
   const lab = document.createElement("label");
   lab.innerHTML = `<span class="sw" style="background:${c.color}"></span>
     <input type="checkbox" autocomplete="off" ${c.on ? "checked" : ""}>
     <span>${c.label}</span><span class="cnt"></span>`;
-  c._cb = lab.querySelector("input");
-  c._cnt = lab.querySelector(".cnt");
-  c._cb.onchange = () => { c.on = c._cb.checked; draw(); };
+  const cb = lab.querySelector("input");
+  cb.onchange = () => { c.on = cb.checked; draw(); };
+  catUI.set(c, { cb, cnt: lab.querySelector(".cnt") });
   filterBox.appendChild(lab);
 });
 function setAllFilters(on) {
-  CATS.forEach(c => { c.on = on; c._cb.checked = on; });
+  CATS.forEach(c => { c.on = on; catUI.get(c).cb.checked = on; });
   draw();
 }
 $("fAll").onclick = () => setAllFilters(true);
@@ -49,6 +50,6 @@ $("exportBtn").onclick = () => {
 function updateCounts() {
   const counts = {};
   state.path.tlvs.forEach(t => { const c = catOf(t); counts[c.key] = (counts[c.key] || 0) + 1; });
-  CATS.forEach(c => c._cnt.textContent = counts[c.key] || "");
+  CATS.forEach(c => catUI.get(c).cnt.textContent = counts[c.key] || "");
 }
 window.addEventListener("selection-changed", updateCounts);
