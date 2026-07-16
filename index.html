@@ -156,8 +156,6 @@
   <div id="hud"></div>
 </div>
 
-<script src="map_data_ao.js" onerror="this.remove()"></script>
-<script src="map_data_ae.js" onerror="this.remove()"></script>
 <script>
 // Each game maps world coordinates to screen artwork differently (data.geometry):
 // AO cameras occupy 1024x480-unit world cells with a 368x240 window at +256/+120
@@ -941,21 +939,19 @@ function draw() {
   ctx.restore();
 }
 
-// boot: over http(s), re-fetch map data with cache disabled so rebuilds show up
-// immediately; on file:// fall back to the <script> tag payloads.
-async function loadOne(file, fallback) {
-  if (location.protocol.startsWith("http")) {
-    try {
-      const t = await fetch(file, { cache: "no-store" }).then(r => r.ok ? r.text() : null);
-      if (t) return JSON.parse(t.slice(t.indexOf("=") + 1).trim().replace(/;$/, ""));
-    } catch (e) { /* fall through */ }
-  }
-  return fallback;
+// boot: the generated data files are `window.MAP_DATA_* = {...}` scripts;
+// fetch them and parse the JSON payload after the "=".
+async function loadOne(file) {
+  try {
+    const t = await fetch(file, { cache: "no-store" }).then(r => r.ok ? r.text() : null);
+    if (t) return JSON.parse(t.slice(t.indexOf("=") + 1).trim().replace(/;$/, ""));
+  } catch { /* tolerate a missing dataset */ }
+  return null;
 }
 
 Promise.all([
-  loadOne("map_data_ao.js", window.MAP_DATA_AO),
-  loadOne("map_data_ae.js", window.MAP_DATA_AE),
+  loadOne("map_data_ao.js"),
+  loadOne("map_data_ae.js"),
 ]).then(datasets => {
   GAMES_DATA = datasets.filter(d => d && d.levels && d.levels.length);
   GAMES_DATA.forEach(G => {

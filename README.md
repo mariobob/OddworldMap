@@ -2,7 +2,7 @@
 
 Interactive map of **Oddworld: Abe's Oddysee** and **Abe's Exoddus** (PS1, NTSC-U), extracted directly from the game discs: every camera background, every object (doors, levers, Mudokons, LCD status boards, hazards, enemies, ...) and every collision line, laid out on the games' real camera grids.
 
-Open **[index.html](index.html)** in a browser — the whole site is static, no server needed.
+Browse it at **[oddworldmap.com](https://oddworldmap.com/)** — or serve the repo root with any static web server (`python3 -m http.server`) to run it locally.
 
 ![Stock Yards in Oddysee](cams/ao/E1/E1P01C03.png)
 
