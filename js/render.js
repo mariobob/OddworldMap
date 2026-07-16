@@ -1,8 +1,13 @@
 // Canvas rendering: cameras, overlays, markers, and the image caches.
 
-import { COLOR, FLASH_MS, LINE_COLORS, catOf } from "./config.js";
+import { FLASH_MS, LINE_COLORS, catOf } from "./config.js";
 import { $, cv, ctx } from "./dom.js";
 import { state, CELL_W, CELL_H, dX, dY } from "./state.js";
+
+// canvas colors shared with the stylesheet, read once from the tokens
+const cssVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const COLOR = { bg: cssVar("--bg"), mapBg: cssVar("--map-bg"), mapBgRgb: cssVar("--map-bg-rgb"),
+                cellEmpty: cssVar("--cell-empty"), accentRgb: cssVar("--accent-rgb") };
 
 const images = {};   // png -> Image
 function img(src) {

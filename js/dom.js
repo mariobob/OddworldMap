@@ -1,6 +1,8 @@
-// Cached references to the static DOM.
+// Cached references to the static DOM and browser-environment handles.
 
 export const $ = id => document.getElementById(id);
+
+export const narrowMQ = window.matchMedia("(max-width: 720px)");   // keep in sync with the CSS breakpoint
 
 export const cv = $("cv"), ctx = cv.getContext("2d");
 export const tip = $("tip"), hud = $("hud");

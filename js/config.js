@@ -1,16 +1,12 @@
-// Viewer-wide tunables, colors and the object category tables.
+// Viewer-wide tunables and the object category tables.
+// Environment-free on purpose: this module must stay importable outside the
+// browser (the unit tests run it in bare Node).
 
 export const ZOOM_MIN = 0.02, ZOOM_MAX = 4;              // manual zoom clamp (px per draw unit)
 export const FOCUS_ZOOM_MIN = 0.5, FOCUS_ZOOM_MAX = 1.6; // zoom clamp when jumping to an object
 export const FOCUS_SCREENS = 2.6;                        // jump target: ~this many screens across
 export const FLASH_MS = 1600;                            // follow-destination highlight duration
 export const TIP_MAX_W = 340;                            // keep in sync with #tip max-width in CSS
-export const narrowMQ = window.matchMedia("(max-width: 720px)");   // keep in sync with the CSS breakpoint
-
-// canvas colors shared with the stylesheet, read once from the tokens
-const cssVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-export const COLOR = { bg: cssVar("--bg"), mapBg: cssVar("--map-bg"), mapBgRgb: cssVar("--map-bg-rgb"),
-                       cellEmpty: cssVar("--cell-empty"), accentRgb: cssVar("--accent-rgb") };
 
 export const LINE_COLORS = { 0:"#43d94c", 1:"#ff5c5c", 2:"#ff9d3d", 3:"#5ca9ff", 4:"#2b8f33", 5:"#a33c3c", 6:"#a3702b" };
 export const LINE_NAMES = { 0:"Floor", 1:"Wall (left)", 2:"Wall (right)", 3:"Ceiling",
