@@ -1,3 +1,9 @@
+import { clamp, esc, extrasText, segDist } from "./util.js";
+import { ZOOM_MIN, ZOOM_MAX, FOCUS_ZOOM_MIN, FOCUS_ZOOM_MAX, FOCUS_SCREENS, FLASH_MS,
+         TIP_MAX_W, narrowMQ, COLOR, CATS, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
+import { $, cv, ctx, tip, hud, menuBtn, scrim, gameBtns, levelBtns, pathBtns, filterBox,
+         searchInput, searchResults, scopeBar } from "./dom.js";
+
 // Each game maps world coordinates to screen artwork differently (data.geometry):
 // AO cameras occupy 1024x480-unit world cells with a 368x240 window at +256/+120
 // (1:1 world:pixel; Map.cpp SetActiveCam + ScreenManager xpos/ypos); AE cameras
@@ -35,39 +41,6 @@ function dY(wy) { const c = Math.floor(wy / GEO.worldH); return c * CELL_H + (wy
 function wX(dx) { const c = Math.floor(dx / CELL_W); return c * GEO.worldW + GEO.winX + (dx - c * CELL_W) / SX; }
 function wY(dy) { const c = Math.floor(dy / CELL_H); return c * GEO.worldH + GEO.winY + (dy - c * CELL_H) / SY; }
 
-// ---- tunables ----------------------------------------------------------
-const ZOOM_MIN = 0.02, ZOOM_MAX = 4;              // manual zoom clamp (px per draw unit)
-const FOCUS_ZOOM_MIN = 0.5, FOCUS_ZOOM_MAX = 1.6; // zoom clamp when jumping to an object
-const FOCUS_SCREENS = 2.6;                        // jump target: ~this many screens across
-const FLASH_MS = 1600;                            // follow-destination highlight duration
-const TIP_MAX_W = 340;                            // keep in sync with #tip max-width in CSS
-const narrowMQ = window.matchMedia("(max-width: 720px)");   // keep in sync with the CSS breakpoint
-
-const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-
-// canvas colors shared with the stylesheet, read once from the tokens
-const cssVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-const COLOR = { bg: cssVar("--bg"), mapBg: cssVar("--map-bg"), mapBgRgb: cssVar("--map-bg-rgb"),
-                cellEmpty: cssVar("--cell-empty"), accentRgb: cssVar("--accent-rgb") };
-
-// ---- categories (matched by TLV name so both games share the buckets) ----
-const CATS = [
-  { key:"board",  label:"LCD Status Boards", color:"#ff3860", on:true, names:["LCDStatusBoard"] },
-  { key:"mud",    label:"Mudokons",          color:"#3ec6ff", on:true, names:["Mudokon","SlingMudokon","RingMudokon","LiftMudokon","MudokonPathTrans","TorturedMudokon"] },
-  { key:"door",   label:"Doors / Transitions", color:"#ffd23e", on:true, names:["Door","PathTransition","BirdPortal","BirdPortalExit","WellLocal","LocalWell","WellExpress","Teleporter","TrainDoor","SlamDoor","MineCar"] },
-  { key:"cont",   label:"Continue points",   color:"#ffffff", on:true, names:["ContinuePoint","AbeStart","ElumStart"] },
-  { key:"switch", label:"Switches / levers", color:"#5dde75", on:true, names:["Switch","Lever","InvisibleSwitch","FootSwitch","BellHammer","HandStone","IdSplitter","SecurityOrb","SecurityDoor","BellSongStone","ChimeLock","MovieHandStone","GlukkonSwitch","CrawlingSligButton","MultiSwitchController","WheelSyncer","WorkWheel","SlapLock"] },
-  { key:"hazard", label:"Hazards",           color:"#ff8b3d", on:true, names:["DeathDrop","TimedMine","Mine","UXB","ElectricWall","DoorFlame","MovingBomb","MeatSaw","BoomMachine","DeathClock","GasEmitter","GasCountdown","TrapDoor","FallingItem","RollingBall","RollingRock","ZBall","Drill","LaughingGas","ExplosionSet","BrewMachine","Water"] },
-  { key:"enemy",  label:"Enemies / spawners", color:"#c85dff", on:true, names:["Slig","Slog","Paramite","Scrab","Bat","Bees","SligSpawner","SlogSpawner","ScrabSpawner","Glukkon","SlogHut","FlyingSlig","FlyingSligSpawner","CrawlingSlig","Fleech","Slurg","SlurgSpawner","ZzzSpawner","Greeter","SligGetPants","SligGetWings","BeeSwarmHole"] },
-  { key:"screen", label:"Screens / pickups", color:"#3effc8", on:false, names:["LCDScreen","LCD","MovieStone","HintFly","DemoPlaybackStone","Honey","HoneySack","HoneyDripTarget","MeatSack","RockSack","BoneBag","Dove","StatusLight","ColourfulMeter"] },
-  { key:"nav",    label:"Hoists / edges / lifts", color:"#8f9bb3", on:false, names:["Hoist","Edge","LiftPoint","LiftMover","Pulley","PullRingRope","ElumWall","ScrabNoFall","RollingBallStopper","FlintLockFire","ParamiteWebLine"] },
-  { key:"meta",   label:"Meta / bounds / fx", color:"#5b6270", on:false, names:[] },   // fallback for everything else
-];
-const NAME_CAT = {};
-CATS.forEach(c => c.names.forEach(n => NAME_CAT[n] = c));
-const META_CAT = CATS[CATS.length - 1];
-const catOf = t => NAME_CAT[t.name] || META_CAT;
-
 // ---- state ------------------------------------------------------------
 let lvl = null, path = null;
 let cam = { x: 0, y: 0, z: 0.3 };   // world offset + zoom (px per unit)
@@ -78,15 +51,11 @@ let flash = null;          // {x, y, t0} follow-destination highlight
 let ruler = null;          // {x1, y1, x2, y2} in draw space
 let measuring = false;
 
-const menuBtn = document.getElementById("menuBtn"), scrim = document.getElementById("scrim");
 const isNarrow = () => narrowMQ.matches;
 document.body.classList.toggle("menu-open", !isNarrow());   // set before first paint: open on wide, out of the way on narrow
 function toggleMenu(open) { document.body.classList.toggle("menu-open", open ?? !document.body.classList.contains("menu-open")); }
 menuBtn.onclick = () => toggleMenu();
 scrim.onclick = () => toggleMenu(false);
-
-const cv = document.getElementById("cv"), ctx = cv.getContext("2d");
-const tip = document.getElementById("tip"), hud = document.getElementById("hud");
 
 function resize() {
   cv.width = cv.clientWidth * devicePixelRatio;
@@ -94,13 +63,9 @@ function resize() {
   draw();
 }
 window.addEventListener("resize", resize);   // catches devicePixelRatio changes, which leave the map box untouched
-new ResizeObserver(resize).observe(document.getElementById("main"));   // the sidebar slide resizes the map without a window resize
+new ResizeObserver(resize).observe($("main"));   // the sidebar slide resizes the map without a window resize
 
 // ---- UI build ---------------------------------------------------------
-const gameBtns = document.getElementById("gameBtns");
-const levelBtns = document.getElementById("levelBtns");
-const pathBtns = document.getElementById("pathBtns");
-
 // highlight the button whose data-key matches, clear the rest
 function markOn(box, key) {
   for (const b of box.children) b.classList.toggle("on", b.dataset.key === key);
@@ -110,7 +75,7 @@ function selectGame(G, keepView) {
   DATA = G;
   setGeometry(G.geometry);
   markOn(gameBtns, G.id);
-  document.getElementById("gameName").textContent = G.game;
+  $("gameName").textContent = G.game;
   ENTRY = computeEntryPaths(G);
   levelBtns.innerHTML = "";
   G.levels.forEach(L => {
@@ -171,7 +136,6 @@ function fitView() {
 }
 
 // filters
-const filterBox = document.getElementById("filterBox");
 CATS.forEach(c => {
   const lab = document.createElement("label");
   lab.innerHTML = `<span class="sw" style="background:${c.color}"></span>
@@ -186,13 +150,13 @@ function setAllFilters(on) {
   CATS.forEach(c => { c.on = on; c._cb.checked = on; });
   draw();
 }
-document.getElementById("fAll").onclick = () => setAllFilters(true);
-document.getElementById("fNone").onclick = () => setAllFilters(false);
+$("fAll").onclick = () => setAllFilters(true);
+$("fNone").onclick = () => setAllFilters(false);
 // display toggles: `show` mirrors the sidebar checkboxes (initial state comes from the HTML)
 const show = {};
 for (const [key, id] of Object.entries({ grid: "tGrid", coll: "tColl", fg: "tFg",
                                          labels: "tLabels", dim: "tDim", ruler: "tRuler" })) {
-  const cb = document.getElementById(id);
+  const cb = $(id);
   show[key] = cb.checked;
   cb.onchange = () => {
     show[key] = cb.checked;
@@ -200,7 +164,7 @@ for (const [key, id] of Object.entries({ grid: "tGrid", coll: "tColl", fg: "tFg"
     draw();
   };
 }
-document.getElementById("exportBtn").onclick = () => {
+$("exportBtn").onclick = () => {
   cv.toBlob(blob => {
     if (!blob) return;
     const a = document.createElement("a");
@@ -289,20 +253,13 @@ function animateFlash() {
 }
 
 // ---- global search ------------------------------------------------------
-const searchInput = document.getElementById("searchInput");
-const searchResults = document.getElementById("searchResults");
 let searchTimer = null;
-
-// decoded extra fields as "k=v k=v", skipping empty values
-const extrasText = (t, sep = " ") => Object.entries(t.extra || {})
-  .filter(([, v]) => v !== null && v !== "").map(([k, v]) => `${k}=${v}`).join(sep);
 
 function tlvSearchText(t) {
   return (t.name + " " + extrasText(t)).toLowerCase();
 }
 
 const HIT_CAP = 1500, GROUP_MAX = 8;
-const scopeBar = document.getElementById("scopeBar");
 let searchScope = "all";   // all | game | level | path (relative to the current selection)
 
 function scopeAccepts(h) {
@@ -328,8 +285,6 @@ function updateScopeBar() {
     scopeBar.appendChild(b);
   }
 }
-
-function esc(t) { return t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 
 function highlight(text, q) {
   const i = text.toLowerCase().indexOf(q);
@@ -658,16 +613,6 @@ function img(src) {
   return images[src];
 }
 
-const LINE_COLORS = { 0:"#43d94c", 1:"#ff5c5c", 2:"#ff9d3d", 3:"#5ca9ff", 4:"#2b8f33", 5:"#a33c3c", 6:"#a3702b" };
-const LINE_NAMES = { 0:"Floor", 1:"Wall (left)", 2:"Wall (right)", 3:"Ceiling",
-                     4:"Background floor", 5:"Background wall (left)", 6:"Background wall (right)" };
-
-function segDist(px, py, x1, y1, x2, y2) {
-  const dx = x2 - x1, dy = y2 - y1;
-  const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / (dx * dx + dy * dy || 1)));
-  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
-}
-
 const tintCache = {};
 function tintedImg(src) {
   if (tintCache[src]) return tintCache[src];
@@ -833,8 +778,8 @@ Promise.all([
 ]).then(datasets => {
   GAMES_DATA = datasets.filter(d => d && d.levels && d.levels.length);
   if (!GAMES_DATA.length) {
-    document.getElementById("gameName").textContent = "Map data failed to load.";
-    document.getElementById("help").textContent = "map data failed to load — check that map_data_ao.js / map_data_ae.js are served";
+    $("gameName").textContent = "Map data failed to load.";
+    $("help").textContent = "map data failed to load — check that map_data_ao.js / map_data_ae.js are served";
     return;
   }
   GAMES_DATA.forEach(G => {
