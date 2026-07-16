@@ -1,0 +1,105 @@
+:root {
+  --bg: #14161a; --panel: #1d2026; --panel2: #23262e; --text: #d8dbe2;
+  --dim: #8a8f9c; --line: #32363f;
+  --accent-rgb: 232, 163, 61; --accent: rgb(var(--accent-rgb));
+  /* canvas backdrop / empty camera cells, read by the script */
+  --map-bg-rgb: 14, 15, 18; --map-bg: rgb(var(--map-bg-rgb)); --cell-empty: #1a1d22;
+  --sidebar-w: 250px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { background: var(--bg); color: var(--text); font: 13px/1.45 -apple-system, "Segoe UI", sans-serif; display: flex; }
+#sidebar { width: var(--sidebar-w); min-width: var(--sidebar-w); background: var(--panel); border-right: 1px solid var(--line);
+           display: flex; flex-direction: column; overflow-y: auto;
+           --collapsed: calc(-1 * var(--sidebar-w)); transition: margin-left .18s ease; }
+body:not(.menu-open) #sidebar { margin-left: var(--collapsed); }
+#sidebar h1 { font-size: 14px; padding: 12px 14px 8px; color: var(--accent); letter-spacing: .04em; }
+#sidebar h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--dim);
+              padding: 12px 14px 4px; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 12px; }
+.btnrow button { background: var(--panel2); color: var(--text); border: 1px solid var(--line); border-radius: 5px;
+                 padding: 4px 8px; cursor: pointer; font-size: 12px; }
+.btnrow button:hover { border-color: var(--accent); }
+.btnrow button.on { background: var(--accent); color: #14161a; border-color: var(--accent); font-weight: 600; }
+.btnrow button.entry::before { content: "\25B8"; color: var(--accent); margin-right: 3px; }
+.btnrow button.entry.on::before { color: #14161a; }
+.filters { padding: 4px 12px 12px; }
+.filters label { display: flex; align-items: center; gap: 7px; padding: 2.5px 2px; cursor: pointer; user-select: none; }
+.filters input { position: absolute; opacity: 0; pointer-events: none; }   /* keyboard-focusable; the swatch is the visual indicator */
+.filters label:not(:has(input:checked)) { opacity: .45; }
+.filters label:has(input:focus-visible) { outline: 1px solid var(--accent); border-radius: 4px; }
+.filters .sw { width: 11px; height: 11px; border-radius: 3px; display: inline-block; flex: none; }
+.filters .cnt { margin-left: auto; color: var(--dim); font-size: 11px; }
+.h2tools { float: right; }
+.h2tools button { background: none; border: 0; padding: 0; font: inherit; text-transform: inherit;
+                  letter-spacing: inherit; color: var(--dim); cursor: pointer; text-decoration: underline; }
+.h2tools button:hover { color: var(--accent); }
+#toggles { padding: 0 12px 10px; }
+#toggles label { display: flex; align-items: center; gap: 7px; padding: 2.5px 2px; cursor: pointer; }
+#exportBtn { margin: 6px 12px 2px; background: var(--panel2); color: var(--text); border: 1px solid var(--line);
+             border-radius: 6px; padding: 5px 10px; cursor: pointer; font-size: 12px; width: calc(100% - 24px); }
+#exportBtn:hover { border-color: var(--accent); }
+#main { flex: 1; position: relative; }
+#cv { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; }
+#cv.panning { cursor: grabbing; }
+#tip { position: absolute; pointer-events: none; background: rgba(18,20,24,.94); border: 1px solid var(--line);
+       border-radius: 6px; padding: 8px 10px; font-size: 12px; max-width: 340px; display: none; z-index: 5;
+       box-shadow: 0 4px 18px rgba(0,0,0,.5); }
+#tip .t { color: var(--accent); font-weight: 600; }
+#tip hr { border: 0; border-top: 1px solid var(--line); margin: 5px 0; }
+#tip .e { color: var(--dim); }
+#tip .f { color: var(--accent); }
+#hud { position: absolute; right: 10px; bottom: 8px; color: var(--dim); font-size: 11px;
+       background: rgba(18,20,24,.7); padding: 3px 8px; border-radius: 5px; }
+#help { position: absolute; left: 10px; bottom: 8px; color: var(--dim); font-size: 11px;
+        background: rgba(18,20,24,.7); padding: 3px 8px; border-radius: 5px; }
+.muted { color: var(--dim); padding: 2px 14px 8px; font-size: 11px; }
+#noscript { position: absolute; inset: 0; display: grid; place-items: center; color: var(--dim); }
+#searchBox { margin: 4px 12px 2px; }
+#searchBox input { width: 100%; background: var(--panel2); border: 1px solid var(--line); border-radius: 6px;
+                   color: var(--text); padding: 6px 9px; font-size: 12px; outline: none; }
+#searchBox input:focus { border-color: var(--accent); }
+#searchResults { padding: 2px 6px 10px; }
+#searchResults .hit { display: block; width: 100%; text-align: left; background: none; border: 0;
+                      color: var(--text); padding: 3px 8px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+#searchResults .hit:hover, #searchResults .hit.active { background: var(--panel2); }
+#searchResults .hit mark { background: none; color: var(--accent); font-weight: 600; }
+#searchResults .hit .loc { color: var(--accent); }
+#searchResults .hit .ex { color: var(--dim); }
+#searchResults .more { color: var(--dim); font-size: 11px; padding: 3px 8px; }
+#scopeBar { display: flex; gap: 4px; margin: 6px 12px 0; }
+#scopeBar button { background: var(--panel2); color: var(--dim); border: 1px solid var(--line); border-radius: 5px;
+                   padding: 2px 8px; cursor: pointer; font-size: 11px; }
+#scopeBar button.on { background: var(--accent); color: #14161a; border-color: var(--accent); font-weight: 600; }
+#searchResults .widen { color: var(--accent); cursor: pointer; text-decoration: underline; }
+#searchResults .shead { display: flex; justify-content: space-between; color: var(--dim); font-size: 10px;
+                        text-transform: uppercase; letter-spacing: .07em; padding: 7px 8px 2px; }
+#searchResults .showmore { display: block; width: 100%; text-align: left; background: none; border: 0;
+                           color: var(--accent); padding: 2px 8px 4px; cursor: pointer; font-size: 11px; }
+#searchResults .showmore:hover { text-decoration: underline; }
+
+/* menu toggle sits at the map's top-left corner, clear of the sidebar when it is open */
+#menuBtn { position: absolute; top: 10px; left: 10px; z-index: 20;
+           background: rgba(18,20,24,.85); color: var(--text); border: 1px solid var(--line);
+           border-radius: 8px; width: 40px; height: 40px; font-size: 20px; cursor: pointer; }
+#menuBtn:hover { border-color: var(--accent); }
+#scrim { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  #sidebar { transition: none; }
+}
+
+/* narrow: the sidebar leaves the flow and slides over the map instead of shrinking it
+   (the 720px breakpoint is duplicated in the script's narrowMQ) */
+@media (max-width: 720px) {
+  #sidebar { position: absolute; z-index: 15; height: 100%; width: 82vw; max-width: 320px;
+             --collapsed: 0; transform: translateX(-100%); transition: transform .2s ease;
+             box-shadow: 4px 0 24px rgba(0,0,0,.5); }
+  body.menu-open #sidebar { transform: none; }
+  body.menu-open #scrim { display: block; position: absolute; inset: 0; z-index: 12;
+                          background: rgba(0,0,0,.45); }
+  #sidebar h1 { padding-left: 60px; }
+  #hud { display: none; }
+  #help { left: auto; right: 10px; font-size: 10px; }
+  .btnrow button, #toggles label, .filters label { padding-top: 6px; padding-bottom: 6px; }
+}
