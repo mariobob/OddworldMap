@@ -1,4 +1,4 @@
-// Pointer and touch input on the map, hover inspection, and the menu toggle.
+// Pointer input on the map (mouse, touch, pen), hover inspection, and the menu toggle.
 
 import { clamp, esc, extrasText, segDist } from "./util.js";
 import { ZOOM_MIN, ZOOM_MAX, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
@@ -24,41 +24,94 @@ window.addEventListener("selection-changed", e => {
   if (isNarrow() && !e.detail.fromHash) toggleMenu(false);   // reveal the map after picking
 });
 
-// ---- mouse: pan, click-to-follow, ruler ---------------------------------
+// ---- pointers: one pointer pans (or measures), two pinch-zoom, click follows ----
+// touch-action: none on #cv keeps the browser's own pan/zoom gestures off the map
 let panning = false, panStart = null;
-cv.addEventListener("mousedown", e => {
-  if (state.show.ruler) {
-    const w = worldAtMouse();
-    state.ruler = { x1: w.x, y1: w.y, x2: w.x, y2: w.y };
-    measuring = true;
-    draw();
+const pointers = new Map();   // active pointerId -> {x, y} in canvas space
+let pinchDist = 0;
+function ptrXY(e) { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+
+cv.addEventListener("pointerdown", e => {
+  const p = ptrXY(e);
+  pointers.set(e.pointerId, p);
+  try { cv.setPointerCapture(e.pointerId); } catch { /* pointer already lifted */ }
+  mouse.x = p.x; mouse.y = p.y;
+  if (pointers.size === 1) {
+    if (state.show.ruler) {
+      const w = worldAtMouse();
+      state.ruler = { x1: w.x, y1: w.y, x2: w.x, y2: w.y };
+      measuring = true;
+      draw();
+      return;
+    }
+    panning = true; panMoved = false; cv.classList.add("panning");
+    panStart = { x: p.x, y: p.y, cx: state.cam.x, cy: state.cam.y };
+  } else if (pointers.size === 2) {   // a second pointer turns pan/measure into a pinch
+    panning = false; measuring = false; cv.classList.remove("panning");
+    const [a, b] = pointers.values();
+    pinchDist = Math.hypot(a.x - b.x, a.y - b.y);
+  }
+});
+
+cv.addEventListener("pointermove", e => {
+  const p = ptrXY(e);
+  if (pointers.has(e.pointerId)) pointers.set(e.pointerId, p);
+  if (pointers.size === 2) {
+    const [a, b] = pointers.values();
+    const dist = Math.hypot(a.x - b.x, a.y - b.y);
+    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    const wx = state.cam.x + mx / state.cam.z, wy = state.cam.y + my / state.cam.z;   // anchor at pinch midpoint
+    state.cam.z = clamp(state.cam.z * dist / pinchDist, ZOOM_MIN, ZOOM_MAX);
+    state.cam.x = wx - mx / state.cam.z;
+    state.cam.y = wy - my / state.cam.z;
+    pinchDist = dist;
+    scheduleDraw();
     return;
   }
-  panning = true; panMoved = false; cv.classList.add("panning"); panStart = { x: e.clientX, y: e.clientY, cx: state.cam.x, cy: state.cam.y };
-});
-cv.addEventListener("click", () => {
-  if (panMoved || state.show.ruler) return;
-  for (const t of hoverTlvs) {
-    const d = destOf(t);
-    if (d) { navigateToDest(d); return; }
-  }
-});
-window.addEventListener("mouseup", () => { measuring = false; if (panning && panMoved) scheduleHash(false); panning = false; cv.classList.remove("panning"); });
-window.addEventListener("mousemove", e => {
-  const r = cv.getBoundingClientRect();
-  mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+  mouse.x = p.x; mouse.y = p.y;
   if (measuring && state.ruler) {
     const w = worldAtMouse();
     state.ruler.x2 = w.x; state.ruler.y2 = w.y;
   }
   if (panning) {
-    if (Math.abs(e.clientX - panStart.x) + Math.abs(e.clientY - panStart.y) > 4) panMoved = true;
-    state.cam.x = panStart.cx - (e.clientX - panStart.x) / state.cam.z;
-    state.cam.y = panStart.cy - (e.clientY - panStart.y) / state.cam.z;
+    if (Math.abs(p.x - panStart.x) + Math.abs(p.y - panStart.y) > (e.pointerType === "mouse" ? 4 : 6)) panMoved = true;
+    state.cam.x = panStart.cx - (p.x - panStart.x) / state.cam.z;
+    state.cam.y = panStart.cy - (p.y - panStart.y) / state.cam.z;
   }
-  updateHover();
+  if (e.pointerType !== "touch" || !panning) updateHover();   // no tooltips under a panning finger
   scheduleDraw();
 });
+
+function endPointer(e) {
+  if (!pointers.delete(e.pointerId)) return;
+  if (pointers.size === 1) {   // pinch ended with a pointer still down: continue as a pan
+    const [p] = pointers.values();
+    panning = true; panMoved = true;
+    panStart = { x: p.x, y: p.y, cx: state.cam.x, cy: state.cam.y };
+  } else if (!pointers.size) {
+    if (panMoved) scheduleHash(false);
+    panning = false; measuring = false; cv.classList.remove("panning");
+  }
+}
+cv.addEventListener("pointerup", endPointer);
+cv.addEventListener("pointercancel", endPointer);
+
+cv.addEventListener("pointerleave", () => {   // moving off the canvas clears hover
+  if (pointers.size) return;   // a captured drag only leaves after release
+  hoverTlvs = [];
+  tip.style.display = "none";
+  cv.style.cursor = "";
+});
+
+cv.addEventListener("click", () => {
+  if (panMoved || state.show.ruler) return;
+  updateHover();   // taps arrive without a preceding hover move
+  for (const t of hoverTlvs) {
+    const d = destOf(t);
+    if (d) { navigateToDest(d); return; }
+  }
+});
+
 cv.addEventListener("wheel", e => {
   e.preventDefault();
   const f = Math.exp(-e.deltaY * 0.0015);
@@ -72,55 +125,6 @@ cv.addEventListener("wheel", e => {
 }, { passive: false });
 
 function worldAtMouse() { return { x: state.cam.x + mouse.x / state.cam.z, y: state.cam.y + mouse.y / state.cam.z }; }
-
-// ---- touch: one finger pans, two fingers pinch-zoom (into the map, not the page) ----
-let touchState = null;   // { mode, ... }
-function touchXY(t) { const r = cv.getBoundingClientRect(); return { x: t.clientX - r.left, y: t.clientY - r.top }; }
-
-cv.addEventListener("touchstart", e => {
-  e.preventDefault();
-  if (e.touches.length === 1) {
-    const p = touchXY(e.touches[0]);
-    touchState = { mode: "pan", sx: p.x, sy: p.y, cx: state.cam.x, cy: state.cam.y, moved: false, tapT: e.target };
-    mouse.x = p.x; mouse.y = p.y;
-  } else if (e.touches.length === 2) {
-    const a = touchXY(e.touches[0]), b = touchXY(e.touches[1]);
-    touchState = { mode: "pinch", dist: Math.hypot(a.x - b.x, a.y - b.y),
-                   mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
-  }
-}, { passive: false });
-
-cv.addEventListener("touchmove", e => {
-  e.preventDefault();
-  if (!touchState) return;
-  if (touchState.mode === "pan" && e.touches.length === 1) {
-    const p = touchXY(e.touches[0]);
-    if (Math.abs(p.x - touchState.sx) + Math.abs(p.y - touchState.sy) > 6) touchState.moved = true;
-    state.cam.x = touchState.cx - (p.x - touchState.sx) / state.cam.z;
-    state.cam.y = touchState.cy - (p.y - touchState.sy) / state.cam.z;
-    scheduleDraw();
-  } else if (touchState.mode === "pinch" && e.touches.length === 2) {
-    const a = touchXY(e.touches[0]), b = touchXY(e.touches[1]);
-    const dist = Math.hypot(a.x - b.x, a.y - b.y);
-    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
-    const wx = state.cam.x + mx / state.cam.z, wy = state.cam.y + my / state.cam.z;   // anchor at pinch midpoint
-    state.cam.z = clamp(state.cam.z * dist / touchState.dist, ZOOM_MIN, ZOOM_MAX);
-    state.cam.x = wx - mx / state.cam.z;
-    state.cam.y = wy - my / state.cam.z;
-    touchState.dist = dist; touchState.mx = mx; touchState.my = my;
-    scheduleDraw();
-  }
-}, { passive: false });
-
-cv.addEventListener("touchend", e => {
-  if (touchState && touchState.mode === "pan" && !touchState.moved) {
-    // treat as a tap: hover there, then follow if it hit a linked object
-    updateHover();
-    for (const t of hoverTlvs) { const d = destOf(t); if (d) { navigateToDest(d); break; } }
-  }
-  if (touchState) scheduleHash(false);
-  touchState = e.touches.length ? touchState : null;
-}, { passive: false });
 
 // ---- hover inspection ----------------------------------------------------
 function updateHover() {
