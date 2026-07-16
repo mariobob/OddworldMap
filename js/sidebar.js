@@ -1,4 +1,4 @@
-// Sidebar controls: category filters, display toggles, PNG export.
+// Sidebar controls: category filters, display toggles, PNG export, feedback link.
 
 import { CATS, catOf } from "./config.js";
 import { $, cv, filterBox } from "./dom.js";
@@ -45,6 +45,13 @@ $("exportBtn").onclick = () => {
     a.click();
     URL.revokeObjectURL(a.href);
   }, "image/png");
+};
+
+// feedback mail: attach the current permalink so reports carry their location
+const fb = $("feedbackLink");
+fb.onclick = () => {
+  const addr = ["feedback", "oddworldmap.com"].join("@");
+  fb.href = `mailto:${addr}?subject=${encodeURIComponent("Oddworld Map feedback")}&body=${encodeURIComponent(`\n\nViewing: ${location.href}`)}`;
 };
 
 function updateCounts() {
