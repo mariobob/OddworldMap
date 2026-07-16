@@ -1,12 +1,14 @@
 // Pointer and touch input on the map, hover inspection, and the menu toggle.
 
 import { clamp, esc, extrasText, segDist } from "./util.js";
-import { ZOOM_MIN, ZOOM_MAX, TIP_MAX_W, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
-import { cv, tip, hud, menuBtn, scrim, narrowMQ } from "./dom.js";
+import { ZOOM_MIN, ZOOM_MAX, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
+import { cv, tip, hud, menuBtn, scrim, narrowMQ, cssVar } from "./dom.js";
 import { state, dX, dY, wX, wY } from "./state.js";
 import { draw, scheduleDraw } from "./render.js";
 import { destOf } from "./model.js";
 import { navigateToDest, scheduleHash } from "./navigate.js";
+
+const TIP_MAX_W = parseFloat(cssVar("--tip-max-w"));
 
 let hoverTlvs = [], mouse = {x:0,y:0};
 let panMoved = false;
