@@ -11,6 +11,7 @@ Guidance for AI agents working in this repo. User-facing docs (controls, rebuild
 ## Build & verify
 
 - `npm run lint` — ESLint over the viewer modules; CI runs it on every push. There is no JS build step: the modules are served as-is, so lint is the only pre-runtime error check.
+- `npm test` — `node --test` unit tests under `tests/unit/` for the DOM-free modules (`config`, `state`, `util`, `model`): geometry transforms, TLV destinations, entry paths, permalink format, plus schema checks over the shipped data files. Those four modules must stay importable in bare Node — no `window`/`document` at module top level (imports.test.js enforces this).
 - `python3 tools/build_map.py --game AO|AE --disc <image.bin ...>` — AE takes both discs; env fallbacks are `$ODDWORLD_DISC_AO` / `$ODDWORLD_DISC_AE` (2352-byte-sector raw images). `cam2rgba` is compiled automatically on first run; `oxipng` must be installed (every emitted PNG is losslessly recompressed with `-o 2 --strip safe`, so byte-determinism of images also depends on the oxipng version — committed images were made with oxipng 10.x).
 - The pipeline is byte-deterministic. To verify builder changes, build into a scratch dir with `--out` and `cmp` the data file (and spot-check PNGs) against the committed outputs.
 - `--levels X,Y` subset builds merge into the existing data file — they do not clobber other levels.

@@ -15,4 +15,12 @@ export default [
       globals: globals.browser,
     },
   },
+  {
+    files: ["tests/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2024,
+      sourceType: "module",
+      globals: globals.node,
+    },
+  },
 ];
