@@ -59,7 +59,8 @@ cv.addEventListener("pointermove", e => {
   if (pointers.size === 2) {
     const [a, b] = pointers.values();
     const dist = Math.hypot(a.x - b.x, a.y - b.y);
-    Object.assign(state.cam, zoomAt(state.cam, dist / pinchDist, (a.x + b.x) / 2, (a.y + b.y) / 2));   // anchor at pinch midpoint
+    if (dist && pinchDist)   // coincident fingers make the factor 0 or Infinity; skip those frames
+      Object.assign(state.cam, zoomAt(state.cam, dist / pinchDist, (a.x + b.x) / 2, (a.y + b.y) / 2));   // anchor at pinch midpoint
     pinchDist = dist;
     scheduleDraw();
     return;
