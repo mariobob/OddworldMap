@@ -184,7 +184,7 @@ function computeEntryPaths(data) {
         const e = t.extra || {};
         if (e.to_level && e.to_level !== L.short) add(e.to_level, e.to_path);
         if (e.alt_level && e.alt_level !== L.short) add(e.alt_level, e.alt_path);
-        if (t.t === (data.id === "AE" ? 22 : 37)) add(L.short, P.id);   // AbeStart (game start / re-entry)
+        if (t.name === "AbeStart") add(L.short, P.id);   // game start / re-entry
       }
   return entries;
 }
