@@ -4,7 +4,7 @@
 
 import { clamp } from "./util.js";
 import { ZOOM_MIN, ZOOM_MAX } from "./config.js";
-import { state } from "./state.js";
+import { GEO, state } from "./state.js";
 
 export function computeEntryPaths(data) {
   const entries = {};
@@ -43,15 +43,29 @@ export function camCell(path, camId) {
   return cm ? cm.cell : null;
 }
 
+// grid cell containing a TLV's top-left corner (spans can cross cells)
+export const tlvCell = (t, path, geo) =>
+  Math.floor(t.y1 / geo.worldH) * path.w + Math.floor(t.x1 / geo.worldW);
+
 // the paired TLV a destination lands on: door numbers are only unique per
 // camera, so match inside the destination camera first, path-wide as a fallback
 export function resolveTarget(d, path, geo) {
   if (!d || !d.target) return null;
   const cell = camCell(path, d.ca);
-  const inCell = t => cell == null ||
-    (Math.floor(t.x1 / geo.worldW) === cell % path.w && Math.floor(t.y1 / geo.worldH) === Math.floor(cell / path.w));
   const match = t => t.name === d.target.name && (t.extra || {})[d.target.field] === d.target.value;
-  return path.tlvs.find(t => match(t) && inCell(t)) || path.tlvs.find(match) || null;
+  return path.tlvs.find(t => match(t) && (cell == null || tlvCell(t, path, geo) === cell)) ||
+         path.tlvs.find(match) || null;
+}
+
+// a paired object (door, teleporter) whose destination names its own camera and
+// resolves back to the object itself; a dangling destination whose path-wide
+// fallback merely lands on it doesn't count
+export function isLoopback(t, lvl = state.lvl, path = state.path, geo = GEO) {
+  if (!lvl || !path) return false;
+  const d = destOf(t, lvl, path);
+  return !!(d && d.lv === lvl.short && d.pa === path.id
+            && camCell(path, d.ca) === tlvCell(t, path, geo)
+            && resolveTarget(d, path, geo) === t);
 }
 
 // zoom the camera by factor about a fixed canvas point: the world spot under

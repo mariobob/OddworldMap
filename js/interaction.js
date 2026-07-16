@@ -5,7 +5,7 @@ import { KEY_PAN_PX, KEY_ZOOM_STEP, catOf, LINE_COLORS, LINE_NAMES } from "./con
 import { cv, tip, hud, menuBtn, scrim, narrowMQ, cssVar } from "./dom.js";
 import { state, dX, dY, wX, wY } from "./state.js";
 import { draw, scheduleDraw } from "./render.js";
-import { destOf, zoomAt } from "./model.js";
+import { destOf, isLoopback, zoomAt } from "./model.js";
 import { navigateToDest, scheduleHash } from "./navigate.js";
 
 const TIP_MAX_W = parseFloat(cssVar("--tip-max-w"));
@@ -161,9 +161,11 @@ function updateHover() {
     tip.innerHTML = hoverTlvs.slice(0, 8).map(t => {
       const ex = extrasText(t, "  ");
       const d = destOf(t);
+      const follow = d && (isLoopback(t)
+        ? `<br><span class="f loop">⟳ loops back to itself</span>`
+        : `<br><span class="f">➜ click to follow to ${esc(`${d.lv} P${d.pa}${d.ca != null ? " C" + d.ca : ""}`)}</span>`);
       return `<div><span class="t">${esc(t.name)}</span> <span class="e">(${t.x1},${t.y1})–(${t.x2},${t.y2})</span>` +
-             (ex ? `<br><span class="e">${esc(ex)}</span>` : "") +
-             (d ? `<br><span class="f">➜ click to follow to ${esc(`${d.lv} P${d.pa}${d.ca != null ? " C" + d.ca : ""}`)}</span>` : "") + `</div>`;
+             (ex ? `<br><span class="e">${esc(ex)}</span>` : "") + (follow || "") + `</div>`;
     }).concat(hoverLines.map(([x1, y1, x2, y2, t]) => {
       const len = Math.round(Math.hypot(x2 - x1, y2 - y1));
       return `<div><span class="t" style="color:${LINE_COLORS[t] || '#999'}">${LINE_NAMES[t] || "Line type " + t}</span>` +

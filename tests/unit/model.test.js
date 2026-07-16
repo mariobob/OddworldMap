@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { camCell, computeEntryPaths, destOf, formatHash, parseHash, resolveTarget, zoomAt } from "../../js/model.js";
+import { camCell, computeEntryPaths, destOf, formatHash, isLoopback, parseHash, resolveTarget, zoomAt } from "../../js/model.js";
 import { ZOOM_MIN, ZOOM_MAX } from "../../js/config.js";
 import { SYNTH_GEOMETRY, dataset, level, path, tlv } from "./fixtures.js";
 
@@ -66,6 +66,30 @@ test("resolveTarget: no paired target -> null", () => {
   const P = path(1, [at(tlv("Door", { "door#": 1 }), 50, 20)], [], 1, 1);
   assert.equal(resolveTarget({ ca: 1, target: null }, P, SYNTH_GEOMETRY), null);
   assert.equal(resolveTarget(null, P, SYNTH_GEOMETRY), null);
+});
+
+test("isLoopback: a door whose destination resolves to itself", () => {
+  const self = at(tlv("Door", { to_level: "R1", to_path: 15, to_cam: 1, "door#": 1, "target_door#": 1 }), 50, 20);
+  const P = path(15, [self], [{ cell: 0, name: "XXP15C01" }], 1, 1);
+  assert.equal(isLoopback(self, { short: "R1" }, P, SYNTH_GEOMETRY), true);
+});
+
+test("isLoopback: paired doors and cross-path/same-cam neighbors are not loopbacks", () => {
+  const cams = [{ cell: 0, name: "XXP15C01" }, { cell: 1, name: "XXP15C02" }];
+  // a proper pair across cameras: each resolves to the other
+  const a = at(tlv("Door", { to_level: "R1", to_path: 15, to_cam: 2, "door#": 1, "target_door#": 1 }), 50, 20);
+  const b = at(tlv("Door", { to_level: "R1", to_path: 15, to_cam: 1, "door#": 1, "target_door#": 1 }), 450, 20);
+  // same camera, but the target is the neighbor's door#, not its own
+  const c = at(tlv("Door", { to_level: "R1", to_path: 15, to_cam: 1, "door#": 2, "target_door#": 3 }), 60, 120);
+  const e = at(tlv("Door", { to_level: "R1", to_path: 15, to_cam: 1, "door#": 3, "target_door#": 2 }), 160, 120);
+  // would resolve to itself, but the destination is another path: gate rejects
+  const f = at(tlv("Door", { to_level: "R1", to_path: 16, to_cam: 1, "door#": 9, "target_door#": 9 }), 250, 120);
+  // dangling destination camera: the path-wide fallback lands on the door
+  // itself, but that's unresolvable data, not a self-reference
+  const g = at(tlv("Door", { to_level: "R1", to_path: 15, to_cam: 9, "door#": 4, "target_door#": 4 }), 350, 120);
+  const P = path(15, [a, b, c, e, f, g], cams, 2, 1);
+  for (const t of [a, b, c, e, f, g])
+    assert.equal(isLoopback(t, { short: "R1" }, P, SYNTH_GEOMETRY), false);
 });
 
 test("computeEntryPaths: cross-level links and AbeStart mark entries", () => {

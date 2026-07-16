@@ -50,6 +50,7 @@ body:not(.menu-open) #sidebar { margin-left: var(--collapsed); }
 #tip hr { border: 0; border-top: 1px solid var(--line); margin: 5px 0; }
 #tip .e { color: var(--dim); }
 #tip .f { color: var(--accent); }
+#tip .f.loop { color: var(--dim); }
 #hud { position: absolute; right: 10px; bottom: 8px; color: var(--dim); font-size: 11px;
        background: rgba(18,20,24,.7); padding: 3px 8px; border-radius: 5px; }
 #help { position: absolute; left: 10px; bottom: 8px; color: var(--dim); font-size: 11px;

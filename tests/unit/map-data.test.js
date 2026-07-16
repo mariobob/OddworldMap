@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { computeEntryPaths } from "../../js/model.js";
+import { computeEntryPaths, isLoopback } from "../../js/model.js";
 import { AO_GEOMETRY, AE_GEOMETRY } from "./fixtures.js";
 
 // Schema sanity over the shipped data: the invariants the viewer relies on.
@@ -33,6 +33,8 @@ for (const [file, id, geometry] of [["map_data_ao.json", "AO", AO_GEOMETRY],
         for (const t of P.tlvs) {
           assert.equal(typeof t.name, "string");
           assert.ok(t.x1 <= t.x2 && t.y1 <= t.y2, `${L.short} P${P.id} ${t.name} rect ordered`);
+          assert.ok(Math.floor(t.x1 / geometry.worldW) < P.w && Math.floor(t.y1 / geometry.worldH) < P.h,
+                    `${L.short} P${P.id} ${t.name} origin inside the grid (tlvCell must not alias)`);
         }
         for (const line of P.lines) assert.equal(line.length, 5);
       }
@@ -41,3 +43,19 @@ for (const [file, id, geometry] of [["map_data_ao.json", "AO", AO_GEOMETRY],
     assert.ok(Object.keys(computeEntryPaths(data)).length > 0, "entry paths found");
   });
 }
+
+// the shipped data contains exactly three genuinely self-referencing paired
+// objects; dangling destinations (e.g. AE MI P11, SV P6) must not be flagged
+test("loopbacks in the shipped data are exactly the three known ones", () => {
+  const found = [];
+  for (const [file, geometry] of [["map_data_ao.json", AO_GEOMETRY], ["map_data_ae.json", AE_GEOMETRY]]) {
+    const data = load(file);
+    for (const L of data.levels)
+      for (const P of L.paths)
+        for (const t of P.tlvs)
+          if (isLoopback(t, L, P, geometry)) found.push(`${data.id} ${L.short} P${P.id} ${t.name} (${t.x1},${t.y1})`);
+  }
+  assert.deepEqual(found, ["AO R1 P18 Door (8746,1232)",
+                           "AE SV P7 Door (1026,440)",
+                           "AE BW P7 Teleporter (199,439)"]);
+});
