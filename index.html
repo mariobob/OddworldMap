@@ -33,7 +33,10 @@
 <style>
   :root {
     --bg: #14161a; --panel: #1d2026; --panel2: #23262e; --text: #d8dbe2;
-    --dim: #8a8f9c; --accent: #e8a33d; --line: #32363f;
+    --dim: #8a8f9c; --line: #32363f;
+    --accent-rgb: 232, 163, 61; --accent: rgb(var(--accent-rgb));
+    /* canvas backdrop / empty camera cells, read by the script */
+    --map-bg-rgb: 14, 15, 18; --map-bg: rgb(var(--map-bg-rgb)); --cell-empty: #1a1d22;
     --sidebar-w: 250px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -76,6 +79,7 @@
          border-radius: 6px; padding: 8px 10px; font-size: 12px; max-width: 340px; display: none; z-index: 5;
          box-shadow: 0 4px 18px rgba(0,0,0,.5); }
   #tip .t { color: var(--accent); font-weight: 600; }
+  #tip hr { border: 0; border-top: 1px solid var(--line); margin: 5px 0; }
   #tip .e { color: var(--dim); }
   #tip .f { color: var(--accent); }
   #hud { position: absolute; right: 10px; bottom: 8px; color: var(--dim); font-size: 11px;
@@ -220,6 +224,11 @@ const TIP_MAX_W = 340;                            // keep in sync with #tip max-
 const narrowMQ = window.matchMedia("(max-width: 720px)");   // keep in sync with the CSS breakpoint
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+// canvas colors shared with the stylesheet, read once from the tokens
+const cssVar = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const COLOR = { bg: cssVar("--bg"), mapBg: cssVar("--map-bg"), mapBgRgb: cssVar("--map-bg-rgb"),
+                cellEmpty: cssVar("--cell-empty"), accentRgb: cssVar("--accent-rgb") };
 
 // ---- categories (matched by TLV name so both games share the buckets) ----
 const CATS = [
@@ -808,7 +817,7 @@ function updateHover() {
       const len = Math.round(Math.hypot(x2 - x1, y2 - y1));
       return `<div><span class="t" style="color:${LINE_COLORS[t] || '#999'}">${LINE_NAMES[t] || "Line type " + t}</span>` +
              ` <span class="e">(${x1},${y1})→(${x2},${y2}) · ${len}u ≈ ${(len / 25).toFixed(1)} grid</span></div>`;
-    })).join("<hr style='border:0;border-top:1px solid #32363f;margin:5px 0'>")
+    })).join("<hr>")
       + (hoverTlvs.length > 8 ? `<div class="e">+${hoverTlvs.length - 8} more…</div>` : "");
     if (!panning) cv.style.cursor = hoverTlvs.some(t => destOf(t)) ? "pointer" : "";
   } else {
@@ -864,9 +873,9 @@ function scheduleDraw() {
 }
 
 function draw() {
-  if (!path) { ctx.fillStyle = "#14161a"; ctx.fillRect(0, 0, cv.width, cv.height); return; }
+  if (!path) { ctx.fillStyle = COLOR.bg; ctx.fillRect(0, 0, cv.width, cv.height); return; }
   ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-  ctx.fillStyle = "#0e0f12";
+  ctx.fillStyle = COLOR.mapBg;
   ctx.fillRect(0, 0, cv.clientWidth, cv.clientHeight);
   ctx.save();
   ctx.scale(cam.z, cam.z);
@@ -885,7 +894,7 @@ function draw() {
         ctx.globalAlpha = 1;
       }
     } else {
-      ctx.fillStyle = "#1a1d22";
+      ctx.fillStyle = COLOR.cellEmpty;
       ctx.fillRect(cx, cy, CELL_W, CELL_H);
     }
   }
@@ -967,7 +976,7 @@ function draw() {
     const label = `${Math.round(Math.abs(dx))} × ${Math.round(Math.abs(dy))} · ${Math.round(len)}u ≈ ${(len / 25).toFixed(1)} grid`;
     ctx.font = `${13 / cam.z}px sans-serif`;
     const midx = (ruler.x1 + ruler.x2) / 2, midy = (ruler.y1 + ruler.y2) / 2 - 10 / cam.z;
-    ctx.fillStyle = "rgba(14,15,18,.85)";
+    ctx.fillStyle = `rgba(${COLOR.mapBgRgb},.85)`;
     const tw = ctx.measureText(label).width;
     ctx.fillRect(midx - tw / 2 - 5 / cam.z, midy - 13 / cam.z, tw + 10 / cam.z, 18 / cam.z);
     ctx.fillStyle = "#ffffff";
@@ -977,7 +986,7 @@ function draw() {
   if (flash) {
     const el = performance.now() - flash.t0;
     const a = Math.max(0, 1 - el / FLASH_MS);
-    ctx.strokeStyle = `rgba(232,163,61,${a})`;
+    ctx.strokeStyle = `rgba(${COLOR.accentRgb},${a})`;
     ctx.lineWidth = 3.5 / cam.z;
     const r = (46 + 10 * Math.sin(el / 110)) / Math.sqrt(cam.z);
     ctx.beginPath(); ctx.arc(flash.x, flash.y, r, 0, Math.PI * 2); ctx.stroke();
