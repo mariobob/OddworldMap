@@ -762,9 +762,9 @@ function updateHover() {
       const ex = Object.entries(t.extra || {}).filter(([k,v]) => v !== null && v !== "")
         .map(([k, v]) => `${k}=${v}`).join("  ");
       const d = destOf(t);
-      return `<div><span class="t">${t.name}</span> <span class="e">(${t.x1},${t.y1})–(${t.x2},${t.y2})</span>` +
-             (ex ? `<br><span class="e">${ex}</span>` : "") +
-             (d ? `<br><span class="f">➜ click to follow to ${d.lv} P${d.pa}${d.ca != null ? " C" + d.ca : ""}</span>` : "") + `</div>`;
+      return `<div><span class="t">${esc(t.name)}</span> <span class="e">(${t.x1},${t.y1})–(${t.x2},${t.y2})</span>` +
+             (ex ? `<br><span class="e">${esc(ex)}</span>` : "") +
+             (d ? `<br><span class="f">➜ click to follow to ${esc(`${d.lv} P${d.pa}`)}${d.ca != null ? " C" + d.ca : ""}</span>` : "") + `</div>`;
     }).concat(hoverLines.map(([x1, y1, x2, y2, t]) => {
       const len = Math.round(Math.hypot(x2 - x1, y2 - y1));
       return `<div><span class="t" style="color:${LINE_COLORS[t] || '#999'}">${LINE_NAMES[t] || "Line type " + t}</span>` +
