@@ -956,6 +956,11 @@ Promise.all([
   loadOne("map_data_ae.js"),
 ]).then(datasets => {
   GAMES_DATA = datasets.filter(d => d && d.levels && d.levels.length);
+  if (!GAMES_DATA.length) {
+    document.getElementById("gameName").textContent = "Map data failed to load.";
+    document.getElementById("help").textContent = "map data failed to load — check that map_data_ao.js / map_data_ae.js are served";
+    return;
+  }
   GAMES_DATA.forEach(G => {
     const b = document.createElement("button");
     b.textContent = G.id;
@@ -964,7 +969,7 @@ Promise.all([
     gameBtns.appendChild(b);
   });
   resize();
-  if (!applyHash() && GAMES_DATA.length) selectGame(GAMES_DATA[0], gameBtns.children[0]);
+  if (!applyHash()) selectGame(GAMES_DATA[0], gameBtns.children[0]);
 });
 </script>
 </body>
