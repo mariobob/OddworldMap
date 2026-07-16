@@ -105,7 +105,8 @@
   #menuBtn:hover { border-color: var(--accent); }
   #scrim { display: none; }
 
-  /* narrow: the sidebar leaves the flow and slides over the map instead of shrinking it */
+  /* narrow: the sidebar leaves the flow and slides over the map instead of shrinking it
+     (the 720px breakpoint is duplicated in the script's narrowMQ) */
   @media (max-width: 720px) {
     #sidebar { position: absolute; z-index: 15; height: 100%; width: 82vw; max-width: 320px;
                --collapsed: 0; transform: translateX(-100%); transition: transform .2s ease;
@@ -194,6 +195,16 @@ function dY(wy) { const c = Math.floor(wy / GEO.worldH); return c * CELL_H + (wy
 function wX(dx) { const c = Math.floor(dx / CELL_W); return c * GEO.worldW + GEO.winX + (dx - c * CELL_W) / SX; }
 function wY(dy) { const c = Math.floor(dy / CELL_H); return c * GEO.worldH + GEO.winY + (dy - c * CELL_H) / SY; }
 
+// ---- tunables ----------------------------------------------------------
+const ZOOM_MIN = 0.02, ZOOM_MAX = 4;              // manual zoom clamp (px per draw unit)
+const FOCUS_ZOOM_MIN = 0.5, FOCUS_ZOOM_MAX = 1.6; // zoom clamp when jumping to an object
+const FOCUS_SCREENS = 2.6;                        // jump target: ~this many screens across
+const FLASH_MS = 1600;                            // follow-destination highlight duration
+const TIP_MAX_W = 340;                            // keep in sync with #tip max-width in CSS
+const narrowMQ = window.matchMedia("(max-width: 720px)");   // keep in sync with the CSS breakpoint
+
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
 // ---- categories (matched by TLV name so both games share the buckets) ----
 const CATS = [
   { key:"board",  label:"LCD Status Boards", color:"#ff3860", on:true, names:["LCDStatusBoard"] },
@@ -223,7 +234,7 @@ let ruler = null;          // {x1, y1, x2, y2} in draw space
 let measuring = false;
 
 const menuBtn = document.getElementById("menuBtn"), scrim = document.getElementById("scrim");
-const isNarrow = () => window.matchMedia("(max-width: 720px)").matches;
+const isNarrow = () => narrowMQ.matches;
 document.body.classList.toggle("menu-open", !isNarrow());   // set before first paint: open on wide, out of the way on narrow
 function toggleMenu(open) { document.body.classList.toggle("menu-open", open ?? !document.body.classList.contains("menu-open")); }
 menuBtn.onclick = () => toggleMenu();
@@ -306,7 +317,7 @@ function fitView() {
     if (!cv.clientWidth || !cv.clientHeight) { requestAnimationFrame(attempt); return; }
     const w = path.w * CELL_W, h = path.h * CELL_H;
     const zx = cv.clientWidth / (w + 200), zy = cv.clientHeight / (h + 200);
-    cam.z = Math.max(0.02, Math.min(zx, zy));
+    cam.z = Math.max(ZOOM_MIN, Math.min(zx, zy));
     cam.x = -(cv.clientWidth / cam.z - w) / 2;
     cam.y = -(cv.clientHeight / cam.z - h) / 2;
     draw();
@@ -373,9 +384,10 @@ function selectPathById(id) {
   return true;
 }
 
-// center on (fx, fy) at roughly 2.6 screens across, flash the spot
+// center on (fx, fy) zoomed to a few screens across, flash the spot
 function focusOn(fx, fy) {
-  cam.z = Math.max(0.5, Math.min(1.6, Math.min(cv.clientWidth / (2.6 * CELL_W), cv.clientHeight / (2.6 * CELL_H))));
+  cam.z = clamp(Math.min(cv.clientWidth / (FOCUS_SCREENS * CELL_W), cv.clientHeight / (FOCUS_SCREENS * CELL_H)),
+                FOCUS_ZOOM_MIN, FOCUS_ZOOM_MAX);
   cam.x = fx - cv.clientWidth / (2 * cam.z);
   cam.y = fy - cv.clientHeight / (2 * cam.z);
   camToken++;   // cancel any fit still waiting on layout
@@ -417,7 +429,7 @@ function navigateToDest(d) {
 
 function animateFlash() {
   if (!flash) return;
-  if (performance.now() - flash.t0 > 1600) { flash = null; draw(); return; }
+  if (performance.now() - flash.t0 > FLASH_MS) { flash = null; draw(); return; }
   draw();
   requestAnimationFrame(animateFlash);
 }
@@ -427,9 +439,12 @@ const searchInput = document.getElementById("searchInput");
 const searchResults = document.getElementById("searchResults");
 let searchTimer = null;
 
+// decoded extra fields as "k=v k=v", skipping empty values
+const extrasText = (t, sep = " ") => Object.entries(t.extra || {})
+  .filter(([, v]) => v !== null && v !== "").map(([k, v]) => `${k}=${v}`).join(sep);
+
 function tlvSearchText(t) {
-  const ex = Object.entries(t.extra || {}).map(([k, v]) => `${k}=${v}`).join(" ");
-  return (t.name + " " + ex).toLowerCase();
+  return (t.name + " " + extrasText(t)).toLowerCase();
 }
 
 const HIT_CAP = 1500, GROUP_MAX = 8;
@@ -480,8 +495,7 @@ function matchRank(t, q) {
 function hitButton(h, q) {
   const b = document.createElement("button");
   b.className = "hit";
-  const ex = Object.entries(h.t.extra || {}).filter(([k, v]) => v !== null && v !== "")
-    .map(([k, v]) => `${k}=${v}`).join(" ");
+  const ex = extrasText(h.t);
   b.innerHTML = `<span class="loc">${h.L.short} P${h.P.id}</span> ${highlight(h.t.name, q)}` +
                 (ex ? ` <span class="ex">${highlight(ex, q)}</span>` : "");
   b.onclick = () => jumpToTlv(h.G, h.L, h.P, h.t);
@@ -630,7 +644,7 @@ function applyHash() {
   if (!selectPathById(+parts[1])) { applyingHash = false; return false; }
   if (parts[2] != null && parts.length >= 5) {
     cam.x = +parts[2]; cam.y = +parts[3];
-    cam.z = Math.max(0.02, Math.min(4, +parts[4]));
+    cam.z = clamp(+parts[4], ZOOM_MIN, ZOOM_MAX);
     camToken++;   // cancel any fit still waiting on layout
   }
   applyingHash = false;
@@ -679,7 +693,7 @@ cv.addEventListener("wheel", e => {
   e.preventDefault();
   const f = Math.exp(-e.deltaY * 0.0015);
   const wx = cam.x + mouse.x / cam.z, wy = cam.y + mouse.y / cam.z;
-  cam.z = Math.min(4, Math.max(0.02, cam.z * f));
+  cam.z = clamp(cam.z * f, ZOOM_MIN, ZOOM_MAX);
   cam.x = wx - mouse.x / cam.z;
   cam.y = wy - mouse.y / cam.z;
   updateHover();
@@ -720,7 +734,7 @@ cv.addEventListener("touchmove", e => {
     const dist = Math.hypot(a.x - b.x, a.y - b.y);
     const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
     const wx = cam.x + mx / cam.z, wy = cam.y + my / cam.z;   // anchor at pinch midpoint
-    cam.z = Math.min(4, Math.max(0.02, cam.z * dist / touchState.dist));
+    cam.z = clamp(cam.z * dist / touchState.dist, ZOOM_MIN, ZOOM_MAX);
     cam.x = wx - mx / cam.z;
     cam.y = wy - my / cam.z;
     touchState.dist = dist; touchState.mx = mx; touchState.my = my;
@@ -756,12 +770,11 @@ function updateHover() {
   });
   if (hoverTlvs.length || hoverLines.length) {
     tip.style.display = "block";
-    const px = Math.min(mouse.x + 16, cv.clientWidth - 350);
+    const px = Math.min(mouse.x + 16, cv.clientWidth - (TIP_MAX_W + 10));
     tip.style.left = px + "px";
     tip.style.top = (mouse.y + 16) + "px";
     tip.innerHTML = hoverTlvs.slice(0, 8).map(t => {
-      const ex = Object.entries(t.extra || {}).filter(([k,v]) => v !== null && v !== "")
-        .map(([k, v]) => `${k}=${v}`).join("  ");
+      const ex = extrasText(t, "  ");
       const d = destOf(t);
       return `<div><span class="t">${esc(t.name)}</span> <span class="e">(${t.x1},${t.y1})–(${t.x2},${t.y2})</span>` +
              (ex ? `<br><span class="e">${esc(ex)}</span>` : "") +
@@ -932,7 +945,7 @@ function draw() {
 
   if (flash) {
     const el = performance.now() - flash.t0;
-    const a = Math.max(0, 1 - el / 1600);
+    const a = Math.max(0, 1 - el / FLASH_MS);
     ctx.strokeStyle = `rgba(232,163,61,${a})`;
     ctx.lineWidth = 3.5 / cam.z;
     const r = (46 + 10 * Math.sin(el / 110)) / Math.sqrt(cam.z);
