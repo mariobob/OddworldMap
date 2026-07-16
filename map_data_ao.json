@@ -1,4 +1,4 @@
-window.MAP_DATA_AO = {
+{
  "id": "AO",
  "game": "Oddworld: Abe's Oddysee (PS1 NTSC-U)",
  "geometry": {
@@ -86564,4 +86564,4 @@ window.MAP_DATA_AO = {
    ]
   }
  ]
-};
+}

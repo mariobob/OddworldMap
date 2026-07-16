@@ -599,8 +599,7 @@ def decode_cam(lvl, cam_name, out_png, tmpdir, bitmask_fg1):
 GAMES = {
     "AO": {
         "title": "Oddworld: Abe's Oddysee (PS1 NTSC-U)",
-        "data_file": "map_data_ao.js",
-        "js_var": "MAP_DATA_AO",
+        "data_file": "map_data_ao.json",
         "cams_dir": "cams/ao",
         "cache": "pathdata_ao.json",
         "env": "ODDWORLD_DISC_AO",
@@ -613,8 +612,7 @@ GAMES = {
     },
     "AE": {
         "title": "Oddworld: Abe's Exoddus (PS1 NTSC-U)",
-        "data_file": "map_data_ae.js",
-        "js_var": "MAP_DATA_AE",
+        "data_file": "map_data_ae.json",
         "cams_dir": "cams/ae",
         "cache": "pathdata_ae.json",
         "env": "ODDWORLD_DISC_AE",
@@ -770,17 +768,16 @@ def main():
             data["levels"].append(level_entry)
 
     # subset builds merge into existing data instead of clobbering other levels
-    prefix = f"window.{game['js_var']} = "
     data_file = out / game["data_file"]
     if only and data_file.exists():
-        old = json.loads(data_file.read_text()[len(prefix):-1])
+        old = json.loads(data_file.read_text())
         built = {L["short"]: L for L in data["levels"]}
         merged = [built.get(L["short"], L) for L in old["levels"]]
         have = {L["short"] for L in merged}
         merged += [L for L in data["levels"] if L["short"] not in have]
         data["levels"] = merged
-    data_file.write_text(prefix + json.dumps(data, indent=1) + ";")
-    print(f"\ndone -> {out}/index.html")
+    data_file.write_text(json.dumps(data, indent=1))
+    print(f"\ndone -> {data_file}")
 
 if __name__ == "__main__":
     main()

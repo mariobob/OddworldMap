@@ -5,7 +5,7 @@ import js from "@eslint/js";
 import globals from "globals";
 
 export default [
-  { ignores: ["map_data_ao.js", "map_data_ae.js", "node_modules/", "tools/"] },
+  { ignores: ["node_modules/", "tools/"] },
   js.configs.recommended,
   {
     files: ["js/**/*.js", "eslint.config.js"],

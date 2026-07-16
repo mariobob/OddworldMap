@@ -1,4 +1,4 @@
-window.MAP_DATA_AE = {
+{
  "id": "AE",
  "game": "Oddworld: Abe's Exoddus (PS1 NTSC-U)",
  "geometry": {
@@ -174049,4 +174049,4 @@ window.MAP_DATA_AE = {
    ]
   }
  ]
-};
+}

@@ -5,7 +5,7 @@ Guidance for AI agents working in this repo. User-facing docs (controls, rebuild
 ## Source vs generated
 
 - Source: the viewer — `index.html`, `css/main.css` and the ES modules under `js/` (dependency-free vanilla JS, no build step; `js/main.js` is the boot entry, `js/state.js` holds shared state + world→draw transforms, and selection announces itself via a `selection-changed` window event so modules stay one-directional) — plus `tools/build_map.py`, `tools/cam2rgba.cpp` and the vendored `PSXMDECDecoder.*` / `Types.hpp`.
-- Generated **and committed** (they are the site's data): `map_data_ao.js`, `map_data_ae.js`, `cams/ao/**`, `cams/ae/**`. Regenerate with the builder from disc images; never hand-edit.
+- Generated **and committed** (they are the site's data): `map_data_ao.json`, `map_data_ae.json`, `cams/ao/**`, `cams/ae/**`. Regenerate with the builder from disc images; never hand-edit.
 - `tools/data/pathdata_ao.json` / `pathdata_ae.json`: cached level/path tables and TLV type enums parsed from the alive_reversing decompilation. Used as-is by builds; only re-parsed when the cache file is deleted, which requires an `alive_reversing` checkout as a sibling directory of this repo (AO tables come from commit `c1ba4c6c8`, AE tables from the current sources).
 
 ## Build & verify
