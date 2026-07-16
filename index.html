@@ -34,13 +34,14 @@
   :root {
     --bg: #14161a; --panel: #1d2026; --panel2: #23262e; --text: #d8dbe2;
     --dim: #8a8f9c; --accent: #e8a33d; --line: #32363f;
+    --sidebar-w: 250px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow: hidden; }
   body { background: var(--bg); color: var(--text); font: 13px/1.45 -apple-system, "Segoe UI", sans-serif; display: flex; }
-  #sidebar { width: 250px; min-width: 250px; background: var(--panel); border-right: 1px solid var(--line);
+  #sidebar { width: var(--sidebar-w); min-width: var(--sidebar-w); background: var(--panel); border-right: 1px solid var(--line);
              display: flex; flex-direction: column; overflow-y: auto;
-             --collapsed: -250px; transition: margin-left .18s ease; }
+             --collapsed: calc(-1 * var(--sidebar-w)); transition: margin-left .18s ease; }
   body:not(.menu-open) #sidebar { margin-left: var(--collapsed); }
   #sidebar h1 { font-size: 14px; padding: 12px 14px 8px; color: var(--accent); letter-spacing: .04em; }
   #sidebar h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--dim);
@@ -82,6 +83,7 @@
   #help { position: absolute; left: 10px; bottom: 8px; color: var(--dim); font-size: 11px;
           background: rgba(18,20,24,.7); padding: 3px 8px; border-radius: 5px; }
   .muted { color: var(--dim); padding: 2px 14px 8px; font-size: 11px; }
+  #noscript { position: absolute; inset: 0; display: grid; place-items: center; color: var(--dim); }
   #searchBox { margin: 4px 12px 2px; }
   #searchBox input { width: 100%; background: var(--panel2); border: 1px solid var(--line); border-radius: 6px;
                      color: var(--text); padding: 6px 9px; font-size: 12px; outline: none; }
@@ -111,6 +113,10 @@
              border-radius: 8px; width: 40px; height: 40px; font-size: 20px; cursor: pointer; }
   #menuBtn:hover { border-color: var(--accent); }
   #scrim { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    #sidebar { transition: none; }
+  }
 
   /* narrow: the sidebar leaves the flow and slides over the map instead of shrinking it
      (the 720px breakpoint is duplicated in the script's narrowMQ) */
@@ -159,6 +165,7 @@
   <div class="filters" id="filterBox"></div>
 </div>
 <div id="main">
+  <noscript><div id="noscript">This interactive map requires JavaScript.</div></noscript>
   <canvas id="cv"></canvas>
   <button id="menuBtn" aria-label="Toggle menu">☰</button>
   <div id="tip"></div>
