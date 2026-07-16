@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { computeEntryPaths, destOf, formatHash, parseHash } from "../../js/model.js";
+import { computeEntryPaths, destOf, formatHash, parseHash, zoomAt } from "../../js/model.js";
+import { ZOOM_MIN, ZOOM_MAX } from "../../js/config.js";
 import { dataset, level, path, tlv } from "./fixtures.js";
 
 const HERE = [{ short: "R1" }, { id: 15 }];   // current level/path stubs
@@ -48,6 +49,20 @@ test("computeEntryPaths: cross-level links and AbeStart mark entries", () => {
   assert.deepEqual([...entries.R1], [15]);   // AbeStart only, not the same-level door
   assert.deepEqual([...entries.R2], [1]);
   assert.deepEqual([...entries.L1], [5]);
+});
+
+test("zoomAt keeps the world point under the anchor fixed", () => {
+  const cam = { x: 100, y: 50, z: 0.5 };
+  const [px, py] = [200, 120];
+  const out = zoomAt(cam, 1.25, px, py);
+  assert.equal(out.z, 0.625);
+  assert.ok(Math.abs((cam.x + px / cam.z) - (out.x + px / out.z)) < 1e-9);
+  assert.ok(Math.abs((cam.y + py / cam.z) - (out.y + py / out.z)) < 1e-9);
+});
+
+test("zoomAt clamps to the manual zoom range", () => {
+  assert.equal(zoomAt({ x: 0, y: 0, z: 3 }, 100, 0, 0).z, ZOOM_MAX);
+  assert.equal(zoomAt({ x: 0, y: 0, z: 0.05 }, 0.001, 0, 0).z, ZOOM_MIN);
 });
 
 test("formatHash rounds coordinates and fixes zoom to two decimals", () => {

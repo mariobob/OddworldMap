@@ -1,7 +1,9 @@
 // DOM-free interpretation of the decoded map data: TLV destinations,
-// entry-path analysis and the permalink format. Kept importable in bare Node
-// for the unit tests.
+// entry-path analysis, view math and the permalink format. Kept importable in
+// bare Node for the unit tests.
 
+import { clamp } from "./util.js";
+import { ZOOM_MIN, ZOOM_MAX } from "./config.js";
 import { state } from "./state.js";
 
 export function computeEntryPaths(data) {
@@ -31,6 +33,13 @@ export function destOf(t, lvl = state.lvl, path = state.path) {
   const b = mk(e.alt_level, e.alt_path, e.alt_cam, null);
   const differs = d => d && !(lvl && path && d.lv === lvl.short && d.pa === path.id && d.target == null);
   return differs(a) ? a : (differs(b) ? b : (a || b));
+}
+
+// zoom the camera by factor about a fixed canvas point: the world spot under
+// (px, py) stays put
+export function zoomAt(cam, factor, px, py) {
+  const z = clamp(cam.z * factor, ZOOM_MIN, ZOOM_MAX);
+  return { x: cam.x + px / cam.z - px / z, y: cam.y + py / cam.z - py / z, z };
 }
 
 // ---- permalinks: #GAME/LEVEL/PATH/x/y/zoom -----------------------------

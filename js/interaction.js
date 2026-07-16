@@ -1,11 +1,11 @@
 // Pointer input on the map (mouse, touch, pen), hover inspection, and the menu toggle.
 
-import { clamp, esc, extrasText, segDist } from "./util.js";
-import { ZOOM_MIN, ZOOM_MAX, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
+import { esc, extrasText, segDist } from "./util.js";
+import { KEY_PAN_PX, KEY_ZOOM_STEP, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
 import { cv, tip, hud, menuBtn, scrim, narrowMQ, cssVar } from "./dom.js";
 import { state, dX, dY, wX, wY } from "./state.js";
 import { draw, scheduleDraw } from "./render.js";
-import { destOf } from "./model.js";
+import { destOf, zoomAt } from "./model.js";
 import { navigateToDest, scheduleHash } from "./navigate.js";
 
 const TIP_MAX_W = parseFloat(cssVar("--tip-max-w"));
@@ -59,11 +59,7 @@ cv.addEventListener("pointermove", e => {
   if (pointers.size === 2) {
     const [a, b] = pointers.values();
     const dist = Math.hypot(a.x - b.x, a.y - b.y);
-    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
-    const wx = state.cam.x + mx / state.cam.z, wy = state.cam.y + my / state.cam.z;   // anchor at pinch midpoint
-    state.cam.z = clamp(state.cam.z * dist / pinchDist, ZOOM_MIN, ZOOM_MAX);
-    state.cam.x = wx - mx / state.cam.z;
-    state.cam.y = wy - my / state.cam.z;
+    Object.assign(state.cam, zoomAt(state.cam, dist / pinchDist, (a.x + b.x) / 2, (a.y + b.y) / 2));   // anchor at pinch midpoint
     pinchDist = dist;
     scheduleDraw();
     return;
@@ -114,17 +110,30 @@ cv.addEventListener("click", () => {
 
 cv.addEventListener("wheel", e => {
   e.preventDefault();
-  const f = Math.exp(-e.deltaY * 0.0015);
-  const wx = state.cam.x + mouse.x / state.cam.z, wy = state.cam.y + mouse.y / state.cam.z;
-  state.cam.z = clamp(state.cam.z * f, ZOOM_MIN, ZOOM_MAX);
-  state.cam.x = wx - mouse.x / state.cam.z;
-  state.cam.y = wy - mouse.y / state.cam.z;
+  Object.assign(state.cam, zoomAt(state.cam, Math.exp(-e.deltaY * 0.0015), mouse.x, mouse.y));
   updateHover();
   scheduleDraw();
   scheduleHash(false);
 }, { passive: false });
 
 function worldAtMouse() { return { x: state.cam.x + mouse.x / state.cam.z, y: state.cam.y + mouse.y / state.cam.z }; }
+
+// ---- keyboard: arrows pan, + / - zoom about the canvas center -------------
+window.addEventListener("keydown", e => {
+  if (e.ctrlKey || e.metaKey || e.altKey || e.target.matches?.("input, textarea, select")) return;
+  const pan = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+  if (pan) {
+    state.cam.x += pan[0] * KEY_PAN_PX / state.cam.z;
+    state.cam.y += pan[1] * KEY_PAN_PX / state.cam.z;
+  } else if (e.key === "+" || e.key === "=" || e.key === "-" || e.key === "_") {
+    const f = e.key === "-" || e.key === "_" ? 1 / KEY_ZOOM_STEP : KEY_ZOOM_STEP;
+    Object.assign(state.cam, zoomAt(state.cam, f, cv.clientWidth / 2, cv.clientHeight / 2));
+  } else return;
+  e.preventDefault();
+  updateHover();
+  scheduleDraw();
+  scheduleHash(false);
+});
 
 // ---- hover inspection ----------------------------------------------------
 function updateHover() {

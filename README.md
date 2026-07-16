@@ -9,7 +9,7 @@ Browse it at **[oddworldmap.com](https://oddworldmap.com/)** — or serve the re
 ## Controls
 
 - **AO / AE** buttons switch between the two games
-- **drag** to pan, **mouse wheel** to zoom (anchored at the cursor)
+- **drag** or **arrow keys** to pan, **mouse wheel** (anchored at the cursor) or **`+` / `-`** to zoom
 - **hover** any object for decoded details — door destinations (level/path/door#), switch IDs, path-transition targets, continue-point zones
 - **click** a door, path transition, travel portal or express well to follow it to its destination, including across levels
 - level and path buttons top-left; object category filters with counts below
