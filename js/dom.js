@@ -13,3 +13,4 @@ export const menuBtn = $("menuBtn"), scrim = $("scrim");
 export const gameBtns = $("gameBtns"), levelBtns = $("levelBtns"), pathBtns = $("pathBtns");
 export const filterBox = $("filterBox");
 export const searchInput = $("searchInput"), searchResults = $("searchResults"), scopeBar = $("scopeBar");
+export const toastEl = $("toast");

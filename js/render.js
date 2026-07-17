@@ -49,16 +49,28 @@ window.addEventListener("selection-changed", () => {
   }
 });
 
-// follow-destination highlight: a fading ring at (x, y) in draw space
-let flash = null;   // {x, y, t0}
-export function flashAt(x, y) {
-  flash = { x, y, t0: performance.now() };
+// follow-destination highlight: a fading ring at (x, y) in draw space. A held
+// flash (object permalink) pulses at full strength until the normal timeout
+// has passed AND the user has interacted.
+let flash = null;   // {x, y, t0, hold}
+let flashInteracted = false;
+for (const ev of ["pointerdown", "wheel", "keydown"])
+  window.addEventListener(ev, () => { flashInteracted = true; }, { capture: true, passive: true });
+
+export function flashAt(x, y, hold = false) {
+  flash = { x, y, t0: performance.now(), hold };
+  flashInteracted = false;
   animateFlash();
 }
 
 function animateFlash() {
   if (!flash) return;
-  if (performance.now() - flash.t0 > FLASH_MS) { flash = null; draw(); return; }
+  if (flash.hold) {
+    if (performance.now() - flash.t0 > FLASH_MS && flashInteracted) {
+      flash.hold = false;
+      flash.t0 = performance.now();   // released: fade out from here
+    }
+  } else if (performance.now() - flash.t0 > FLASH_MS) { flash = null; draw(); return; }
   draw();
   requestAnimationFrame(animateFlash);
 }
@@ -193,7 +205,7 @@ export function draw() {
 
   if (flash) {
     const el = performance.now() - flash.t0;
-    const a = Math.max(0, 1 - el / FLASH_MS);
+    const a = flash.hold ? 1 : Math.max(0, 1 - el / FLASH_MS);
     ctx.strokeStyle = `rgba(${COLOR.accentRgb},${a})`;
     ctx.lineWidth = 3.5 / cam.z;
     const r = (46 + 10 * Math.sin(el / 110)) / Math.sqrt(cam.z);

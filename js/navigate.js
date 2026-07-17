@@ -103,6 +103,14 @@ function focusOn(fx, fy) {
   scheduleHash(true);
 }
 
+// permalink to one object: the focused view plus the object identity, so
+// opening the link can highlight it
+export function objectHash(t) {
+  const fx = (dX(t.x1) + dX(t.x2)) / 2, fy = (dY(t.y1) + dY(t.y2)) / 2;
+  const v = focusView(fx, fy, cv.clientWidth, cv.clientHeight);
+  return formatHash(state.data.id, state.lvl.short, state.path.id, v, t);
+}
+
 // ---- follow (click a door/portal/well to jump to its destination) -----
 export function navigateToDest(d) {
   if (!cv.clientWidth) { requestAnimationFrame(() => navigateToDest(d)); return; }
@@ -165,6 +173,17 @@ export function applyHash() {
     camToken++;   // cancel any fit still waiting on layout
   }
   applyingHash = false;
+  if (p.obj) {   // a link to a specific object: center it and hold a marker on it
+    const t = state.path.tlvs.find(x => x.name === p.obj.name && x.x1 === p.obj.x1 && x.y1 === p.obj.y1);
+    if (t) {
+      const fx = (dX(t.x1) + dX(t.x2)) / 2, fy = (dY(t.y1) + dY(t.y2)) / 2;
+      // recenter for this viewport: the link's x/y/z were focusView on the
+      // copier's screen and only serve as the fallback when the object is gone
+      Object.assign(state.cam, focusView(fx, fy, cv.clientWidth, cv.clientHeight));
+      camToken++;
+      flashAt(fx, fy, true);
+    }
+  }
   draw();
   return true;
 }

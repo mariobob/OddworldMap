@@ -1,12 +1,12 @@
 // Pointer input on the map (mouse, touch, pen), hover inspection, and the menu toggle.
 
 import { esc, extrasText, segDist } from "./util.js";
-import { KEY_PAN_PX, KEY_ZOOM_STEP, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
-import { cv, tip, hud, menuBtn, scrim, narrowMQ, cssVar } from "./dom.js";
+import { KEY_PAN_PX, KEY_ZOOM_STEP, TOAST_MS, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
+import { cv, tip, hud, menuBtn, scrim, narrowMQ, cssVar, toastEl } from "./dom.js";
 import { state, dX, dY, wX, wY } from "./state.js";
 import { draw, scheduleDraw } from "./render.js";
 import { destOf, isLoopback, zoomAt } from "./model.js";
-import { navigateToDest, scheduleHash } from "./navigate.js";
+import { navigateToDest, objectHash, scheduleHash } from "./navigate.js";
 
 const TIP_MAX_W = parseFloat(cssVar("--tip-max-w"));
 
@@ -108,6 +108,27 @@ cv.addEventListener("click", () => {
     if (d) { navigateToDest(d); return; }
   }
 });
+
+// right-click (long-press on touch) copies a permalink to the object under
+// the pointer; over empty map the native menu stays available
+cv.addEventListener("contextmenu", e => {
+  const r = cv.getBoundingClientRect();
+  mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+  updateHover();
+  if (!hoverTlvs.length) return;
+  e.preventDefault();
+  const url = location.href.split("#")[0] + objectHash(hoverTlvs[0]);
+  (navigator.clipboard?.writeText(url) ?? Promise.reject())
+    .then(() => toast("object link copied"), () => toast("copy failed"));
+});
+
+let toastTimer = null;
+function toast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), TOAST_MS);
+}
 
 cv.addEventListener("wheel", e => {
   e.preventDefault();

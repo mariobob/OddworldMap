@@ -89,21 +89,25 @@ export function focusView(fx, fy, cw, ch) {
   return { x: fx - cw / (2 * z), y: fy - ch / (2 * z), z };
 }
 
-// ---- permalinks: #GAME/LEVEL/PATH/x/y/zoom -----------------------------
-export function formatHash(gameId, levelShort, pathId, cam) {
-  return `#${gameId}/${levelShort}/${pathId}/${Math.round(cam.x)}/${Math.round(cam.y)}/${cam.z.toFixed(2)}`;
+// ---- permalinks: #GAME/LEVEL/PATH/x/y/zoom[/Name@x1,y1] -----------------
+export function formatHash(gameId, levelShort, pathId, cam, obj) {
+  const base = `#${gameId}/${levelShort}/${pathId}/${Math.round(cam.x)}/${Math.round(cam.y)}/${cam.z.toFixed(2)}`;
+  return obj ? `${base}/${obj.name}@${obj.x1},${obj.y1}` : base;
 }
 
-// null for an empty hash; view is null unless x/y/z are all present. Numbers
-// may come back NaN — the caller resolves and validates against the data.
+// null for an empty hash; view is null unless x/y/z are all present; obj names
+// a TLV to highlight, identified by name and origin. Numbers may come back
+// NaN — the caller resolves and validates against the data.
 export function parseHash(hash) {
   const h = hash.replace(/^#/, "");
   if (!h) return null;
   const parts = h.split("/");
+  const om = parts.length >= 7 ? /^(\w+)@(-?\d+),(-?\d+)$/.exec(parts[6]) : null;
   return {
     game: parts[0].toUpperCase(),
     level: (parts[1] || "").toUpperCase(),
     path: +parts[2],
     view: parts[3] != null && parts.length >= 6 ? { x: +parts[3], y: +parts[4], z: +parts[5] } : null,
+    obj: om ? { name: om[1], x1: +om[2], y1: +om[3] } : null,
   };
 }

@@ -6,6 +6,7 @@ export const ZOOM_MIN = 0.02, ZOOM_MAX = 4;              // manual zoom clamp (p
 export const FOCUS_ZOOM_MIN = 0.5, FOCUS_ZOOM_MAX = 1.6; // zoom clamp when jumping to an object
 export const FOCUS_SCREENS = 2.6;                        // jump target: ~this many screens across
 export const FLASH_MS = 1600;                            // follow-destination highlight duration
+export const TOAST_MS = 1500;                            // transient notice duration
 export const CACHE_MAX_IMAGES = 500;                     // cam bitmaps kept before eviction (~70 KB compressed each)
 export const KEY_PAN_PX = 75, KEY_ZOOM_STEP = 1.25;      // keyboard pan step (screen px) / zoom factor per press
 

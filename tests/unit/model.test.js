@@ -162,15 +162,23 @@ test("formatHash rounds coordinates and fixes zoom to two decimals", () => {
 
 test("parseHash round-trips a formatted hash (against the rounded values)", () => {
   const p = parseHash(formatHash("AO", "R2", 1, { x: 177.4, y: 54.6, z: 2.234 }));
-  assert.deepEqual(p, { game: "AO", level: "R2", path: 1, view: { x: 177, y: 55, z: 2.23 } });
+  assert.deepEqual(p, { game: "AO", level: "R2", path: 1, view: { x: 177, y: 55, z: 2.23 }, obj: null });
+});
+
+test("permalinks can carry an object, identified by name and origin", () => {
+  const h = formatHash("AO", "R1", 18, { x: 177.4, y: 54.6, z: 2.234 }, { name: "Door", x1: 8746, y1: 1232 });
+  assert.equal(h, "#AO/R1/18/177/55/2.23/Door@8746,1232");
+  assert.deepEqual(parseHash(h).obj, { name: "Door", x1: 8746, y1: 1232 });
+  assert.equal(parseHash("#AO/R1/18/177/55/2.23").obj, null);
+  assert.equal(parseHash("#AO/R1/18/177/55/2.23/garbage!").obj, null);
 });
 
 test("parseHash: case-insensitive, partial and garbage inputs", () => {
   assert.equal(parseHash(""), null);
   assert.equal(parseHash("#"), null);
-  assert.deepEqual(parseHash("#ao/r2/1"), { game: "AO", level: "R2", path: 1, view: null });
-  assert.deepEqual(parseHash("#AO"), { game: "AO", level: "", path: NaN, view: null });
+  assert.deepEqual(parseHash("#ao/r2/1"), { game: "AO", level: "R2", path: 1, view: null, obj: null });
+  assert.deepEqual(parseHash("#AO"), { game: "AO", level: "", path: NaN, view: null, obj: null });
   // x/y without z: the view is ignored as a whole
-  assert.deepEqual(parseHash("#AO/R2/1/10/20"), { game: "AO", level: "R2", path: 1, view: null });
+  assert.deepEqual(parseHash("#AO/R2/1/10/20"), { game: "AO", level: "R2", path: 1, view: null, obj: null });
   assert.ok(Number.isNaN(parseHash("#AO/R2/junk").path));
 });

@@ -59,6 +59,11 @@ body:not(.menu-open) #sidebar { margin-left: var(--collapsed); }
 #help { position: absolute; left: 10px; bottom: 8px; color: var(--dim); font-size: 11px;
         background: rgba(18,20,24,.7); padding: 3px 8px; border-radius: 5px; }
 .muted { color: var(--dim); padding: 2px 14px 8px; font-size: 11px; }
+#toast { position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%);
+         background: rgba(18,20,24,.92); border: 1px solid var(--line); border-radius: 6px;
+         color: var(--text); font-size: 12px; padding: 6px 12px; opacity: 0;
+         pointer-events: none; transition: opacity .15s ease; z-index: 6; }
+#toast.show { opacity: 1; }
 #noscript { position: absolute; inset: 0; display: grid; place-items: center; color: var(--dim); }
 #searchBox { margin: 4px 12px 2px; }
 #searchBox input { width: 100%; background: var(--panel2); border: 1px solid var(--line); border-radius: 6px;
