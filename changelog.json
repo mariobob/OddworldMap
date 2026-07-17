@@ -22,7 +22,7 @@
    "date": "2026-07-16",
    "tag": "new",
    "title": "Explore with the keyboard",
-   "detail": "Arrow keys pan the map and +/\u2212 zoom; the object filters are fully keyboard-operable too."
+   "detail": "Arrow keys pan the map and +/- zoom; the object filters are fully keyboard-operable too."
   },
   {
    "date": "2026-07-16",
@@ -58,13 +58,13 @@
    "date": "2026-07-14",
    "tag": "new",
    "title": "Abe's Exoddus joins the map",
-   "detail": "The entire second game \u2014 every level, camera and object \u2014 sits alongside Abe's Oddysee. Switch between them with the game tabs."
+   "detail": "The entire second game (every level, camera and object) sits alongside Abe's Oddysee. Switch between them with the game tabs."
   },
   {
    "date": "2026-07-14",
    "tag": "improved",
    "title": "Smarter search",
-   "detail": "Search results are ranked by relevance, grouped by where they live, and scoped to a level or the whole game \u2014 all keyboard-navigable."
+   "detail": "Search results are ranked by relevance, grouped by where they live, and scoped to a level or the whole game. All keyboard-navigable."
   },
   {
    "date": "2026-07-12",
