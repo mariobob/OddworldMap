@@ -339,6 +339,16 @@ def tlv_extra_ao(t, blob, pos, length, level_short):
     elif t == 51:
         v = s16s(1)
         if v: e = {"movie": v[0]}
+    elif t == 100:  # HandStone: scale, then up to three viewed (level, path, camera) triples
+        v = s16s(10)
+        if len(v) >= 10:
+            for n in range(3):
+                lv, pa, ca = v[1 + n * 3:4 + n * 3]
+                # unused slots carry stale level ids with zeroed path/camera
+                if 1 <= lv <= 15 and pa >= 1 and ca >= 1:
+                    e[f"view{n + 1}_level"] = level_short.get(lv, lv)
+                    e[f"view{n + 1}_path"] = pa
+                    e[f"view{n + 1}_cam"] = ca
     elif t == 45:  # WellExpress: off/on destinations (level/path/camera), switched by trigger id
         v = s16s(13)
         if len(v) >= 13:
@@ -395,6 +405,14 @@ def tlv_extra_ae(t, blob, pos, length, level_short):
             if on and on != e:
                 e.update({"alt_level": on["to_level"], "alt_path": on["to_path"], "alt_cam": on["to_cam"]})
             e["switch_id"] = v[1]
+    elif t == 61:  # HandStone: scale, up to three viewed camera ids (current path), trigger switch
+        v = s16s(5)
+        if len(v) >= 5:
+            for n in range(3):
+                if v[1 + n]:
+                    e[f"view{n + 1}_cam"] = v[1 + n]
+            if v[4]:
+                e["switch_id"] = v[4]
     elif t == 88:  # Teleporter: own id, other id, camera, path, level, switch id
         v = s16s(6)
         if len(v) >= 6:
