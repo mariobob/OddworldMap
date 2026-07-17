@@ -4,21 +4,45 @@
 import { $ } from "./dom.js";
 import { esc } from "./util.js";
 
-const PREVIEW_N = 5;                      // entries shown before "see all"
+const PREVIEW_N = 5; // entries shown before "see all"
 const SEEN_KEY = "owm:whatsnew:lastSeen"; // newest date the visitor has opened
 const TAGS = new Set(["new", "improved", "fixed"]);
-const MONTHS = ["January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"];
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
-const fmtDate = iso => {
+const fmtDate = (iso) => {
   const [y, m, d] = iso.split("-").map(Number);
   return `${MONTHS[m - 1]} ${d}, ${y}`;
 };
 
 // localStorage may be unavailable (private mode, blocked); never let that break the panel
 const store = {
-  get: () => { try { return localStorage.getItem(SEEN_KEY); } catch { return null; } },
-  set: v => { try { localStorage.setItem(SEEN_KEY, v); } catch { /* ignore */ } },
+  get: () => {
+    try {
+      return localStorage.getItem(SEEN_KEY);
+    } catch {
+      return null;
+    }
+  },
+  set: (v) => {
+    try {
+      localStorage.setItem(SEEN_KEY, v);
+    } catch {
+      /* ignore */
+    }
+  },
 };
 
 init();
@@ -29,18 +53,26 @@ async function init() {
     const r = await fetch("changelog.json", { cache: "no-cache" });
     if (!r.ok) return;
     entries = (await r.json()).entries;
-  } catch { return; }
+  } catch {
+    return;
+  }
   if (!Array.isArray(entries) || !entries.length) return;
 
-  const btn = $("whatsnewBtn"), overlay = $("whatsnewOverlay");
-  const body = $("whatsnewBody"), closeBtn = $("whatsnewClose");
+  const btn = $("whatsnewBtn"),
+    overlay = $("whatsnewOverlay");
+  const body = $("whatsnewBody"),
+    closeBtn = $("whatsnewClose");
   const newest = entries[0].date;
 
-  const render = expanded => {
+  const render = (expanded) => {
     const shown = expanded ? entries : entries.slice(0, PREVIEW_N);
-    let html = "", lastDate = null;
+    let html = "",
+      lastDate = null;
     for (const e of shown) {
-      if (e.date !== lastDate) { html += `<div class="wn-date">${esc(fmtDate(e.date))}</div>`; lastDate = e.date; }
+      if (e.date !== lastDate) {
+        html += `<div class="wn-date">${esc(fmtDate(e.date))}</div>`;
+        lastDate = e.date;
+      }
       const tag = TAGS.has(e.tag) ? `<span class="wn-tag wn-tag-${e.tag}">${e.tag}</span>` : "";
       const detail = e.detail ? `<div class="wn-detail">${esc(e.detail)}</div>` : "";
       html += `<div class="wn-entry">${tag}<span class="wn-title">${esc(e.title)}</span>${detail}</div>`;
@@ -59,15 +91,20 @@ async function init() {
     store.set(newest);
     closeBtn.focus();
   };
-  const close = () => { document.body.classList.remove("whatsnew-open"); btn.focus(); };
+  const close = () => {
+    document.body.classList.remove("whatsnew-open");
+    btn.focus();
+  };
 
   const seen = store.get();
   if (!seen || newest > seen) btn.classList.add("hasnew");
 
   btn.onclick = open;
   closeBtn.onclick = close;
-  overlay.onclick = e => { if (e.target === overlay) close(); };
-  window.addEventListener("keydown", e => {
+  overlay.onclick = (e) => {
+    if (e.target === overlay) close();
+  };
+  window.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && document.body.classList.contains("whatsnew-open")) close();
   });
 

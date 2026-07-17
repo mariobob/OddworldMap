@@ -6,7 +6,14 @@ import { ZOOM_MIN, ZOOM_MAX } from "./config.js";
 import { $, cv, gameBtns, levelBtns, pathBtns } from "./dom.js";
 import { state, GEO, CELL_W, CELL_H, setGeometry, dX, dY } from "./state.js";
 import { draw, flashAt } from "./render.js";
-import { camCell, computeEntryPaths, focusView, formatHash, parseHash, resolveTarget } from "./model.js";
+import {
+  camCell,
+  computeEntryPaths,
+  focusView,
+  formatHash,
+  parseHash,
+  resolveTarget,
+} from "./model.js";
 
 // highlight the button whose data-key matches, clear the rest
 function markOn(box, key) {
@@ -16,7 +23,7 @@ function markOn(box, key) {
 // build the game buttons once the datasets are known
 export function initGames(games) {
   state.games = games;
-  games.forEach(G => {
+  games.forEach((G) => {
     const b = document.createElement("button");
     b.textContent = G.id;
     b.title = G.game;
@@ -33,7 +40,7 @@ export function selectGame(G, keepView) {
   $("gameName").textContent = G.game;
   state.entry = computeEntryPaths(G);
   levelBtns.innerHTML = "";
-  G.levels.forEach(L => {
+  G.levels.forEach((L) => {
     const b = document.createElement("button");
     b.textContent = L.short;
     b.title = L.name;
@@ -48,7 +55,7 @@ function selectLevel(L) {
   state.lvl = L;
   markOn(levelBtns, L.short);
   pathBtns.innerHTML = "";
-  L.paths.forEach(P => {
+  L.paths.forEach((P) => {
     const b = document.createElement("button");
     b.textContent = "P" + P.id;
     b.dataset.key = String(P.id);
@@ -68,25 +75,32 @@ function selectPath(P) {
   fitView();
   draw();
   scheduleHash(true);
-  window.dispatchEvent(new CustomEvent("selection-changed", { detail: { fromHash: applyingHash } }));
+  window.dispatchEvent(
+    new CustomEvent("selection-changed", { detail: { fromHash: applyingHash } }),
+  );
 }
 
 function selectPathById(id) {
-  const P = state.lvl.paths.find(p => p.id === id);
+  const P = state.lvl.paths.find((p) => p.id === id);
   if (!P) return false;
   selectPath(P);
   return true;
 }
 
-let camToken = 0;   // bumped on explicit positioning to invalidate pending fits
+let camToken = 0; // bumped on explicit positioning to invalidate pending fits
 
 function fitView() {
   const token = ++camToken;
   const attempt = () => {
-    if (token !== camToken) return;   // superseded by hash restore or follow
-    if (!cv.clientWidth || !cv.clientHeight) { requestAnimationFrame(attempt); return; }
-    const w = state.path.w * CELL_W, h = state.path.h * CELL_H;
-    const zx = cv.clientWidth / (w + 200), zy = cv.clientHeight / (h + 200);
+    if (token !== camToken) return; // superseded by hash restore or follow
+    if (!cv.clientWidth || !cv.clientHeight) {
+      requestAnimationFrame(attempt);
+      return;
+    }
+    const w = state.path.w * CELL_W,
+      h = state.path.h * CELL_H;
+    const zx = cv.clientWidth / (w + 200),
+      zy = cv.clientHeight / (h + 200);
     state.cam.z = Math.max(ZOOM_MIN, Math.min(zx, zy));
     state.cam.x = -(cv.clientWidth / state.cam.z - w) / 2;
     state.cam.y = -(cv.clientHeight / state.cam.z - h) / 2;
@@ -98,7 +112,7 @@ function fitView() {
 // center on (fx, fy) zoomed to a few screens across, flash the spot
 function focusOn(fx, fy) {
   Object.assign(state.cam, focusView(fx, fy, cv.clientWidth, cv.clientHeight));
-  camToken++;   // cancel any fit still waiting on layout
+  camToken++; // cancel any fit still waiting on layout
   flashAt(fx, fy);
   scheduleHash(true);
 }
@@ -106,28 +120,36 @@ function focusOn(fx, fy) {
 // permalink to one object: the focused view plus the object identity, so
 // opening the link can highlight it
 export function objectHash(t) {
-  const fx = (dX(t.x1) + dX(t.x2)) / 2, fy = (dY(t.y1) + dY(t.y2)) / 2;
+  const fx = (dX(t.x1) + dX(t.x2)) / 2,
+    fy = (dY(t.y1) + dY(t.y2)) / 2;
   const v = focusView(fx, fy, cv.clientWidth, cv.clientHeight);
   return formatHash(state.data.id, state.lvl.short, state.path.id, v, t);
 }
 
 // ---- follow (click a door/portal/well to jump to its destination) -----
 export function navigateToDest(d) {
-  if (!cv.clientWidth) { requestAnimationFrame(() => navigateToDest(d)); return; }
-  const L = state.data.levels.find(l => l.short === d.lv);
+  if (!cv.clientWidth) {
+    requestAnimationFrame(() => navigateToDest(d));
+    return;
+  }
+  const L = state.data.levels.find((l) => l.short === d.lv);
   if (!L) return;
   if (state.lvl !== L) selectLevel(L);
   if (!selectPathById(d.pa)) return;
 
-  let fx = null, fy = null;
+  let fx = null,
+    fy = null;
   const tgt = resolveTarget(d, state.path, GEO);
-  if (tgt) { fx = (dX(tgt.x1) + dX(tgt.x2)) / 2; fy = (dY(tgt.y1) + dY(tgt.y2)) / 2; }
+  if (tgt) {
+    fx = (dX(tgt.x1) + dX(tgt.x2)) / 2;
+    fy = (dY(tgt.y1) + dY(tgt.y2)) / 2;
+  }
   const cell = camCell(state.path, d.ca);
   if (fx == null && cell != null) {
     fx = (cell % state.path.w) * CELL_W + CELL_W / 2;
     fy = Math.floor(cell / state.path.w) * CELL_H + CELL_H / 2;
   }
-  if (fx == null) return;   // path-level target: selectPath already fit the view
+  if (fx == null) return; // path-level target: selectPath already fit the view
   focusOn(fx, fy);
 }
 
@@ -139,7 +161,8 @@ export function jumpToTlv(G, L, P, t) {
 }
 
 // ---- permalinks ---------------------------------------------------------
-let applyingHash = false, hashTimer = null;
+let applyingHash = false,
+  hashTimer = null;
 
 function hashFor() {
   return formatHash(state.data.id, state.lvl.short, state.path.id, state.cam);
@@ -148,35 +171,47 @@ function hashFor() {
 export function scheduleHash(push) {
   if (applyingHash || !state.path) return;
   clearTimeout(hashTimer);
-  hashTimer = setTimeout(() => {
-    const h = hashFor();
-    if (h === location.hash) return;
-    if (push) location.hash = h;                 // history entry (level/path/follow)
-    else history.replaceState(null, "", h);      // silent update (pan/zoom)
-  }, push ? 0 : 350);
+  hashTimer = setTimeout(
+    () => {
+      const h = hashFor();
+      if (h === location.hash) return;
+      if (push)
+        location.hash = h; // history entry (level/path/follow)
+      else history.replaceState(null, "", h); // silent update (pan/zoom)
+    },
+    push ? 0 : 350,
+  );
 }
 
 export function applyHash() {
   const p = parseHash(location.hash);
   if (!p) return false;
-  const G = state.games.find(g => g.id === p.game);
+  const G = state.games.find((g) => g.id === p.game);
   if (!G) return false;
-  const L = G.levels.find(l => l.short === p.level);
+  const L = G.levels.find((l) => l.short === p.level);
   if (!L) return false;
   applyingHash = true;
   if (state.data !== G) selectGame(G, true);
   if (state.lvl !== L) selectLevel(L);
-  if (!selectPathById(p.path)) { applyingHash = false; return false; }
+  if (!selectPathById(p.path)) {
+    applyingHash = false;
+    return false;
+  }
   if (p.view) {
-    state.cam.x = p.view.x; state.cam.y = p.view.y;
+    state.cam.x = p.view.x;
+    state.cam.y = p.view.y;
     state.cam.z = clamp(p.view.z, ZOOM_MIN, ZOOM_MAX);
-    camToken++;   // cancel any fit still waiting on layout
+    camToken++; // cancel any fit still waiting on layout
   }
   applyingHash = false;
-  if (p.obj) {   // a link to a specific object: center it and hold a marker on it
-    const t = state.path.tlvs.find(x => x.name === p.obj.name && x.x1 === p.obj.x1 && x.y1 === p.obj.y1);
+  if (p.obj) {
+    // a link to a specific object: center it and hold a marker on it
+    const t = state.path.tlvs.find(
+      (x) => x.name === p.obj.name && x.x1 === p.obj.x1 && x.y1 === p.obj.y1,
+    );
     if (t) {
-      const fx = (dX(t.x1) + dX(t.x2)) / 2, fy = (dY(t.y1) + dY(t.y2)) / 2;
+      const fx = (dX(t.x1) + dX(t.x2)) / 2,
+        fy = (dY(t.y1) + dY(t.y2)) / 2;
       // recenter for this viewport: the link's x/y/z were focusView on the
       // copier's screen and only serve as the fallback when the object is gone
       Object.assign(state.cam, focusView(fx, fy, cv.clientWidth, cv.clientHeight));
@@ -188,4 +223,6 @@ export function applyHash() {
   return true;
 }
 
-window.addEventListener("hashchange", () => { if (!applyingHash) applyHash(); });
+window.addEventListener("hashchange", () => {
+  if (!applyingHash) applyHash();
+});

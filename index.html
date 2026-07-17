@@ -1,92 +1,138 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#14161a">
-<title>Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus</title>
-<meta name="description" content="Interactive map of Oddworld: Abe's Oddysee and Abe's Exoddus (PS1). Every camera screen, object and collision line, extracted straight from the game discs — pan, zoom, follow doors, search.">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#14161a" />
+    <title>Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus</title>
+    <meta
+      name="description"
+      content="Interactive map of Oddworld: Abe's Oddysee and Abe's Exoddus (PS1). Every camera screen, object and collision line, extracted straight from the game discs — pan, zoom, follow doors, search."
+    />
 
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="icon" href="favicon-96.png" sizes="96x96" type="image/png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="manifest" href="site.webmanifest">
-<link rel="canonical" href="https://oddworldmap.com/">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="favicon-96.png" sizes="96x96" type="image/png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="canonical" href="https://oddworldmap.com/" />
 
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://oddworldmap.com/">
-<meta property="og:title" content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus">
-<meta property="og:description" content="Every camera screen, object and collision line, extracted straight from the game discs — pan, zoom, follow doors, search.">
-<meta property="og:site_name" content="Oddworld Map">
-<meta property="og:image" content="https://oddworldmap.com/og-image.png">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://oddworldmap.com/" />
+    <meta
+      property="og:title"
+      content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus"
+    />
+    <meta
+      property="og:description"
+      content="Every camera screen, object and collision line, extracted straight from the game discs — pan, zoom, follow doors, search."
+    />
+    <meta property="og:site_name" content="Oddworld Map" />
+    <meta property="og:image" content="https://oddworldmap.com/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus"
+    />
 
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus">
-<meta name="twitter:description" content="Every camera screen, object and collision line, extracted straight from the game discs — pan, zoom, follow doors, search.">
-<meta name="twitter:image" content="https://oddworldmap.com/og-image.png">
-<meta name="twitter:image:alt" content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus">
-<link rel="stylesheet" href="css/main.css">
-<!-- start the data downloads during HTML parse instead of after the module graph;
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus"
+    />
+    <meta
+      name="twitter:description"
+      content="Every camera screen, object and collision line, extracted straight from the game discs — pan, zoom, follow doors, search."
+    />
+    <meta name="twitter:image" content="https://oddworldmap.com/og-image.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Oddworld Map — interactive PS1 map of Abe's Oddysee & Exoddus"
+    />
+    <link rel="stylesheet" href="css/main.css" />
+    <!-- start the data downloads during HTML parse instead of after the module graph;
      crossorigin matches fetch()'s cors/same-origin mode so the preload is consumed -->
-<link rel="preload" href="map_data_ao.json" as="fetch" crossorigin>
-<link rel="preload" href="map_data_ae.json" as="fetch" crossorigin>
-</head>
-<body>
-<div id="scrim"></div>
-<div id="sidebar">
-  <h1>ODDWORLD MAP</h1>
-  <div class="muted" id="gameName"></div>
-  <h2>Search</h2>
-  <div id="searchBox"><input id="searchInput" type="search" placeholder="mudokon, lcdstatusboard, switch_id=70…" autocomplete="off"></div>
-  <div id="scopeBar"></div>
-  <div id="searchResults"></div>
-  <h2>Game</h2>
-  <div class="btnrow" id="gameBtns"></div>
-  <h2>Level</h2>
-  <div class="btnrow" id="levelBtns"></div>
-  <h2>Path</h2>
-  <div class="btnrow" id="pathBtns"></div>
-  <h2>Display</h2>
-  <div id="toggles">
-    <!-- autocomplete=off: the script mirrors .checked into state, so form-state
+    <link rel="preload" href="map_data_ao.json" as="fetch" crossorigin />
+    <link rel="preload" href="map_data_ae.json" as="fetch" crossorigin />
+  </head>
+  <body>
+    <div id="scrim"></div>
+    <div id="sidebar">
+      <h1>ODDWORLD MAP</h1>
+      <div class="muted" id="gameName"></div>
+      <h2>Search</h2>
+      <div id="searchBox">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="mudokon, lcdstatusboard, switch_id=70…"
+          autocomplete="off"
+        />
+      </div>
+      <div id="scopeBar"></div>
+      <div id="searchResults"></div>
+      <h2>Game</h2>
+      <div class="btnrow" id="gameBtns"></div>
+      <h2>Level</h2>
+      <div class="btnrow" id="levelBtns"></div>
+      <h2>Path</h2>
+      <div class="btnrow" id="pathBtns"></div>
+      <h2>Display</h2>
+      <div id="toggles">
+        <!-- autocomplete=off: the script mirrors .checked into state, so form-state
          restoration (which fires no change events) must not flip these -->
-    <label><input type="checkbox" id="tGrid" autocomplete="off" checked> Camera grid + names</label>
-    <label><input type="checkbox" id="tColl" autocomplete="off"> Collision lines</label>
-    <label><input type="checkbox" id="tFg" autocomplete="off"> Foreground masks (FG1)</label>
-    <label><input type="checkbox" id="tLabels" autocomplete="off" checked> Object labels (zoomed)</label>
-    <label><input type="checkbox" id="tDim" autocomplete="off"> Dim backgrounds</label>
-    <label><input type="checkbox" id="tRuler" autocomplete="off"> Ruler (drag to measure)</label>
-    <button id="exportBtn" title="save the current view as an image">Export view as PNG</button>
-  </div>
-  <h2>Objects <span class="h2tools"><button id="fAll">all</button> · <button id="fNone">none</button></span></h2>
-  <div class="filters" id="filterBox"></div>
-  <div id="sbFooter"><a id="feedbackLink" href="mailto:">Send feedback</a></div>
-</div>
-<div id="main">
-  <noscript><div id="noscript">This interactive map requires JavaScript.</div></noscript>
-  <canvas id="cv"></canvas>
-  <button id="menuBtn" aria-label="Toggle menu">☰</button>
-  <button id="whatsnewBtn" hidden aria-label="What's new"><span class="wn-dot"></span>What's new</button>
-  <div id="tip"></div>
-  <div id="help">drag / arrows = pan · wheel / ± = zoom · hover = inspect</div>
-  <div id="hud"></div>
-  <div id="toast"></div>
-</div>
-<div id="whatsnewOverlay">
-  <aside id="whatsnew" role="dialog" aria-modal="true" aria-labelledby="whatsnewTitle">
-    <div class="wn-head">
-      <h2 id="whatsnewTitle">What's New</h2>
-      <button id="whatsnewClose" aria-label="Close">×</button>
+        <label
+          ><input type="checkbox" id="tGrid" autocomplete="off" checked /> Camera grid +
+          names</label
+        >
+        <label><input type="checkbox" id="tColl" autocomplete="off" /> Collision lines</label>
+        <label><input type="checkbox" id="tFg" autocomplete="off" /> Foreground masks (FG1)</label>
+        <label
+          ><input type="checkbox" id="tLabels" autocomplete="off" checked /> Object labels
+          (zoomed)</label
+        >
+        <label><input type="checkbox" id="tDim" autocomplete="off" /> Dim backgrounds</label>
+        <label
+          ><input type="checkbox" id="tRuler" autocomplete="off" /> Ruler (drag to measure)</label
+        >
+        <button id="exportBtn" title="save the current view as an image">Export view as PNG</button>
+      </div>
+      <h2>
+        Objects
+        <span class="h2tools"
+          ><button id="fAll">all</button> · <button id="fNone">none</button></span
+        >
+      </h2>
+      <div class="filters" id="filterBox"></div>
+      <div id="sbFooter"><a id="feedbackLink" href="mailto:">Send feedback</a></div>
     </div>
-    <div id="whatsnewBody"></div>
-  </aside>
-</div>
+    <div id="main">
+      <noscript><div id="noscript">This interactive map requires JavaScript.</div></noscript>
+      <canvas id="cv"></canvas>
+      <button id="menuBtn" aria-label="Toggle menu">☰</button>
+      <button id="whatsnewBtn" hidden aria-label="What's new">
+        <span class="wn-dot"></span>What's new
+      </button>
+      <div id="tip"></div>
+      <div id="help">drag / arrows = pan · wheel / ± = zoom · hover = inspect</div>
+      <div id="hud"></div>
+      <div id="toast"></div>
+    </div>
+    <div id="whatsnewOverlay">
+      <aside id="whatsnew" role="dialog" aria-modal="true" aria-labelledby="whatsnewTitle">
+        <div class="wn-head">
+          <h2 id="whatsnewTitle">What's New</h2>
+          <button id="whatsnewClose" aria-label="Close">×</button>
+        </div>
+        <div id="whatsnewBody"></div>
+      </aside>
+    </div>
 
-<script type="module" src="js/main.js"></script>
-</body>
+    <script type="module" src="js/main.js"></script>
+  </body>
 </html>

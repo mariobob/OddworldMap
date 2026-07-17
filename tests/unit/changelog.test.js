@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 // panel relies on. changelog.json is hand-curated, so this guards against
 // a typo shipping a broken feed.
 
-const load = name => JSON.parse(readFileSync(new URL(`../../${name}`, import.meta.url), "utf8"));
+const load = (name) => JSON.parse(readFileSync(new URL(`../../${name}`, import.meta.url), "utf8"));
 
 const TAGS = new Set(["new", "improved", "fixed"]);
 

@@ -10,7 +10,7 @@ test("catOf buckets known names and falls back to meta", () => {
 });
 
 test("CATS keys are unique", () => {
-  const keys = CATS.map(c => c.key);
+  const keys = CATS.map((c) => c.key);
   assert.equal(new Set(keys).size, keys.length);
 });
 

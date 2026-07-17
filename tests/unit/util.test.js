@@ -21,8 +21,8 @@ test("extrasText skips null and empty values but keeps 0", () => {
 });
 
 test("segDist point-to-segment distance", () => {
-  assert.equal(segDist(5, 0, 0, 0, 10, 0), 0);    // on the segment
-  assert.equal(segDist(5, 3, 0, 0, 10, 0), 3);    // perpendicular to the interior
-  assert.equal(segDist(-4, 3, 0, 0, 10, 0), 5);   // clamped to an endpoint
-  assert.equal(segDist(3, 4, 0, 0, 0, 0), 5);     // degenerate zero-length segment
+  assert.equal(segDist(5, 0, 0, 0, 10, 0), 0); // on the segment
+  assert.equal(segDist(5, 3, 0, 0, 10, 0), 3); // perpendicular to the interior
+  assert.equal(segDist(-4, 3, 0, 0, 10, 0), 5); // clamped to an endpoint
+  assert.equal(segDist(3, 4, 0, 0, 0, 0), 5); // degenerate zero-length segment
 });

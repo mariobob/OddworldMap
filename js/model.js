@@ -8,14 +8,16 @@ import { GEO, state, CELL_W, CELL_H } from "./state.js";
 
 export function computeEntryPaths(data) {
   const entries = {};
-  const add = (lv, pa) => { if (lv != null && pa != null) (entries[lv] ??= new Set()).add(pa); };
+  const add = (lv, pa) => {
+    if (lv != null && pa != null) (entries[lv] ??= new Set()).add(pa);
+  };
   for (const L of data.levels)
     for (const P of L.paths)
       for (const t of P.tlvs) {
         const e = t.extra || {};
         if (e.to_level && e.to_level !== L.short) add(e.to_level, e.to_path);
         if (e.alt_level && e.alt_level !== L.short) add(e.alt_level, e.alt_path);
-        if (t.name === "AbeStart") add(L.short, P.id);   // game start / re-entry
+        if (t.name === "AbeStart") add(L.short, P.id); // game start / re-entry
       }
   return entries;
 }
@@ -34,22 +36,24 @@ export function destOf(t, lvl = state.lvl, path = state.path) {
   }
   // paired objects land on their counterpart within the destination camera
   let target = null;
-  if (e["target_door#"] != null) target = { name: "Door", field: "door#", value: e["target_door#"] };
-  else if (e["target_tp#"] != null) target = { name: "Teleporter", field: "tp#", value: e["target_tp#"] };
-  else if (t.name === "BirdPortal" && e.portal === "travel")
-    target = { name: "BirdPortalExit" };
-  const mk = (lv, pa, ca, tgt) => (lv != null && pa != null) ? { lv, pa, ca, target: tgt } : null;
+  if (e["target_door#"] != null)
+    target = { name: "Door", field: "door#", value: e["target_door#"] };
+  else if (e["target_tp#"] != null)
+    target = { name: "Teleporter", field: "tp#", value: e["target_tp#"] };
+  else if (t.name === "BirdPortal" && e.portal === "travel") target = { name: "BirdPortalExit" };
+  const mk = (lv, pa, ca, tgt) => (lv != null && pa != null ? { lv, pa, ca, target: tgt } : null);
   const a = mk(e.to_level, e.to_path, e.to_cam, target);
   const b = mk(e.alt_level, e.alt_path, e.alt_cam, null);
-  const differs = d => d && !(lvl && path && d.lv === lvl.short && d.pa === path.id && d.target == null);
-  return differs(a) ? a : (differs(b) ? b : (a || b));
+  const differs = (d) =>
+    d && !(lvl && path && d.lv === lvl.short && d.pa === path.id && d.target == null);
+  return differs(a) ? a : differs(b) ? b : a || b;
 }
 
 // camera id -> grid cell within a path (cam names end in C##)
 export function camCell(path, camId) {
   if (camId == null) return null;
   const suffix = "C" + String(camId).padStart(2, "0");
-  const cm = path.cams.find(c => c.name && c.name.endsWith(suffix));
+  const cm = path.cams.find((c) => c.name && c.name.endsWith(suffix));
   return cm ? cm.cell : null;
 }
 
@@ -64,12 +68,18 @@ export const tlvCell = (t, path, geo) =>
 export function resolveTarget(d, path, geo) {
   if (!d || !d.target) return null;
   const cell = camCell(path, d.ca);
-  const match = t => t.name === d.target.name &&
+  const match = (t) =>
+    t.name === d.target.name &&
     (d.target.field == null || (t.extra || {})[d.target.field] === d.target.value);
   if (d.target.field == null)
-    return cell == null ? null : path.tlvs.find(t => match(t) && tlvCell(t, path, geo) === cell) || null;
-  return path.tlvs.find(t => match(t) && (cell == null || tlvCell(t, path, geo) === cell)) ||
-         path.tlvs.find(match) || null;
+    return cell == null
+      ? null
+      : path.tlvs.find((t) => match(t) && tlvCell(t, path, geo) === cell) || null;
+  return (
+    path.tlvs.find((t) => match(t) && (cell == null || tlvCell(t, path, geo) === cell)) ||
+    path.tlvs.find(match) ||
+    null
+  );
 }
 
 // a paired object (door, teleporter) whose destination names its own camera and
@@ -78,9 +88,13 @@ export function resolveTarget(d, path, geo) {
 export function isLoopback(t, lvl = state.lvl, path = state.path, geo = GEO) {
   if (!lvl || !path) return false;
   const d = destOf(t, lvl, path);
-  return !!(d && d.lv === lvl.short && d.pa === path.id
-            && camCell(path, d.ca) === tlvCell(t, path, geo)
-            && resolveTarget(d, path, geo) === t);
+  return !!(
+    d &&
+    d.lv === lvl.short &&
+    d.pa === path.id &&
+    camCell(path, d.ca) === tlvCell(t, path, geo) &&
+    resolveTarget(d, path, geo) === t
+  );
 }
 
 // zoom the camera by factor about a fixed canvas point: the world spot under
@@ -92,8 +106,11 @@ export function zoomAt(cam, factor, px, py) {
 
 // the view for jumping to a point: centered on it, a few screens across
 export function focusView(fx, fy, cw, ch) {
-  const z = clamp(Math.min(cw / (FOCUS_SCREENS * CELL_W), ch / (FOCUS_SCREENS * CELL_H)),
-                  FOCUS_ZOOM_MIN, FOCUS_ZOOM_MAX);
+  const z = clamp(
+    Math.min(cw / (FOCUS_SCREENS * CELL_W), ch / (FOCUS_SCREENS * CELL_H)),
+    FOCUS_ZOOM_MIN,
+    FOCUS_ZOOM_MAX,
+  );
   return { x: fx - cw / (2 * z), y: fy - ch / (2 * z), z };
 }
 
@@ -115,7 +132,8 @@ export function parseHash(hash) {
     game: parts[0].toUpperCase(),
     level: (parts[1] || "").toUpperCase(),
     path: +parts[2],
-    view: parts[3] != null && parts.length >= 6 ? { x: +parts[3], y: +parts[4], z: +parts[5] } : null,
+    view:
+      parts[3] != null && parts.length >= 6 ? { x: +parts[3], y: +parts[4], z: +parts[5] } : null,
     obj: om ? { name: om[1], x1: +om[2], y1: +om[3] } : null,
   };
 }

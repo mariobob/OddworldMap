@@ -14,18 +14,18 @@ async function loadOne(file) {
     // but an unchanged dataset is not re-downloaded
     const r = await fetch(file, { cache: "no-cache" });
     if (r.ok) return await r.json();
-  } catch { /* tolerate a missing dataset */ }
+  } catch {
+    /* tolerate a missing dataset */
+  }
   return null;
 }
 
-Promise.all([
-  loadOne("map_data_ao.json"),
-  loadOne("map_data_ae.json"),
-]).then(datasets => {
-  const games = datasets.filter(d => d && d.levels && d.levels.length);
+Promise.all([loadOne("map_data_ao.json"), loadOne("map_data_ae.json")]).then((datasets) => {
+  const games = datasets.filter((d) => d && d.levels && d.levels.length);
   if (!games.length) {
     $("gameName").textContent = "Map data failed to load.";
-    $("help").textContent = "map data failed to load — check that map_data_ao.json / map_data_ae.json are served";
+    $("help").textContent =
+      "map data failed to load — check that map_data_ao.json / map_data_ae.json are served";
     return;
   }
   initGames(games);
