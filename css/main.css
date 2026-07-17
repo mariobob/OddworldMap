@@ -410,31 +410,44 @@ body:not(.menu-open) #sidebar {
   top: 10px;
   right: 10px;
   z-index: 21;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  height: 40px;
-  padding: 0 13px;
-  background: rgba(18, 20, 24, 0.85);
-  color: var(--text);
-  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  background: rgba(18, 20, 24, 0.5);
+  color: var(--dim);
+  border: 1px solid transparent;
   border-radius: 8px;
-  font-family: var(--serif);
-  font-size: 13px;
-  letter-spacing: 0.02em;
   cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
-#whatsnewBtn:hover {
+#whatsnewBtn:hover,
+#whatsnewBtn:focus-visible {
+  color: var(--text);
+  background: rgba(18, 20, 24, 0.85);
   border-color: var(--accent);
+  outline: none;
+}
+#whatsnewBtn svg {
+  display: block;
+  width: 19px;
+  height: 19px;
 }
 #whatsnewBtn[hidden] {
   display: none;
 }
 #whatsnewBtn .wn-dot {
-  width: 7px;
-  height: 7px;
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--accent);
+  border: 2px solid var(--bg);
   display: none;
 }
 #whatsnewBtn.hasnew .wn-dot {
