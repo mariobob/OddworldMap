@@ -1,0 +1,94 @@
+{
+ "entries": [
+  {
+   "date": "2026-07-17",
+   "tag": "new",
+   "title": "Follow hand stones to the view they show",
+   "detail": "Click a hand stone to jump straight to the camera it reveals, the same way doors, portals and wells follow to their destination."
+  },
+  {
+   "date": "2026-07-17",
+   "tag": "new",
+   "title": "Right-click to copy a link to any object",
+   "detail": "Right-click any door, portal or object to copy a link that reopens the map right on it, with the spot highlighted when the link is followed."
+  },
+  {
+   "date": "2026-07-17",
+   "tag": "improved",
+   "title": "Travel portals land you on the exit",
+   "detail": "Following a bird portal now drops you exactly on the destination exit rather than the middle of the screen."
+  },
+  {
+   "date": "2026-07-16",
+   "tag": "new",
+   "title": "Explore with the keyboard",
+   "detail": "Arrow keys pan the map and +/\u2212 zoom; the object filters are fully keyboard-operable too."
+  },
+  {
+   "date": "2026-07-16",
+   "tag": "new",
+   "title": "Send feedback from the sidebar",
+   "detail": "A link in the sidebar footer opens a pre-filled email that carries a link to exactly what you're looking at."
+  },
+  {
+   "date": "2026-07-16",
+   "tag": "fixed",
+   "title": "Smoother touch controls",
+   "detail": "Fixed a blue flash when tapping the map and a pinch-zoom glitch that could fling the view off into the distance."
+  },
+  {
+   "date": "2026-07-16",
+   "tag": "improved",
+   "title": "Doors that loop back are labelled",
+   "detail": "Doors and teleporters that lead back to themselves now say so in the tooltip, instead of offering a jump that goes nowhere."
+  },
+  {
+   "date": "2026-07-15",
+   "tag": "improved",
+   "title": "Collapse the sidebar on any screen",
+   "detail": "Tuck the sidebar away to give the map the whole window, at any size."
+  },
+  {
+   "date": "2026-07-14",
+   "tag": "new",
+   "title": "Made for mobile",
+   "detail": "Pan and pinch-zoom by touch, with the sidebar tucked into a slide-out menu on small screens."
+  },
+  {
+   "date": "2026-07-14",
+   "tag": "new",
+   "title": "Abe's Exoddus joins the map",
+   "detail": "The entire second game \u2014 every level, camera and object \u2014 sits alongside Abe's Oddysee. Switch between them with the game tabs."
+  },
+  {
+   "date": "2026-07-14",
+   "tag": "improved",
+   "title": "Smarter search",
+   "detail": "Search results are ranked by relevance, grouped by where they live, and scoped to a level or the whole game \u2014 all keyboard-navigable."
+  },
+  {
+   "date": "2026-07-12",
+   "tag": "new",
+   "title": "Follow doors, portals and wells",
+   "detail": "Click a door, bird portal or express well to jump straight to where it leads."
+  },
+  {
+   "date": "2026-07-12",
+   "tag": "new",
+   "title": "Search every object in the game",
+   "detail": "Find any Mudokon, switch or object by name and jump to it instantly."
+  },
+  {
+   "date": "2026-07-12",
+   "tag": "new",
+   "title": "Link to any view",
+   "detail": "The URL keeps your exact position and zoom, so you can bookmark or share a precise spot on the map."
+  },
+  {
+   "date": "2026-07-12",
+   "tag": "new",
+   "title": "Oddworld Map is live",
+   "detail": "An interactive map of Abe's Oddysee, built straight from the PS1 disc: every camera screen, object and collision line. Pan, zoom, measure with the ruler, export the view and toggle foreground masks."
+  }
+ ]
+}
