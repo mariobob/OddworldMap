@@ -71,10 +71,20 @@
   <noscript><div id="noscript">This interactive map requires JavaScript.</div></noscript>
   <canvas id="cv"></canvas>
   <button id="menuBtn" aria-label="Toggle menu">☰</button>
+  <button id="whatsnewBtn" hidden aria-label="What's new"><span class="wn-dot"></span>What's new</button>
   <div id="tip"></div>
   <div id="help">drag / arrows = pan · wheel / ± = zoom · hover = inspect</div>
   <div id="hud"></div>
   <div id="toast"></div>
+</div>
+<div id="whatsnewOverlay">
+  <aside id="whatsnew" role="dialog" aria-modal="true" aria-labelledby="whatsnewTitle">
+    <div class="wn-head">
+      <h2 id="whatsnewTitle">What's New</h2>
+      <button id="whatsnewClose" aria-label="Close">×</button>
+    </div>
+    <div id="whatsnewBody"></div>
+  </aside>
 </div>
 
 <script type="module" src="js/main.js"></script>

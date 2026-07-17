@@ -6,6 +6,7 @@ import { initGames, selectGame, applyHash } from "./navigate.js";
 import "./sidebar.js";
 import "./search.js";
 import "./interaction.js";
+import "./whatsnew.js";
 
 async function loadOne(file) {
   try {

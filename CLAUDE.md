@@ -35,5 +35,6 @@ Guidance for AI agents working in this repo. User-facing docs (controls, rebuild
 
 - One concern per commit; split bundled diffs before committing.
 - Prose files (README, docs, this file) are never manually line-wrapped — let lines run long.
+- A user-facing change ships its docs in the same commit — update the relevant README.md / CLAUDE.md, and add its `changelog.json` entry (draft with `tools/changelog.py`, then curate into a player-facing headline + detail). Documenting the change is part of the same concern, not a follow-up commit.
 - No game owns unsuffixed defaults: everything game-specific carries `ao`/`ae` in its name (files, JS globals, env vars, URL hashes). Do not reintroduce unsuffixed names for AO just because it came first.
 - Generated JSON is pretty-printed (`indent=1`) so history stays diffable; keep the format stable.
