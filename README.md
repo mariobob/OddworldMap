@@ -4,7 +4,7 @@ Interactive map of **Oddworld: Abe's Oddysee** and **Abe's Exoddus** (PS1, NTSC-
 
 Browse it at **[oddworldmap.com](https://oddworldmap.com/)** — or serve the repo root with any static web server (`python3 -m http.server`) to run it locally.
 
-![Stock Yards in Oddysee](cams/ao/E1/E1P01C03.png)
+![The viewer on Stock Yards in Oddysee, inspecting a travel bird portal](screenshot.png)
 
 ## Controls
 
