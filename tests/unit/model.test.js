@@ -1,8 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { camCell, computeEntryPaths, destOf, formatHash, isLoopback, parseHash, resolveTarget, zoomAt } from "../../js/model.js";
+import { camCell, computeEntryPaths, destOf, focusView, formatHash, isLoopback, parseHash, resolveTarget, zoomAt } from "../../js/model.js";
 import { ZOOM_MIN, ZOOM_MAX } from "../../js/config.js";
-import { SYNTH_GEOMETRY, dataset, level, path, tlv } from "./fixtures.js";
+import { setGeometry } from "../../js/state.js";
+import { AO_GEOMETRY, SYNTH_GEOMETRY, dataset, level, path, tlv } from "./fixtures.js";
 
 const HERE = [{ short: "R1" }, { id: 15 }];   // current level/path stubs
 
@@ -139,6 +140,15 @@ test("zoomAt keeps the world point under the anchor fixed", () => {
   assert.equal(out.z, 0.625);
   assert.ok(Math.abs((cam.x + px / cam.z) - (out.x + px / out.z)) < 1e-9);
   assert.ok(Math.abs((cam.y + py / cam.z) - (out.y + py / out.z)) < 1e-9);
+});
+
+test("focusView centers the point and clamps the focus zoom", () => {
+  setGeometry(SYNTH_GEOMETRY);   // 100x50 cells; FOCUS_SCREENS 2.6 -> fit bounds 260x130
+  // large canvas: zoom clamps at FOCUS_ZOOM_MAX
+  assert.deepEqual(focusView(500, 300, 520, 260), { x: 500 - 520 / 3.2, y: 300 - 260 / 3.2, z: 1.6 });
+  // small canvas: clamps at FOCUS_ZOOM_MIN, still centered
+  assert.deepEqual(focusView(500, 300, 130, 65), { x: 370, y: 235, z: 0.5 });
+  setGeometry(AO_GEOMETRY);
 });
 
 test("zoomAt clamps to the manual zoom range", () => {

@@ -3,8 +3,8 @@
 // bare Node for the unit tests.
 
 import { clamp } from "./util.js";
-import { ZOOM_MIN, ZOOM_MAX } from "./config.js";
-import { GEO, state } from "./state.js";
+import { ZOOM_MIN, ZOOM_MAX, FOCUS_ZOOM_MIN, FOCUS_ZOOM_MAX, FOCUS_SCREENS } from "./config.js";
+import { GEO, state, CELL_W, CELL_H } from "./state.js";
 
 export function computeEntryPaths(data) {
   const entries = {};
@@ -80,6 +80,13 @@ export function isLoopback(t, lvl = state.lvl, path = state.path, geo = GEO) {
 export function zoomAt(cam, factor, px, py) {
   const z = clamp(cam.z * factor, ZOOM_MIN, ZOOM_MAX);
   return { x: cam.x + px / cam.z - px / z, y: cam.y + py / cam.z - py / z, z };
+}
+
+// the view for jumping to a point: centered on it, a few screens across
+export function focusView(fx, fy, cw, ch) {
+  const z = clamp(Math.min(cw / (FOCUS_SCREENS * CELL_W), ch / (FOCUS_SCREENS * CELL_H)),
+                  FOCUS_ZOOM_MIN, FOCUS_ZOOM_MAX);
+  return { x: fx - cw / (2 * z), y: fy - ch / (2 * z), z };
 }
 
 // ---- permalinks: #GAME/LEVEL/PATH/x/y/zoom -----------------------------

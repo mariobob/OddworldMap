@@ -2,11 +2,11 @@
 // Fires a "selection-changed" window event (detail.fromHash) whenever a path is picked.
 
 import { clamp } from "./util.js";
-import { ZOOM_MIN, ZOOM_MAX, FOCUS_ZOOM_MIN, FOCUS_ZOOM_MAX, FOCUS_SCREENS } from "./config.js";
+import { ZOOM_MIN, ZOOM_MAX } from "./config.js";
 import { $, cv, gameBtns, levelBtns, pathBtns } from "./dom.js";
 import { state, GEO, CELL_W, CELL_H, setGeometry, dX, dY } from "./state.js";
 import { draw, flashAt } from "./render.js";
-import { camCell, computeEntryPaths, formatHash, parseHash, resolveTarget } from "./model.js";
+import { camCell, computeEntryPaths, focusView, formatHash, parseHash, resolveTarget } from "./model.js";
 
 // highlight the button whose data-key matches, clear the rest
 function markOn(box, key) {
@@ -97,10 +97,7 @@ function fitView() {
 
 // center on (fx, fy) zoomed to a few screens across, flash the spot
 function focusOn(fx, fy) {
-  state.cam.z = clamp(Math.min(cv.clientWidth / (FOCUS_SCREENS * CELL_W), cv.clientHeight / (FOCUS_SCREENS * CELL_H)),
-                      FOCUS_ZOOM_MIN, FOCUS_ZOOM_MAX);
-  state.cam.x = fx - cv.clientWidth / (2 * state.cam.z);
-  state.cam.y = fy - cv.clientHeight / (2 * state.cam.z);
+  Object.assign(state.cam, focusView(fx, fy, cv.clientWidth, cv.clientHeight));
   camToken++;   // cancel any fit still waiting on layout
   flashAt(fx, fy);
   scheduleHash(true);
