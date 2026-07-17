@@ -24,10 +24,12 @@ export function computeEntryPaths(data) {
 // current level+path unless it names a paired target object
 export function destOf(t, lvl = state.lvl, path = state.path) {
   const e = t.extra || {};
-  // paired objects land on their counterpart, matched by field within the destination camera
+  // paired objects land on their counterpart within the destination camera
   let target = null;
   if (e["target_door#"] != null) target = { name: "Door", field: "door#", value: e["target_door#"] };
   else if (e["target_tp#"] != null) target = { name: "Teleporter", field: "tp#", value: e["target_tp#"] };
+  else if (t.name === "BirdPortal" && e.portal === "travel")
+    target = { name: "BirdPortalExit" };
   const mk = (lv, pa, ca, tgt) => (lv != null && pa != null) ? { lv, pa, ca, target: tgt } : null;
   const a = mk(e.to_level, e.to_path, e.to_cam, target);
   const b = mk(e.alt_level, e.alt_path, e.alt_cam, null);
@@ -48,11 +50,16 @@ export const tlvCell = (t, path, geo) =>
   Math.floor(t.y1 / geo.worldH) * path.w + Math.floor(t.x1 / geo.worldW);
 
 // the paired TLV a destination lands on: door numbers are only unique per
-// camera, so match inside the destination camera first, path-wide as a fallback
+// camera, so match inside the destination camera first, path-wide as a fallback.
+// A name-only target (no pair number) is positional — only the stated camera
+// can identify it, so it gets no fallback.
 export function resolveTarget(d, path, geo) {
   if (!d || !d.target) return null;
   const cell = camCell(path, d.ca);
-  const match = t => t.name === d.target.name && (t.extra || {})[d.target.field] === d.target.value;
+  const match = t => t.name === d.target.name &&
+    (d.target.field == null || (t.extra || {})[d.target.field] === d.target.value);
+  if (d.target.field == null)
+    return cell == null ? null : path.tlvs.find(t => match(t) && tlvCell(t, path, geo) === cell) || null;
   return path.tlvs.find(t => match(t) && (cell == null || tlvCell(t, path, geo) === cell)) ||
          path.tlvs.find(match) || null;
 }

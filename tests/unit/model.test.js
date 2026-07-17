@@ -32,6 +32,29 @@ test("destOf: both destinations self -> primary still returned", () => {
   assert.deepEqual(destOf(t, ...HERE), { lv: "R1", pa: 15, ca: 1, target: null });
 });
 
+test("destOf: travel BirdPortals pair with the exit in the destination camera", () => {
+  const travel = tlv("BirdPortal", { portal: "travel", to_level: "R2", to_path: 16, to_cam: 3 });
+  assert.deepEqual(destOf(travel, ...HERE),
+    { lv: "R2", pa: 16, ca: 3, target: { name: "BirdPortalExit" } });
+  // rescue/shrykull portals record a destination but don't traverse: no pairing
+  const rescue = tlv("BirdPortal", { portal: "rescue", to_level: "MI", to_path: 1, to_cam: 1 });
+  assert.deepEqual(destOf(rescue, ...HERE), { lv: "MI", pa: 1, ca: 1, target: null });
+});
+
+test("resolveTarget: name-only targets match only inside the stated camera", () => {
+  const exitA = at(tlv("BirdPortalExit"), 50, 20);    // cell 0 -> C01
+  const exitB = at(tlv("BirdPortalExit"), 450, 20);   // cell 1 -> C02
+  const cams = [{ cell: 0, name: "XXP01C01" }, { cell: 1, name: "XXP01C02" }];
+  const target = { name: "BirdPortalExit" };
+  const P = path(1, [exitA, exitB], cams, 2, 1);
+  assert.equal(resolveTarget({ ca: 2, target }, P, SYNTH_GEOMETRY), exitB);
+  assert.equal(resolveTarget({ ca: 1, target }, P, SYNTH_GEOMETRY), exitA);
+  // dangling camera or exit-less destination: no path-wide fallback for name-only
+  assert.equal(resolveTarget({ ca: 9, target }, P, SYNTH_GEOMETRY), null);
+  const noExitInC2 = path(1, [exitA], cams, 2, 1);
+  assert.equal(resolveTarget({ ca: 2, target }, noExitInC2, SYNTH_GEOMETRY), null);
+});
+
 test("destOf: no or incomplete destination -> null", () => {
   assert.equal(destOf(tlv("Slig"), ...HERE), null);
   assert.equal(destOf(tlv("Door", { to_level: "R2" }), ...HERE), null);   // path missing
