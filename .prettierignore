@@ -1,0 +1,6 @@
+# Hand-aligned data tables; keep the columnar layout
+js/config.js
+# JSON keeps its committed formats
+*.json
+# prose Markdown is never wrapped
+*.md

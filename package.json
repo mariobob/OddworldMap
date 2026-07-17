@@ -3,12 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "format": "prettier --write \"**/*.{js,css,html}\"",
+    "format:check": "prettier --check \"**/*.{js,css,html}\"",
     "lint": "eslint .",
     "test": "node --test"
   },
   "devDependencies": {
     "@eslint/js": "^9",
     "eslint": "^9",
-    "globals": "^15"
+    "globals": "^15",
+    "prettier": "3.9.5"
   }
 }

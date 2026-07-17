@@ -38,3 +38,9 @@ Guidance for AI agents working in this repo. User-facing docs (controls, rebuild
 - A user-facing change ships its docs in the same commit — update the relevant README.md / CLAUDE.md, and add its `changelog.json` entry (draft with `tools/changelog.py`, then curate into a player-facing headline + detail). Documenting the change is part of the same concern, not a follow-up commit.
 - No game owns unsuffixed defaults: everything game-specific carries `ao`/`ae` in its name (files, JS globals, env vars, URL hashes). Do not reintroduce unsuffixed names for AO just because it came first.
 - Generated JSON is pretty-printed (`indent=1`) so history stays diffable; keep the format stable.
+- Prettier owns js/css/html formatting (`.prettierrc`: printWidth 100, defaults otherwise; exemptions in `.prettierignore` — `js/config.js` keeps its hand-aligned tables, JSON and Markdown keep their own formats). The version is pinned exactly in devDependencies because output is version-dependent (like oxipng for the PNGs); bump it deliberately: upgrade, reformat the tree in a dedicated commit, and add that commit to `.git-blame-ignore-revs`. New clones opt blame in once with `git config blame.ignoreRevsFile .git-blame-ignore-revs` (GitHub reads the file automatically).
+- Format only the staged files before each commit, so the commit doesn't drag in formatter drift from unrelated files:
+  ```
+  git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(js|css|html)$' | xargs -r npx prettier --write
+  ```
+  then re-stage what Prettier changed. Never run whole-tree `npm run format` as part of a normal commit — whole-tree formatting belongs in its own dedicated commit (CI runs `format:check`, so drift can't accumulate).
