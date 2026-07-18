@@ -119,7 +119,7 @@ def main():
             print(f"#   {ln}" if ln else "#")
         print()
         entry = {"date": date, "tag": guess_tag(subject), "title": clean_title(subject), "detail": ""}
-        print(json.dumps(entry, indent=1) + ",\n")
+        print(json.dumps(entry, indent=1, ensure_ascii=False) + ",\n")
 
 if __name__ == "__main__":
     main()
