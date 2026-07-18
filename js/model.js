@@ -24,7 +24,7 @@ export function computeEntryPaths(data) {
 
 // where a door/portal/well leads: prefers a destination that differs from the
 // current level+path unless it names a paired target object
-export function destOf(t, lvl = state.lvl, path = state.path) {
+export function destOf(t, lvl = state.lvl, path = state.path, geo = GEO) {
   const e = t.extra || {};
   // hand stones show other cameras rather than transitioning; follow the first
   // view. AO stones carry full level/path/camera triples; AE ones bare camera
@@ -41,17 +41,39 @@ export function destOf(t, lvl = state.lvl, path = state.path) {
   // 0 is a pair number like any other (the placeholder ~250 doors and
   // teleporters share — the engine's arrival hunt finds the 0-numbered partner)
   let target = null;
+  let altTarget = null;
   if (e["target_door#"] != null)
     target = { name: "Door", field: "door#", value: e["target_door#"] };
   else if (e["target_tp#"] != null)
     target = { name: "Teleporter", field: "tp#", value: e["target_tp#"] };
   else if (t.name === "BirdPortal" && e.portal === "travel") target = { name: "BirdPortalExit" };
+  // express wells name the well each ride lands on; either well type answers
+  // to the id (and the games name local wells differently), so the target
+  // carries no name
+  if (e["target_well#"] != null) target = { field: "well#", value: e["target_well#"] };
+  if (e["alt_target_well#"] != null) altTarget = { field: "well#", value: e["alt_target_well#"] };
   const mk = (lv, pa, ca, tgt) => (lv != null && pa != null ? { lv, pa, ca, target: tgt } : null);
   const a = mk(e.to_level, e.to_path, e.to_cam, target);
-  const b = mk(e.alt_level, e.alt_path, e.alt_cam, null);
-  const differs = (d) =>
-    d && !(lvl && path && d.lv === lvl.short && d.pa === path.id && d.target == null);
-  return differs(a) ? a : differs(b) ? b : a || b;
+  const b = mk(e.alt_level, e.alt_path, e.alt_cam, altTarget);
+  // a destination is only skippable when it goes nowhere: an untargeted one
+  // pointing at the current path, or a well's bounce-back naming the well's
+  // own camera (its switch-off state) — a door pair or a well ride to another
+  // camera of the same path is a real transition and wins as primary
+  const bounce = (d) =>
+    lvl &&
+    path &&
+    d.lv === lvl.short &&
+    d.pa === path.id &&
+    (d.target != null && d.target.field === "well#"
+      ? camCell(path, d.ca) != null && camCell(path, d.ca) === tlvCell(t, path, geo)
+      : d.target == null);
+  const differs = (d) => d && !bounce(d);
+  if (differs(a)) return a;
+  if (differs(b)) return b;
+  const d = a || b;
+  // a well whose every state bounces is a launcher (it exits within its own
+  // screen), not self-referencing scenery: the follow keeps no pairing
+  return d && d.target != null && d.target.field === "well#" ? { ...d, target: null } : d;
 }
 
 // camera id -> grid cell within a path (cam names end in C##)
@@ -71,14 +93,16 @@ export const tlvCell = (t, path, geo) =>
 // Positional targets get no fallback — a name-only target (no pair number)
 // resolves only when the stated camera holds exactly one candidate, and pair
 // number 0 (shared by many placeholder doors) only inside the stated camera,
-// mirroring the engine's forward hunt from there.
+// mirroring the engine's forward hunt from there. A nameless target (well ids)
+// accepts any object carrying the field, camera-only again: the engine's well
+// arrival scan is bounded to the arrival camera's rect.
 export function resolveTarget(d, path, geo) {
   if (!d || !d.target) return null;
   const cell = camCell(path, d.ca);
   const match = (t) =>
-    t.name === d.target.name &&
+    (d.target.name == null || t.name === d.target.name) &&
     (d.target.field == null || (t.extra || {})[d.target.field] === d.target.value);
-  const positional = d.target.field == null || d.target.value === 0;
+  const positional = d.target.name == null || d.target.field == null || d.target.value === 0;
   if (positional && cell == null) return null;
   if (d.target.field == null) {
     const hits = path.tlvs.filter((t) => match(t) && tlvCell(t, path, geo) === cell);
@@ -96,7 +120,7 @@ export function resolveTarget(d, path, geo) {
 // fallback merely lands on it doesn't count
 export function isLoopback(t, lvl = state.lvl, path = state.path, geo = GEO) {
   if (!lvl || !path) return false;
-  const d = destOf(t, lvl, path);
+  const d = destOf(t, lvl, path, geo);
   return !!(
     d &&
     d.lv === lvl.short &&

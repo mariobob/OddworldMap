@@ -66,6 +66,85 @@ test("destOf: pair number 0 is a value target like any other", () => {
   });
 });
 
+test("destOf: a well's bounce-back yields to the ride, even within the path", () => {
+  // switch off, most express wells drop you back out of the same well; that
+  // bounce names the well's own camera (and its own well id). The enabled ride
+  // wins — including a local ride to another camera of the same path
+  const cams = [
+    { cell: 0, name: "XXP15C01" },
+    { cell: 1, name: "XXP15C02" },
+  ];
+  const well = at(
+    tlv("WellExpress", {
+      to_level: "R1",
+      to_path: 15,
+      to_cam: 1,
+      alt_level: "R1",
+      alt_path: 15,
+      alt_cam: 2,
+      "well#": 3,
+      "target_well#": 3,
+      "alt_target_well#": 12,
+    }),
+    50,
+    20,
+  ); // cell 0 -> C01: the primary names its own camera
+  const P = path(15, [well], cams, 2, 1);
+  assert.deepEqual(destOf(well, { short: "R1" }, P, SYNTH_GEOMETRY), {
+    lv: "R1",
+    pa: 15,
+    ca: 2,
+    target: { field: "well#", value: 12 },
+  });
+});
+
+test("destOf: a launcher well (every state bounces) keeps no pairing", () => {
+  // wells whose only destination is their own camera exit within their screen;
+  // they must not read as self-referencing scenery (no loopback flag)
+  const launcher = at(
+    tlv("WellExpress", { to_level: "R1", to_path: 15, to_cam: 1, "well#": 3, "target_well#": 3 }),
+    50,
+    20,
+  );
+  const P = path(15, [launcher], [{ cell: 0, name: "XXP15C01" }], 1, 1);
+  assert.deepEqual(destOf(launcher, { short: "R1" }, P, SYNTH_GEOMETRY), {
+    lv: "R1",
+    pa: 15,
+    ca: 1,
+    target: null,
+  });
+  assert.equal(isLoopback(launcher, { short: "R1" }, P, SYNTH_GEOMETRY), false);
+});
+
+test("destOf: a cross-path well ride carries its arrival well id", () => {
+  const t = tlv("WellExpress", { to_level: "R2", to_path: 1, to_cam: 4, "target_well#": 7 });
+  assert.deepEqual(destOf(t, ...HERE), {
+    lv: "R2",
+    pa: 1,
+    ca: 4,
+    target: { field: "well#", value: 7 },
+  });
+});
+
+test("resolveTarget: nameless well targets match either well type, camera-only", () => {
+  // AO names local wells WellLocal, AE LocalWell; arrival goes by id alone
+  const local = at(tlv("LocalWell", { "well#": 7 }), 50, 20); // cell 0 -> C01
+  const express = at(tlv("WellExpress", { "well#": 7 }), 450, 20); // cell 1 -> C02
+  const cams = [
+    { cell: 0, name: "XXP01C01" },
+    { cell: 1, name: "XXP01C02" },
+  ];
+  const P = path(1, [local, express], cams, 2, 1);
+  const target = { field: "well#", value: 7 };
+  assert.equal(resolveTarget({ ca: 1, target }, P, SYNTH_GEOMETRY), local);
+  assert.equal(resolveTarget({ ca: 2, target }, P, SYNTH_GEOMETRY), express);
+  // the engine's arrival scan is camera-bounded: no path-wide fallback
+  assert.equal(
+    resolveTarget({ ca: 2, target: { field: "well#", value: 9 } }, P, SYNTH_GEOMETRY),
+    null,
+  );
+});
+
 test("destOf: hand stone views follow the first viewed camera", () => {
   // AE shape: bare camera ids, viewed within the stone's own path
   const ae = tlv("HandStone", { view1_cam: 50, view2_cam: 53 });

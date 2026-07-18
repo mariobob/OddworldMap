@@ -2,6 +2,12 @@
  "entries": [
   {
    "date": "2026-07-18",
+   "tag": "fixed",
+   "title": "Express wells land on the arrival well",
+   "detail": "Following an express well now drops the highlight ring on the exact well you pop out of (matched by the same well id the game reads on arrival) instead of the middle of the destination screen. Wells whose switch-off state just bounces you back out now follow their real ride, including local rides to another screen of the same path."
+  },
+  {
+   "date": "2026-07-18",
    "tag": "new",
    "title": "One-click reset for Display and Objects",
    "detail": "A small reset in the Display and Objects headers puts that section back to its defaults, handy now that view options carry over between visits."

@@ -150,10 +150,39 @@ test("hand stones in the shipped data carry decoded views", () => {
   }
 });
 
+// every well in the shipped data carries its pair id, and express wells name
+// the arrival well of each destination they emit
+test("wells in the shipped data carry decoded pair ids", () => {
+  let express = 0,
+    locals = 0;
+  for (const file of ["map_data_ao.json", "map_data_ae.json"]) {
+    const data = load(file);
+    for (const L of data.levels)
+      for (const P of L.paths)
+        for (const t of P.tlvs) {
+          const where = `${data.id} ${L.short} P${P.id} (${t.x1},${t.y1})`;
+          if (t.name === "WellExpress") {
+            express++;
+            assert.ok(t.extra && t.extra["well#"] != null, `${where} express lacks well#`);
+            if (t.extra.to_level != null)
+              assert.ok(t.extra["target_well#"] != null, `${where} lacks target_well#`);
+            if (t.extra.alt_level != null)
+              assert.ok(t.extra["alt_target_well#"] != null, `${where} lacks alt_target_well#`);
+          } else if (t.name === "WellLocal" || t.name === "LocalWell") {
+            locals++;
+            assert.ok(t.extra && t.extra["well#"] != null, `${where} local well lacks well#`);
+          }
+        }
+  }
+  assert.ok(express > 0 && locals > 0, "wells found in both roles");
+});
+
 // the shipped data contains exactly three genuinely self-referencing paired
 // objects. Dangling destinations (e.g. AE MI P11) must not be flagged, and
 // neither must 0-target doors whose camera merely holds them (SV P6, BR P21
-// carry numbers 7 and 1 — the engine's hunt for door 0 skips them).
+// carry numbers 7 and 1 — the engine's hunt for door 0 skips them), nor
+// launcher wells whose every state exits within their own screen (destOf
+// strips their pairing).
 test("loopbacks in the shipped data are exactly the three known ones", () => {
   const found = [];
   for (const [file, geometry] of [
