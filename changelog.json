@@ -38,6 +38,12 @@
   },
   {
    "date": "2026-07-17",
+   "tag": "new",
+   "title": "What's New keeps you posted",
+   "detail": "The newspaper button in the top-right corner opens this very feed of updates; a dot on it marks entries added since you last looked."
+  },
+  {
+   "date": "2026-07-17",
    "tag": "improved",
    "title": "One map for every version of the games",
    "detail": "The map is built from the PS1 discs, but level layouts and object placements are identical in the PC releases too, so the site no longer leads with PS1 in its titles."
