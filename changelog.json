@@ -3,6 +3,12 @@
   {
    "date": "2026-07-18",
    "tag": "new",
+   "title": "Full game, level and path names on the buttons",
+   "detail": "Turn on \"Show full names\" in Settings and the game, level and path buttons expand into a list carrying their full names next to the short codes: \"AO (Abe's Oddysee)\", \"MI (Necrum Mines)\", and the named path areas like the Rupture Farms Return zulags and the Exoddus enders."
+  },
+  {
+   "date": "2026-07-18",
+   "tag": "new",
    "title": "Pick up where you left off",
    "detail": "Turn on \"Remember last location\" in Settings and opening the site brings you back to the exact game, level, path and view you last had on screen. Opening a shared permalink still goes to the linked spot."
   },

@@ -14,19 +14,32 @@ import {
   parseHash,
   resolveTarget,
 } from "./model.js";
-import { rememberLocation } from "./settings.js";
+import { displayLabel, getSettings, rememberLocation } from "./settings.js";
 
 // highlight the button whose data-key matches, clear the rest
 function markOn(box, key) {
   for (const b of box.children) b.classList.toggle("on", b.dataset.key === key);
 }
 
+// label from the code/full-name pair stashed on the button, honoring the
+// full-names setting; re-run on every button when the setting flips
+function setLabel(b) {
+  b.textContent = displayLabel(b.dataset.code, b.dataset.full, getSettings().fullNames);
+}
+
+window.addEventListener("settings-changed", (e) => {
+  if (e.detail.key !== "fullNames") return;
+  for (const box of [gameBtns, levelBtns, pathBtns]) for (const b of box.children) setLabel(b);
+});
+
 // build the game buttons once the datasets are known
 export function initGames(games) {
   state.games = games;
   games.forEach((G) => {
     const b = document.createElement("button");
-    b.textContent = G.id;
+    b.dataset.code = G.id;
+    b.dataset.full = G.game;
+    setLabel(b);
     b.title = G.game;
     b.dataset.key = G.id;
     b.onclick = () => selectGame(G);
@@ -43,7 +56,9 @@ export function selectGame(G, keepView) {
   levelBtns.innerHTML = "";
   G.levels.forEach((L) => {
     const b = document.createElement("button");
-    b.textContent = L.short;
+    b.dataset.code = L.short;
+    b.dataset.full = L.name;
+    setLabel(b);
     b.title = L.name;
     b.dataset.key = L.short;
     b.onclick = () => selectLevel(L);
@@ -58,7 +73,9 @@ function selectLevel(L) {
   pathBtns.innerHTML = "";
   L.paths.forEach((P) => {
     const b = document.createElement("button");
-    b.textContent = "P" + P.id;
+    b.dataset.code = "P" + P.id;
+    b.dataset.full = P.name || "";
+    setLabel(b);
     b.dataset.key = String(P.id);
     const tip = [];
     if (P.name) tip.push(P.name);

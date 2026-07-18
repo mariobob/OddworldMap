@@ -12,7 +12,7 @@ const SETTINGS_KEY = "owm:settings";
 const VIEW_KEY = "owm:view";
 const LOC_KEY = "owm:lastloc";
 
-export const SETTINGS_DEFAULTS = { rememberView: true, rememberLoc: false };
+export const SETTINGS_DEFAULTS = { rememberView: true, rememberLoc: false, fullNames: false };
 export const SHOW_KEYS = ["grid", "coll", "fg", "labels", "dim"];
 
 // localStorage may be unavailable (private mode, blocked); never let that break the viewer
@@ -90,6 +90,13 @@ export function viewChanged() {
   store.set(VIEW_KEY, JSON.stringify({ show: state.show, cats }));
 }
 
+// a selector-button label: the short code alone, or "code (full name)" in
+// full-names mode ("Oddworld: " is dropped so games read "AO (Abe's Oddysee)")
+export function displayLabel(code, fullName, on) {
+  const name = (fullName || "").replace(/^Oddworld:\s*/, "");
+  return on && name ? `${code} (${name})` : code;
+}
+
 // a candidate "#GAME/LEVEL/…" permalink string, or null; whether its level and
 // path still exist is applyHash's job to validate
 export function sanitizeLocationHash(raw) {
@@ -156,5 +163,11 @@ export function initSettings() {
     if (on)
       rememberLocation(location.hash); // capture the current spot right away
     else store.remove(LOC_KEY);
+  });
+
+  document.body.classList.toggle("fullnames", s.fullNames);
+  bind("sFullNames", "fullNames", (on) => {
+    document.body.classList.toggle("fullnames", on);
+    window.dispatchEvent(new CustomEvent("settings-changed", { detail: { key: "fullNames" } }));
   });
 }
