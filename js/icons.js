@@ -11,6 +11,12 @@ export const HAMBURGER_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="curre
   <line x1="4" y1="17" x2="20" y2="17" />
 </svg>`;
 
+// Close (×) — the sidebar toggle while the sidebar is open.
+export const CLOSE_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <line x1="6" y1="6" x2="18" y2="18" />
+  <line x1="18" y1="6" x2="6" y2="18" />
+</svg>`;
+
 // Newspaper — the What's New button.
 export const NEWSPAPER_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
   <rect x="3.5" y="5" width="17" height="14" rx="1.5" />

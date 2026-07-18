@@ -7,7 +7,7 @@ import { state, dX, dY, wX, wY } from "./state.js";
 import { draw, scheduleDraw } from "./render.js";
 import { destOf, isLoopback, zoomAt } from "./model.js";
 import { navigateToDest, objectHash, scheduleHash } from "./navigate.js";
-import { HAMBURGER_SVG } from "./icons.js";
+import { HAMBURGER_SVG, CLOSE_SVG } from "./icons.js";
 
 const TIP_MAX_W = parseFloat(cssVar("--tip-max-w"));
 
@@ -18,14 +18,22 @@ let measuring = false;
 
 // ---- menu --------------------------------------------------------------
 const isNarrow = () => narrowMQ.matches;
+function syncMenuIcon() {
+  const open = document.body.classList.contains("menu-open");
+  menuBtn.innerHTML = open ? CLOSE_SVG : HAMBURGER_SVG;
+  const label = open ? "Close menu" : "Open menu";
+  menuBtn.title = label;
+  menuBtn.setAttribute("aria-label", label);
+}
 document.body.classList.toggle("menu-open", !isNarrow()); // set before first paint: open on wide, out of the way on narrow
 function toggleMenu(open) {
   document.body.classList.toggle(
     "menu-open",
     open ?? !document.body.classList.contains("menu-open"),
   );
+  syncMenuIcon();
 }
-menuBtn.insertAdjacentHTML("afterbegin", HAMBURGER_SVG);
+syncMenuIcon();
 menuBtn.onclick = () => toggleMenu();
 scrim.onclick = () => toggleMenu(false);
 window.addEventListener("selection-changed", (e) => {
