@@ -6,6 +6,10 @@ import ImageIO
 import CoreText
 import UniformTypeIdentifiers
 
+guard CommandLine.arguments.count > 1 else {
+  FileHandle.standardError.write(Data("usage: swift tools/ogcard.swift <out.png>\n".utf8))
+  exit(1)
+}
 let outPath = CommandLine.arguments[1]
 let W = 1200, H = 630
 let cs = CGColorSpaceCreateDeviceRGB()
