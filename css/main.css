@@ -490,12 +490,13 @@ body.fullnames .btnrow button {
   visibility: hidden;
   transition:
     opacity 0.18s ease,
-    visibility 0.18s;
+    visibility 0s 0.18s;
 }
 body.whatsnew-open #whatsnewOverlay,
 body.settings-open #settingsOverlay {
   opacity: 1;
   visibility: visible;
+  transition: opacity 0.18s ease;
 }
 #whatsnew,
 #settings {
