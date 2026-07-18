@@ -40,6 +40,8 @@ NOISE_CONTAINS = ("refactor", "eslint", "unit test", "test suite", "claude.md",
 def is_noise(subject):
     if subject.startswith(NOISE_PREFIXES):
         return True
+    if subject.startswith(("fixup!", "squash!", "amend!")):
+        return True
     if subject.split(None, 1)[0] in NOISE_LEADING:
         return True
     s = subject.lower()
