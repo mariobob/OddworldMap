@@ -92,9 +92,9 @@ def main():
     args = ap.parse_args()
 
     if args.since:
-        range_args = ["--since", args.since] if DATE_RE.match(args.since) else [f"{args.since}..HEAD"]
+        range_args = ["--since", f"{args.since} 00:00"] if DATE_RE.match(args.since) else [f"{args.since}..HEAD"]
     elif (since := newest_date(Path(args.changelog))):
-        range_args = ["--since", since]
+        range_args = ["--since", f"{since} 00:00"]
     else:
         range_args = ["-n", str(args.limit)]
 
