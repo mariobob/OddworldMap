@@ -14,6 +14,7 @@ import {
   parseHash,
   resolveTarget,
 } from "./model.js";
+import { rememberLocation } from "./settings.js";
 
 // highlight the button whose data-key matches, clear the rest
 function markOn(box, key) {
@@ -177,6 +178,7 @@ export function scheduleHash(push) {
   hashTimer = setTimeout(
     () => {
       const h = hashFor();
+      rememberLocation(h);
       if (h === location.hash) return;
       if (push)
         location.hash = h; // history entry (level/path/follow)
@@ -227,5 +229,7 @@ export function applyHash() {
 }
 
 window.addEventListener("hashchange", () => {
-  if (!applyingHash) applyHash();
+  if (applyingHash) return;
+  // back/forward retraces update the remembered spot; a rejected hash must not
+  if (applyHash()) rememberLocation(location.hash);
 });

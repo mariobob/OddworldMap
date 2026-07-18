@@ -1,6 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { SETTINGS_DEFAULTS, SHOW_KEYS, sanitizeSettings, sanitizeView } from "../../js/settings.js";
+import {
+  SETTINGS_DEFAULTS,
+  SHOW_KEYS,
+  sanitizeLocationHash,
+  sanitizeSettings,
+  sanitizeView,
+} from "../../js/settings.js";
 import { CATS } from "../../js/config.js";
 
 test("sanitizeSettings: absent or unreadable storage yields the defaults", () => {
@@ -41,4 +47,14 @@ test("sanitizeView: unknown keys and wrong-typed values are dropped", () => {
     }),
   );
   assert.deepEqual(v, { show: { grid: false }, cats: { mud: false } });
+});
+
+test("sanitizeLocationHash: keeps a permalink-shaped string, rejects the rest", () => {
+  const h = "#AO/R1/15/-100/-1139/0.16";
+  assert.equal(sanitizeLocationHash(h), h);
+  assert.equal(sanitizeLocationHash(""), null);
+  assert.equal(sanitizeLocationHash("#"), null);
+  assert.equal(sanitizeLocationHash("AO/R1/15"), null); // no leading #
+  assert.equal(sanitizeLocationHash(null), null);
+  assert.equal(sanitizeLocationHash(42), null);
 });

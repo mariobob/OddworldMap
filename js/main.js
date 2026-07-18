@@ -3,7 +3,7 @@
 import { $ } from "./dom.js";
 import { resize } from "./render.js";
 import { initGames, selectGame, applyHash } from "./navigate.js";
-import { initSettings } from "./settings.js";
+import { initSettings, storedLocationHash, clearStoredLocation } from "./settings.js";
 import "./sidebar.js";
 import "./search.js";
 import "./interaction.js";
@@ -33,5 +33,13 @@ Promise.all([loadOne("map_data_ao.json"), loadOne("map_data_ae.json")]).then((da
   }
   initGames(games);
   resize();
-  if (!applyHash()) selectGame(games[0]);
+  if (!applyHash()) {
+    // no usable permalink in the URL: fall back to the remembered location
+    const stored = storedLocationHash();
+    if (stored) history.replaceState(null, "", stored); // silent: no history entry, no hashchange
+    if (!stored || !applyHash()) {
+      if (stored) clearStoredLocation(); // its level or path no longer exists
+      selectGame(games[0]);
+    }
+  }
 });

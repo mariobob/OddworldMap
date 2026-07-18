@@ -5,12 +5,14 @@
 
 import { CATS } from "./config.js";
 import { state } from "./state.js";
+import { parseHash } from "./model.js";
 import { GEAR_SVG } from "./icons.js";
 
 const SETTINGS_KEY = "owm:settings";
 const VIEW_KEY = "owm:view";
+const LOC_KEY = "owm:lastloc";
 
-export const SETTINGS_DEFAULTS = { rememberView: true };
+export const SETTINGS_DEFAULTS = { rememberView: true, rememberLoc: false };
 export const SHOW_KEYS = ["grid", "coll", "fg", "labels", "dim"];
 
 // localStorage may be unavailable (private mode, blocked); never let that break the viewer
@@ -88,6 +90,26 @@ export function viewChanged() {
   store.set(VIEW_KEY, JSON.stringify({ show: state.show, cats }));
 }
 
+// a candidate "#GAME/LEVEL/…" permalink string, or null; whether its level and
+// path still exist is applyHash's job to validate
+export function sanitizeLocationHash(raw) {
+  return typeof raw === "string" && raw.startsWith("#") && parseHash(raw) ? raw : null;
+}
+
+// called by navigate.js whenever the permalink hash is (re)written
+export function rememberLocation(hash) {
+  if (getSettings().rememberLoc && sanitizeLocationHash(hash)) store.set(LOC_KEY, hash);
+}
+
+// the remembered permalink for hashless loads, or null when off/absent/corrupt
+export function storedLocationHash() {
+  return getSettings().rememberLoc ? sanitizeLocationHash(store.get(LOC_KEY)) : null;
+}
+
+export function clearStoredLocation() {
+  store.remove(LOC_KEY);
+}
+
 export function initSettings() {
   const s = getSettings();
   const $ = (id) => document.getElementById(id);
@@ -128,5 +150,11 @@ export function initSettings() {
     if (on)
       viewChanged(); // capture the current view right away
     else store.remove(VIEW_KEY);
+  });
+
+  bind("sRememberLoc", "rememberLoc", (on) => {
+    if (on)
+      rememberLocation(location.hash); // capture the current spot right away
+    else store.remove(LOC_KEY);
   });
 }
