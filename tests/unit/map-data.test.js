@@ -137,13 +137,11 @@ test("hand stones in the shipped data carry decoded views", () => {
   }
 });
 
-// the shipped data contains exactly five genuinely self-referencing objects:
-// three that name themselves by pair number, and two zero-target doors that
-// are the sole door of their own destination camera (SV P6, BR P21) — the
-// same placeholder pattern as the numbered ones. Dangling destinations
-// (e.g. AE MI P11) and zero-target doors in multi-door cameras must not be
-// flagged.
-test("loopbacks in the shipped data are exactly the five known ones", () => {
+// the shipped data contains exactly three genuinely self-referencing paired
+// objects. Dangling destinations (e.g. AE MI P11) must not be flagged, and
+// neither must 0-target doors whose camera merely holds them (SV P6, BR P21
+// carry numbers 7 and 1 — the engine's hunt for door 0 skips them).
+test("loopbacks in the shipped data are exactly the three known ones", () => {
   const found = [];
   for (const [file, geometry] of [
     ["map_data_ao.json", AO_GEOMETRY],
@@ -158,9 +156,7 @@ test("loopbacks in the shipped data are exactly the five known ones", () => {
   }
   assert.deepEqual(found, [
     "AO R1 P18 Door (8746,1232)",
-    "AE SV P6 Door (975,1100)",
     "AE SV P7 Door (1026,440)",
     "AE BW P7 Teleporter (199,439)",
-    "AE BR P21 Door (550,440)",
   ]);
 });

@@ -47,22 +47,22 @@ test("destOf: a paired target keeps even a same-path destination", () => {
   });
 });
 
-test("destOf: a zero pair number becomes a positional target", () => {
-  // no retail door is numbered 0, so the engine never resolves a zero target;
-  // the landing is the destination camera's sole door, not a search for door#=0
+test("destOf: pair number 0 is a value target like any other", () => {
+  // ~200 placeholder pairs are numbered 0 on both sides; the engine's arrival
+  // hunt looks for door number 0 exactly as it would for any other number
   const door = tlv("Door", { to_level: "R2", to_path: 1, to_cam: 2, "target_door#": 0 });
   assert.deepEqual(destOf(door, ...HERE), {
     lv: "R2",
     pa: 1,
     ca: 2,
-    target: { name: "Door" },
+    target: { name: "Door", field: "door#", value: 0 },
   });
   const tp = tlv("Teleporter", { to_level: "R2", to_path: 1, to_cam: 2, "target_tp#": 0 });
   assert.deepEqual(destOf(tp, ...HERE), {
     lv: "R2",
     pa: 1,
     ca: 2,
-    target: { name: "Teleporter" },
+    target: { name: "Teleporter", field: "tp#", value: 0 },
   });
 });
 
@@ -185,6 +185,24 @@ test("resolveTarget: path-wide fallback when the destination camera has no match
     resolveTarget({ ca: 2, target: { name: "Door", field: "door#", value: 9 } }, P, SYNTH_GEOMETRY),
     null,
   );
+});
+
+test("resolveTarget: pair number 0 matches the 0-numbered partner, camera-only", () => {
+  const zero = at(tlv("Door", { "door#": 0 }), 50, 20); // cell 0 -> C01
+  const five = at(tlv("Door", { "door#": 5 }), 60, 120); // cell 0 too
+  const stray = at(tlv("Door", { "door#": 0 }), 450, 20); // cell 1 -> C02
+  const cams = [
+    { cell: 0, name: "XXP01C01" },
+    { cell: 1, name: "XXP01C02" },
+  ];
+  const target = { name: "Door", field: "door#", value: 0 };
+  // the 0-numbered door wins over a same-camera neighbor with a real number
+  const P = path(1, [five, zero, stray], cams, 2, 1);
+  assert.equal(resolveTarget({ ca: 1, target }, P, SYNTH_GEOMETRY), zero);
+  // no 0-numbered door in the stated camera: no path-wide fallback for 0
+  const onlyFive = path(1, [five, stray], cams, 2, 1);
+  assert.equal(resolveTarget({ ca: 1, target }, onlyFive, SYNTH_GEOMETRY), null);
+  assert.equal(resolveTarget({ ca: 9, target }, P, SYNTH_GEOMETRY), null); // dangling camera
 });
 
 test("resolveTarget: no paired target -> null", () => {

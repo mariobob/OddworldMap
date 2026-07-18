@@ -34,18 +34,14 @@ export function destOf(t, lvl = state.lvl, path = state.path) {
     const pa = e.view1_path ?? (path && path.id);
     return lv != null && pa != null ? { lv, pa, ca: e.view1_cam, target: null } : null;
   }
-  // paired objects land on their counterpart within the destination camera; a
-  // zero pair number names no partner (the engine never resolves it), so the
-  // landing is positional, like a travel portal's exit
+  // paired objects land on their counterpart within the destination camera;
+  // 0 is a pair number like any other (the placeholder ~250 doors and
+  // teleporters share — the engine's arrival hunt finds the 0-numbered partner)
   let target = null;
   if (e["target_door#"] != null)
-    target = e["target_door#"]
-      ? { name: "Door", field: "door#", value: e["target_door#"] }
-      : { name: "Door" };
+    target = { name: "Door", field: "door#", value: e["target_door#"] };
   else if (e["target_tp#"] != null)
-    target = e["target_tp#"]
-      ? { name: "Teleporter", field: "tp#", value: e["target_tp#"] }
-      : { name: "Teleporter" };
+    target = { name: "Teleporter", field: "tp#", value: e["target_tp#"] };
   else if (t.name === "BirdPortal" && e.portal === "travel") target = { name: "BirdPortalExit" };
   const mk = (lv, pa, ca, tgt) => (lv != null && pa != null ? { lv, pa, ca, target: tgt } : null);
   const a = mk(e.to_level, e.to_path, e.to_cam, target);
@@ -69,23 +65,25 @@ export const tlvCell = (t, path, geo) =>
 
 // the paired TLV a destination lands on: door numbers are only unique per
 // camera, so match inside the destination camera first, path-wide as a fallback.
-// A name-only target (no pair number) is positional — only the stated camera
-// can identify it, and only when it holds exactly one candidate, so it gets
-// neither a fallback nor a first-of-many guess.
+// Positional targets get no fallback — a name-only target (no pair number)
+// resolves only when the stated camera holds exactly one candidate, and pair
+// number 0 (shared by many placeholder doors) only inside the stated camera,
+// mirroring the engine's forward hunt from there.
 export function resolveTarget(d, path, geo) {
   if (!d || !d.target) return null;
   const cell = camCell(path, d.ca);
   const match = (t) =>
     t.name === d.target.name &&
     (d.target.field == null || (t.extra || {})[d.target.field] === d.target.value);
+  const positional = d.target.field == null || d.target.value === 0;
+  if (positional && cell == null) return null;
   if (d.target.field == null) {
-    if (cell == null) return null;
     const hits = path.tlvs.filter((t) => match(t) && tlvCell(t, path, geo) === cell);
     return hits.length === 1 ? hits[0] : null;
   }
   return (
     path.tlvs.find((t) => match(t) && (cell == null || tlvCell(t, path, geo) === cell)) ||
-    path.tlvs.find(match) ||
+    (positional ? null : path.tlvs.find(match)) ||
     null
   );
 }

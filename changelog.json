@@ -22,7 +22,7 @@
    "date": "2026-07-18",
    "tag": "fixed",
    "title": "Follow markers land on the destination door",
-   "detail": "Doors and teleporters that don't name their partner by number (about 200 of them) used to drop the highlight ring at the center of the destination screen. When the destination camera has exactly one matching door or teleporter, the ring now lands on it; genuinely ambiguous screens keep the center marker."
+   "detail": "About 250 door and teleporter pairs share the placeholder pair number 0, and following one used to drop the highlight ring at the center of the destination screen. The ring now lands on the 0-numbered partner door there — the same door the game itself picks on arrival."
   },
   {
    "date": "2026-07-18",
