@@ -13,6 +13,7 @@ Browse it at **[oddworldmap.com](https://oddworldmap.com/)** — or serve the re
 - **hover** any object for decoded details — door destinations (level/path/door#), switch IDs, path-transition targets, continue-point zones
 - **click** a door, path transition, travel portal, express well, teleporter or hand stone to follow it to its destination (for hand stones, the camera they show), including across levels
 - level and path buttons top-left; object category filters with counts below — hover a path button for its in-game area name where the game defines one (Rupture Farms Return's Zulag 1–4, Exoddus ender areas)
+- **reset** in the Display and Objects headers puts that section back to its defaults
 - **Collision lines**: floors green, walls red/orange, ceilings blue, dashed = background layer
 - **Foreground masks (FG1)**: highlights the scenery drawn in front of the player — every hideable/behind-walkable spot at a glance (pairs well with "Dim backgrounds")
 - the URL hash (`#LEVEL/path/x/y/zoom`) always reflects the current view — copy it to share an exact location; the browser back button retraces follows

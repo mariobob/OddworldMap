@@ -82,7 +82,10 @@
       <div class="btnrow" id="levelBtns"></div>
       <h2>Path</h2>
       <div class="btnrow" id="pathBtns"></div>
-      <h2>Display</h2>
+      <h2>
+        Display
+        <span class="h2tools"><button id="tReset">reset</button></span>
+      </h2>
       <div id="toggles">
         <!-- autocomplete=off: the script mirrors .checked into state, so form-state
          restoration (which fires no change events) must not flip these -->
@@ -105,7 +108,8 @@
       <h2>
         Objects
         <span class="h2tools"
-          ><button id="fAll">all</button> · <button id="fNone">none</button></span
+          ><button id="fAll">all</button> · <button id="fNone">none</button> ·
+          <button id="fReset">reset</button></span
         >
       </h2>
       <div class="filters" id="filterBox"></div>

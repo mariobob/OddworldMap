@@ -10,6 +10,7 @@ import { getViewSnapshot, viewChanged } from "./settings.js";
 const snap = getViewSnapshot();
 
 // filters
+const catDefaults = new Map(CATS.map((c) => [c.key, c.on])); // config defaults, captured before the snapshot merge
 const catUI = new Map(); // category -> its checkbox and count elements
 CATS.forEach((c) => {
   if (snap && c.key in snap.cats) c.on = snap.cats[c.key];
@@ -26,18 +27,27 @@ CATS.forEach((c) => {
   catUI.set(c, { cb, cnt: lab.querySelector(".cnt") });
   filterBox.appendChild(lab);
 });
-function setAllFilters(on) {
+function setFilters(onFor) {
   CATS.forEach((c) => {
-    c.on = on;
-    catUI.get(c).cb.checked = on;
+    c.on = onFor(c);
+    catUI.get(c).cb.checked = c.on;
   });
   viewChanged();
   draw();
 }
-$("fAll").onclick = () => setAllFilters(true);
-$("fNone").onclick = () => setAllFilters(false);
+$("fAll").onclick = () => setFilters(() => true);
+$("fNone").onclick = () => setFilters(() => false);
+$("fReset").onclick = () => setFilters((c) => catDefaults.get(c.key));
 
 // display toggles: state.show mirrors the sidebar checkboxes (initial state comes from the HTML)
+const showUI = new Map(); // show key -> its checkbox
+function syncShow(key, cb) {
+  state.show[key] = cb.checked;
+  if (key === "ruler") {
+    if (!state.show.ruler) state.ruler = null;
+    cv.style.cursor = state.show.ruler ? "crosshair" : "";
+  }
+}
 for (const [key, id] of Object.entries({
   grid: "tGrid",
   coll: "tColl",
@@ -50,15 +60,20 @@ for (const [key, id] of Object.entries({
   if (snap && key in snap.show) cb.checked = snap.show[key];
   state.show[key] = cb.checked;
   cb.onchange = () => {
-    state.show[key] = cb.checked;
-    if (key === "ruler") {
-      if (!state.show.ruler) state.ruler = null;
-      cv.style.cursor = state.show.ruler ? "crosshair" : "";
-    }
+    syncShow(key, cb);
     viewChanged();
     draw();
   };
+  showUI.set(key, cb);
 }
+$("tReset").onclick = () => {
+  for (const [key, cb] of showUI) {
+    cb.checked = cb.defaultChecked; // the HTML checked attribute is the source of the defaults
+    syncShow(key, cb);
+  }
+  viewChanged();
+  draw();
+};
 
 $("exportBtn").onclick = () => {
   cv.toBlob((blob) => {
