@@ -4,6 +4,7 @@
 import { $ } from "./dom.js";
 import { esc } from "./util.js";
 import { NEWSPAPER_SVG } from "./icons.js";
+import { trapDialogKeys } from "./dialog.js";
 
 const PREVIEW_N = 5; // entries shown before "see all"
 const SEEN_KEY = "owm:whatsnew:lastSeen"; // newest date the visitor has opened
@@ -105,9 +106,7 @@ async function init() {
   overlay.onclick = (e) => {
     if (e.target === overlay) close();
   };
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && document.body.classList.contains("whatsnew-open")) close();
-  });
+  trapDialogKeys(() => document.body.classList.contains("whatsnew-open"), $("whatsnew"), close);
 
   btn.insertAdjacentHTML("afterbegin", NEWSPAPER_SVG);
   btn.hidden = false;

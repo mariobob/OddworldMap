@@ -7,6 +7,7 @@ import { CATS } from "./config.js";
 import { state } from "./state.js";
 import { parseHash } from "./model.js";
 import { GEAR_SVG } from "./icons.js";
+import { trapDialogKeys } from "./dialog.js";
 
 const SETTINGS_KEY = "owm:settings";
 const VIEW_KEY = "owm:view";
@@ -138,9 +139,7 @@ export function initSettings() {
   overlay.onclick = (e) => {
     if (e.target === overlay) close();
   };
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && document.body.classList.contains("settings-open")) close();
-  });
+  trapDialogKeys(() => document.body.classList.contains("settings-open"), $("settings"), close);
 
   // seed each checkbox from the stored settings, then persist + apply on change
   const bind = (id, key, apply) => {
