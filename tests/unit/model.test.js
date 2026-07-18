@@ -69,11 +69,13 @@ test("destOf: pair number 0 is a value target like any other", () => {
 test("destOf: hand stone views follow the first viewed camera", () => {
   // AE shape: bare camera ids, viewed within the stone's own path
   const ae = tlv("HandStone", { view1_cam: 50, view2_cam: 53 });
-  assert.deepEqual(destOf(ae, ...HERE), { lv: "R1", pa: 15, ca: 50, target: null });
+  const P = path(15, [], [{ cell: 0, name: "XXP15C50" }], 1, 1);
+  assert.deepEqual(destOf(ae, { short: "R1" }, P), { lv: "R1", pa: 15, ca: 50, target: null });
   // AO shape: full level/path/camera triples
   const ao = tlv("HandStone", { view1_level: "F1", view1_path: 2, view1_cam: 5 });
   assert.deepEqual(destOf(ao, ...HERE), { lv: "F1", pa: 2, ca: 5, target: null });
-  // no selection and no triple: nothing to resolve against
+  // a viewed camera the path no longer has, or no selection: nothing to follow
+  assert.equal(destOf(tlv("HandStone", { view1_cam: 4 }), { short: "R1" }, P), null);
   assert.equal(destOf(ae, null, null), null);
 });
 

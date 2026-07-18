@@ -27,12 +27,15 @@ export function computeEntryPaths(data) {
 export function destOf(t, lvl = state.lvl, path = state.path) {
   const e = t.extra || {};
   // hand stones show other cameras rather than transitioning; follow the first
-  // view (AO stones carry full level/path/camera triples, AE ones bare camera
-  // ids within their own path)
+  // view. AO stones carry full level/path/camera triples; AE ones bare camera
+  // ids within their own path, where the camera must still exist — a few
+  // stones view cameras the shipped path no longer has, and get no follow
   if (e.view1_cam != null) {
-    const lv = e.view1_level ?? (lvl && lvl.short);
-    const pa = e.view1_path ?? (path && path.id);
-    return lv != null && pa != null ? { lv, pa, ca: e.view1_cam, target: null } : null;
+    if (e.view1_level != null && e.view1_path != null)
+      return { lv: e.view1_level, pa: e.view1_path, ca: e.view1_cam, target: null };
+    return lvl && path && camCell(path, e.view1_cam) != null
+      ? { lv: lvl.short, pa: path.id, ca: e.view1_cam, target: null }
+      : null;
   }
   // paired objects land on their counterpart within the destination camera;
   // 0 is a pair number like any other (the placeholder ~250 doors and

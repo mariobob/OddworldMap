@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { computeEntryPaths, isLoopback } from "../../js/model.js";
+import { camCell, computeEntryPaths, isLoopback } from "../../js/model.js";
 import { AO_GEOMETRY, AE_GEOMETRY } from "./fixtures.js";
 
 // Schema sanity over the shipped data: the invariants the viewer relies on.
@@ -114,11 +114,16 @@ test("path names in the shipped data are exactly the game-defined ones", () => {
 });
 
 // every shipped hand stone is decoded: at least one view, no raw fallback,
-// and no transition fields (views must not create entry markers)
+// and no transition fields (views must not create entry markers). Eight AE
+// stones view cameras their shipped path no longer has — pinned so a rebuild
+// changing that set is noticed (destOf offers those stones no follow); AO
+// triples are resolved against the path they name.
 test("hand stones in the shipped data carry decoded views", () => {
+  const expectedDead = { AO: 0, AE: 8 };
   for (const file of ["map_data_ao.json", "map_data_ae.json"]) {
     const data = load(file);
-    let count = 0;
+    let count = 0,
+      dead = 0;
     for (const L of data.levels)
       for (const P of L.paths)
         for (const t of P.tlvs)
@@ -132,8 +137,16 @@ test("hand stones in the shipped data carry decoded views", () => {
               !("raw" in t.extra) && !("to_level" in t.extra),
               `${data.id} ${L.short} P${P.id} stone has stray fields`,
             );
+            const viewPath =
+              t.extra.view1_level == null
+                ? P
+                : data.levels
+                    .find((l) => l.short === t.extra.view1_level)
+                    ?.paths.find((p) => p.id === t.extra.view1_path);
+            if (!viewPath || camCell(viewPath, t.extra.view1_cam) == null) dead++;
           }
     assert.ok(count > 0, `${data.id}: no hand stones found`);
+    assert.equal(dead, expectedDead[data.id], `${data.id}: stones with a dead first view`);
   }
 });
 
