@@ -10,31 +10,31 @@
    "date": "2026-07-18",
    "tag": "new",
    "title": "Full game, level and path names on the buttons",
-   "detail": "Turn on \"Show full names\" in Settings and the game, level and path buttons expand into a list carrying their full names next to the short codes: \"AO (Abe's Oddysee)\", \"MI (Necrum Mines)\", and the named path areas like the Rupture Farms Return zulags and the Exoddus enders."
+   "detail": "Turn on \"Show full names\" in Settings and the game, level and path buttons expand into a list carrying their full names next to the short codes: \"AO (Abe's Oddysee)\", \"R1 (Rupture Farms)\", and the named path areas like the Rupture Farms Return zulags and the Exoddus enders."
   },
   {
    "date": "2026-07-18",
    "tag": "new",
    "title": "Pick up where you left off",
-   "detail": "Turn on \"Remember last location\" in Settings and opening the site brings you back to the exact game, level, path and view you last had on screen. Opening a shared permalink still goes to the linked spot."
+   "detail": "Turning on \"Remember last location\" in Settings and reopening the site brings you back to the exact game, level, path and view you last had on screen. Opening a shared permalink still goes to the linked spot."
   },
   {
    "date": "2026-07-18",
    "tag": "new",
    "title": "Settings panel: view options are remembered",
-   "detail": "The gear button at the top of the sidebar opens the new Settings panel. The Display toggles and Objects filters now carry over between visits by default (except the ruler, which always starts off); switch off \"Remember display & object filters\" there to start from a clean slate each time."
+   "detail": "The gear button at the top of the sidebar opens the new Settings panel. The Display toggles and Objects filters now carry over between visits by default (except the ruler, which always starts off); switch off \"Remember display & object filters\" in settings to start from a clean slate each time."
   },
   {
    "date": "2026-07-18",
    "tag": "fixed",
    "title": "Follow markers land on the destination door",
-   "detail": "About 250 door and teleporter pairs share the placeholder pair number 0, and following one used to drop the highlight ring at the center of the destination screen. The ring now lands on the 0-numbered partner door there — the same door the game itself picks on arrival."
+   "detail": "About 250 door and teleporter pairs share the placeholder pair number 0, and following one used to drop the highlight ring at the center of the destination screen. The ring now lands on the 0-numbered partner door there, which is the same door the game itself picks on arrival."
   },
   {
    "date": "2026-07-18",
    "tag": "new",
    "title": "Path buttons name their area",
-   "detail": "Hover a path button to see the in-game name of the area where the game defines one: Rupture Farms Return's paths show their Zulag (1–4, straight from the save-name table on the disc), and Exoddus endgame paths show their ender area, like Mudanchee Vault Ender or Bonewerkz Ender."
+   "detail": "Hover over a path button to see the in-game name of the area where the game defines one: Rupture Farms Return's paths show their Zulag (1-4, straight from the save-name table on the disc), and Exoddus endgame paths show their ender area, like Mudanchee Vault Ender or Bonewerkz Ender."
   },
   {
    "date": "2026-07-18",
