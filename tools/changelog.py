@@ -32,7 +32,7 @@ PREFIX_RE = re.compile(r"^[A-Z][A-Za-z0-9]+: +")   # "Search: ", "Ruler: " → s
 TRAILER_RE = re.compile(r"^(Co-authored-by|Signed-off-by|Reviewed-by|Change-Id):", re.I)
 
 # internal commits that should not reach players
-NOISE_PREFIXES = ("Builder:", "cam2rgba:", "README:")
+NOISE_PREFIXES = ("Builder:", "cam2rgba:", "README:", "CI:", "changelog.py:", "ogcard:", "og-image:")
 NOISE_LEADING = {"Extract", "Move", "Rename", "Bump"}
 NOISE_CONTAINS = ("refactor", "eslint", "unit test", "test suite", "claude.md",
                   "license", "static.yml", "ci.yml")
