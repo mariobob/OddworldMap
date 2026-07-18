@@ -3,10 +3,13 @@
 import { $ } from "./dom.js";
 import { resize } from "./render.js";
 import { initGames, selectGame, applyHash } from "./navigate.js";
+import { initSettings } from "./settings.js";
 import "./sidebar.js";
 import "./search.js";
 import "./interaction.js";
 import "./whatsnew.js";
+
+initSettings();
 
 async function loadOne(file) {
   try {

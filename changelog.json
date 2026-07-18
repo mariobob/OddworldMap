@@ -2,6 +2,12 @@
  "entries": [
   {
    "date": "2026-07-18",
+   "tag": "new",
+   "title": "Settings panel: view options are remembered",
+   "detail": "The gear button at the top of the sidebar opens the new Settings panel. The Display toggles and Objects filters now carry over between visits by default (except the ruler, which always starts off); switch off \"Remember display & object filters\" there to start from a clean slate each time."
+  },
+  {
+   "date": "2026-07-18",
    "tag": "fixed",
    "title": "Follow markers land on the destination door",
    "detail": "Doors and teleporters that don't name their partner by number (about 200 of them) used to drop the highlight ring at the center of the destination screen. When the destination camera has exactly one matching door or teleporter, the ring now lands on it; genuinely ambiguous screens keep the center marker."

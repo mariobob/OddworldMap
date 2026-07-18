@@ -21,6 +21,7 @@ Browse it at **[oddworldmap.com](https://oddworldmap.com/)** — or serve the re
 - **Ruler**: enable, then drag to measure — Δx × Δy, length in world units (1 unit = 1 PS1 screen pixel) and 25-unit grid squares; hovering a collision line shows its type and length the same way
 - on touch devices one finger pans and two fingers pinch-zoom; the sidebar collapses behind a menu button on narrow screens
 - **What's new**: the top-right button opens a dated changelog of recent updates; a dot marks entries added since you last opened it
+- **Settings**: the gear button at the top of the sidebar — by default the Display toggles and Objects filters are remembered across visits; turn off "Remember display & object filters" to start from the defaults every time
 
 One grid cell = one in-game camera. Each camera occupies a 1024×480-unit cell in the game's world grid, but the visible screen is a 368×240-unit window centered at (cell·1024+440, cell·480+240) — world units map 1:1 to PS1 screen pixels. The viewer lays the visible windows out edge to edge and translates all object/collision coordinates accordingly, so markers land on the artwork.
 

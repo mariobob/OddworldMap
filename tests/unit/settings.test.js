@@ -1,0 +1,44 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { SETTINGS_DEFAULTS, SHOW_KEYS, sanitizeSettings, sanitizeView } from "../../js/settings.js";
+import { CATS } from "../../js/config.js";
+
+test("sanitizeSettings: absent or unreadable storage yields the defaults", () => {
+  assert.deepEqual(sanitizeSettings(null), SETTINGS_DEFAULTS);
+  assert.deepEqual(sanitizeSettings("{not json"), SETTINGS_DEFAULTS);
+  assert.deepEqual(sanitizeSettings('"a string"'), SETTINGS_DEFAULTS);
+  assert.deepEqual(sanitizeSettings("null"), SETTINGS_DEFAULTS);
+});
+
+test("sanitizeSettings: known boolean keys apply, everything else is dropped", () => {
+  const s = sanitizeSettings('{"rememberView":false,"bogus":true}');
+  assert.equal(s.rememberView, false);
+  assert.deepEqual(Object.keys(s).sort(), Object.keys(SETTINGS_DEFAULTS).sort());
+});
+
+test("sanitizeSettings: a wrong-typed value keeps its default", () => {
+  assert.equal(sanitizeSettings('{"rememberView":"yes"}').rememberView, true);
+  assert.equal(sanitizeSettings('{"rememberView":0}').rememberView, true);
+});
+
+test("sanitizeView: absent or unreadable snapshot yields null", () => {
+  assert.equal(sanitizeView(null), null);
+  assert.equal(sanitizeView("{not json"), null);
+  assert.equal(sanitizeView("42"), null);
+});
+
+test("sanitizeView: a full snapshot round-trips", () => {
+  const show = Object.fromEntries(SHOW_KEYS.map((k, i) => [k, i % 2 === 0]));
+  const cats = Object.fromEntries(CATS.map((c, i) => [c.key, i % 2 === 1]));
+  assert.deepEqual(sanitizeView(JSON.stringify({ show, cats })), { show, cats });
+});
+
+test("sanitizeView: unknown keys and wrong-typed values are dropped", () => {
+  const v = sanitizeView(
+    JSON.stringify({
+      show: { grid: false, bogus: true, coll: "yes", ruler: true }, // ruler is never remembered
+      cats: { mud: false, gone: true, door: 1 },
+    }),
+  );
+  assert.deepEqual(v, { show: { grid: false }, cats: { mud: false } });
+});

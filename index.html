@@ -60,7 +60,10 @@
   <body>
     <div id="scrim"></div>
     <div id="sidebar">
-      <h1><img src="favicon.svg" alt="" width="24" height="24" />ODDWORLD MAP</h1>
+      <h1>
+        <img src="favicon.svg" alt="" width="24" height="24" />ODDWORLD MAP
+        <button id="settingsBtn" class="h1btn" aria-label="Settings" title="Settings"></button>
+      </h1>
       <div class="muted" id="gameName"></div>
       <h2>Search</h2>
       <div id="searchBox">
@@ -127,6 +130,23 @@
           <button id="whatsnewClose" aria-label="Close">×</button>
         </div>
         <div id="whatsnewBody"></div>
+      </aside>
+    </div>
+    <div id="settingsOverlay">
+      <aside id="settings" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <div class="st-head">
+          <h2 id="settingsTitle">Settings</h2>
+          <button id="settingsClose" aria-label="Close">×</button>
+        </div>
+        <div id="settingsBody">
+          <!-- autocomplete=off: the script seeds .checked from stored settings, so
+           form-state restoration must not flip these -->
+          <label
+            ><input type="checkbox" id="sRememberView" autocomplete="off" checked /> Remember
+            display &amp; object filters</label
+          >
+          <div class="st-desc">Keeps the Display toggles and Objects filters across visits.</div>
+        </div>
       </aside>
     </div>
 

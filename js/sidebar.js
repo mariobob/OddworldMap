@@ -4,10 +4,15 @@ import { CATS, catOf } from "./config.js";
 import { $, cv, filterBox } from "./dom.js";
 import { state } from "./state.js";
 import { draw } from "./render.js";
+import { getViewSnapshot, viewChanged } from "./settings.js";
+
+// persisted view options (when "remember" is on) override the HTML/config defaults
+const snap = getViewSnapshot();
 
 // filters
 const catUI = new Map(); // category -> its checkbox and count elements
 CATS.forEach((c) => {
+  if (snap && c.key in snap.cats) c.on = snap.cats[c.key];
   const lab = document.createElement("label");
   lab.innerHTML = `<span class="sw" style="background:${c.color}"></span>
     <input type="checkbox" autocomplete="off" ${c.on ? "checked" : ""}>
@@ -15,6 +20,7 @@ CATS.forEach((c) => {
   const cb = lab.querySelector("input");
   cb.onchange = () => {
     c.on = cb.checked;
+    viewChanged();
     draw();
   };
   catUI.set(c, { cb, cnt: lab.querySelector(".cnt") });
@@ -25,6 +31,7 @@ function setAllFilters(on) {
     c.on = on;
     catUI.get(c).cb.checked = on;
   });
+  viewChanged();
   draw();
 }
 $("fAll").onclick = () => setAllFilters(true);
@@ -40,6 +47,7 @@ for (const [key, id] of Object.entries({
   ruler: "tRuler",
 })) {
   const cb = $(id);
+  if (snap && key in snap.show) cb.checked = snap.show[key];
   state.show[key] = cb.checked;
   cb.onchange = () => {
     state.show[key] = cb.checked;
@@ -47,6 +55,7 @@ for (const [key, id] of Object.entries({
       if (!state.show.ruler) state.ruler = null;
       cv.style.cursor = state.show.ruler ? "crosshair" : "";
     }
+    viewChanged();
     draw();
   };
 }
