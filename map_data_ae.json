@@ -49150,7 +49150,8 @@
        2565,
        6
       ]
-     ]
+     ],
+     "name": "Mudomo Vault Ender"
     },
     {
      "id": 14,
@@ -65245,7 +65246,8 @@
        299,
        4
       ]
-     ]
+     ],
+     "name": "Mudanchee Vault Ender"
     },
     {
      "id": 10,
@@ -66513,7 +66515,8 @@
        460,
        1
       ]
-     ]
+     ],
+     "name": "Mudanchee Vault Ender"
     },
     {
      "id": 11,
@@ -66871,7 +66874,8 @@
        120,
        2
       ]
-     ]
+     ],
+     "name": "Mudanchee Vault Ender"
     },
     {
      "id": 12,
@@ -68995,7 +68999,8 @@
        39,
        4
       ]
-     ]
+     ],
+     "name": "Mudanchee Vault Ender"
     }
    ]
   },
@@ -87000,7 +87005,8 @@
        347,
        2
       ]
-     ]
+     ],
+     "name": "FeeCo Depot Ender"
     },
     {
      "id": 12,
@@ -89778,7 +89784,8 @@
        126,
        8
       ]
-     ]
+     ],
+     "name": "FeeCo Depot Ender"
     },
     {
      "id": 14,
@@ -90147,7 +90154,8 @@
        420,
        1
       ]
-     ]
+     ],
+     "name": "FeeCo Depot Ender"
     }
    ]
   },
@@ -110293,7 +110301,8 @@
        1120,
        0
       ]
-     ]
+     ],
+     "name": "Barracks Ender"
     },
     {
      "id": 13,
@@ -114782,7 +114791,8 @@
        100,
        0
       ]
-     ]
+     ],
+     "name": "Barracks Ender"
     }
    ]
   },
@@ -129977,7 +129987,8 @@
        360,
        0
       ]
-     ]
+     ],
+     "name": "Bonewerkz Ender"
     },
     {
      "id": 13,
@@ -130751,7 +130762,8 @@
        183,
        10
       ]
-     ]
+     ],
+     "name": "Bonewerkz Ender"
     },
     {
      "id": 14,
@@ -131464,7 +131476,8 @@
        120,
        3
       ]
-     ]
+     ],
+     "name": "Bonewerkz Ender"
     }
    ]
   },

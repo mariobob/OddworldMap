@@ -69,6 +69,50 @@ test("destination level fields are level shorts, never raw ids", () => {
   }
 });
 
+// path display names come from game data only: AO R2's zulag save-name table
+// and AE's ender-id destinations; every other path stays unnamed
+test("path names in the shipped data are exactly the game-defined ones", () => {
+  const expected = {
+    "AO R2": {
+      15: "Zulag 1",
+      16: "Zulag 1",
+      18: "Zulag 1",
+      19: "Zulag 1",
+      20: "Zulag 1",
+      1: "Zulag 2",
+      2: "Zulag 2",
+      3: "Zulag 2",
+      10: "Zulag 2",
+      5: "Zulag 3",
+      7: "Zulag 3",
+      9: "Zulag 3",
+      12: "Zulag 3",
+      13: "Zulag 3",
+      4: "Zulag 4",
+      8: "Zulag 4",
+      11: "Zulag 4",
+      14: "Zulag 4",
+    },
+    "AE SV": {
+      9: "Mudanchee Vault Ender",
+      10: "Mudanchee Vault Ender",
+      11: "Mudanchee Vault Ender",
+      14: "Mudanchee Vault Ender",
+    },
+    "AE PV": { 13: "Mudomo Vault Ender" },
+    "AE FD": { 11: "FeeCo Depot Ender", 13: "FeeCo Depot Ender", 14: "FeeCo Depot Ender" },
+    "AE BA": { 11: "Barracks Ender", 16: "Barracks Ender" },
+    "AE BW": { 12: "Bonewerkz Ender", 13: "Bonewerkz Ender", 14: "Bonewerkz Ender" },
+  };
+  const found = {};
+  for (const file of ["map_data_ao.json", "map_data_ae.json"]) {
+    const data = load(file);
+    for (const L of data.levels)
+      for (const P of L.paths) if (P.name) (found[`${data.id} ${L.short}`] ??= {})[P.id] = P.name;
+  }
+  assert.deepEqual(found, expected);
+});
+
 // every shipped hand stone is decoded: at least one view, no raw fallback,
 // and no transition fields (views must not create entry markers)
 test("hand stones in the shipped data carry decoded views", () => {

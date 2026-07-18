@@ -52,6 +52,16 @@ AO_LEVELS = [
     (0, "S1", "Menu"),
 ]
 
+# Rescue Zulag membership of Rupture Farms Return paths: the game names R2
+# save slots "Rescue Zulag N" by finding the current path id in this table
+# (AliveLibAO/SaveGame.cpp word_4BC670, applied via PauseMenu's gLevelNames)
+AO_R2_ZULAGS = {
+    1: (15, 16, 17, 18, 19, 20),
+    2: (1, 2, 3, 10),
+    3: (5, 7, 9, 12, 13),
+    4: (4, 8, 11, 14),
+}
+
 AO_TLV_NAMES = {
     0:"ContinuePoint",1:"PathTransition",2:"ContinueZone",3:"Hoist",4:"Edge",5:"DeathDrop",6:"Door",
     7:"ShadowZone",8:"LiftPoint",11:"WellLocal",12:"Dove",13:"RockSack",14:"ZBall",15:"FallingItem",
@@ -738,6 +748,10 @@ def main():
 
         cell_w, cell_h = game["geometry"]["worldW"], game["geometry"]["worldH"]
         level_entry = {"id": lid, "short": short, "name": display, "paths": []}
+        # paths entered under an ender id belong to the endgame revisit; raw
+        # destination ids (decoded with an identity level map) reveal which
+        ender_ids = [i for i, s in level_short.items() if s == short and i != lid]
+        raw_refs = {}
         for path_id, meta in sorted(tables[short].items()):
             key = ("Path", path_id)
             if key not in chunks:
@@ -768,6 +782,12 @@ def main():
             # TLVs: linear walk of object region
             region_end = meta["idx_off"] if meta["idx_off"] > meta["obj_off"] else len(blob)
             tlvs = walk_obj_region(blob, meta["obj_off"], region_end, game, level_short)
+            if ender_ids:
+                for rt in walk_obj_region(blob, meta["obj_off"], region_end, game, {}):
+                    e = rt["extra"]
+                    for lk, pk in (("to_level", "to_path"), ("alt_level", "alt_path")):
+                        if isinstance(e.get(lk), int) and e.get(pk):
+                            raw_refs.setdefault(e[lk], set()).add(e[pk])
 
             # cameras
             cams = []
@@ -787,6 +807,20 @@ def main():
                 "id": path_id, "w": W, "h": H,
                 "cams": cams, "tlvs": tlvs, "lines": lines,
             })
+
+        # path display names where the game defines them: AO R2's zulag
+        # membership; AE paths referenced only under their ender id (paths the
+        # base level also leads to are shared geography and stay unnamed)
+        path_names = {}
+        if args.game == "AO" and short == "R2":
+            path_names = {p: f"Zulag {z}" for z, ps in AO_R2_ZULAGS.items() for p in ps}
+        for eid in ender_ids:
+            for p in raw_refs.get(eid, set()) - raw_refs.get(lid, set()):
+                path_names[p] = AE_LEVEL_DISPLAY.get(eid, f"level {eid}")
+        for P in level_entry["paths"]:
+            if P["id"] in path_names:
+                P["name"] = path_names[P["id"]]
+
         if level_entry["paths"]:
             data["levels"].append(level_entry)
 
