@@ -2,6 +2,12 @@
  "entries": [
   {
    "date": "2026-07-19",
+   "tag": "new",
+   "title": "Copy a link to the view you're looking at",
+   "detail": "The chain button in the top-right corner puts a permalink to the exact spot on screen on your clipboard. The address bar has always carried this link, but on phones (especially with the map opened as an installed app) there may be no address bar to copy from."
+  },
+  {
+   "date": "2026-07-19",
    "tag": "improved",
    "title": "Screens you've visited can load instantly on your next visit",
    "detail": "Turn on \"Cache screen artwork on this device\" in Settings and visited screens stay stored locally (up to about 150 MB), so returning to the map doesn't re-download them screen by screen. Previously the whole map re-fetched after every site update. Off by default; switching it off removes everything stored."

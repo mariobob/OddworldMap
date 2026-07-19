@@ -2,12 +2,12 @@
 
 import { esc, extrasText, segDist } from "./util.js";
 import { KEY_PAN_PX, KEY_ZOOM_STEP, TOAST_MS, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
-import { cv, tip, hud, menuBtn, scrim, narrowMQ, cssVar, toastEl } from "./dom.js";
+import { cv, tip, hud, menuBtn, scrim, copyLinkBtn, narrowMQ, cssVar, toastEl } from "./dom.js";
 import { state, dX, dY, wX, wY } from "./state.js";
 import { draw, scheduleDraw } from "./render.js";
 import { destOf, isLoopback, zoomAt } from "./model.js";
-import { navigateToDest, objectHash, scheduleHash } from "./navigate.js";
-import { HAMBURGER_SVG, CLOSE_SVG } from "./icons.js";
+import { navigateToDest, objectHash, scheduleHash, viewHash } from "./navigate.js";
+import { HAMBURGER_SVG, CLOSE_SVG, LINK_SVG } from "./icons.js";
 
 const TIP_MAX_W = parseFloat(cssVar("--tip-max-w"));
 
@@ -172,6 +172,19 @@ cv.addEventListener("contextmenu", (e) => {
     () => toast("copy failed"),
   );
 });
+
+// the top-right chain button copies a permalink to the current view — the
+// address bar equivalent, which phones and installed/standalone mode may hide.
+// viewHash(), not location.href: the hash write is debounced and can lag a pan
+copyLinkBtn.innerHTML = LINK_SVG;
+copyLinkBtn.onclick = () => {
+  if (!state.path) return;
+  const url = location.href.split("#")[0] + viewHash();
+  (navigator.clipboard?.writeText(url) ?? Promise.reject()).then(
+    () => toast("view link copied"),
+    () => toast("copy failed"),
+  );
+};
 
 let toastTimer = null;
 function toast(msg) {

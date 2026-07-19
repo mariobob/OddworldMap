@@ -16,7 +16,7 @@ Browse it at **[oddworldmap.com](https://oddworldmap.com/)** — or serve the re
 - **reset** in the Display and Objects headers puts that section back to its defaults
 - **Collision lines**: floors green, walls red/orange, ceilings blue, dashed = background layer
 - **Foreground masks (FG1)**: highlights the scenery drawn in front of the player — every hideable/behind-walkable spot at a glance (pairs well with "Dim backgrounds")
-- the URL hash (`#LEVEL/path/x/y/zoom`) always reflects the current view — copy it to share an exact location; the browser back button retraces follows
+- the URL hash (`#LEVEL/path/x/y/zoom`) always reflects the current view — copy it to share an exact location; the browser back button retraces follows. The chain button in the top-right corner copies the same link, for phones and installed-app mode where there may be no address bar
 - **right-click** an object to copy a direct link to it — opening that link centers the object and holds a marker on it until you've had a chance to look and interact
 - **search** (`/` to focus) matches object names and decoded fields across both games — try `mudokon`, `lcdstatusboard` or `switch_id=70`. Results are grouped by context (current path, current level, then per game), rank exact name matches first, and clicking (or Enter) jumps straight to the hit; a scope bar narrows the search to the current game/level/path
 - **Ruler**: enable, then drag to measure — Δx × Δy, length in world units (1 unit = 1 PS1 screen pixel) and 25-unit grid squares; hovering a collision line shows its type and length the same way

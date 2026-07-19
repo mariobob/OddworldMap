@@ -185,7 +185,9 @@ export function jumpToTlv(G, L, P, t) {
 let applyingHash = false,
   hashTimer = null;
 
-function hashFor() {
+// permalink to the current view (what the address bar shows once the
+// debounced hash write lands)
+export function viewHash() {
   return formatHash(state.data.id, state.lvl.short, state.path.id, state.cam);
 }
 
@@ -194,7 +196,7 @@ export function scheduleHash(push) {
   clearTimeout(hashTimer);
   hashTimer = setTimeout(
     () => {
-      const h = hashFor();
+      const h = viewHash();
       rememberLocation(h);
       if (h === location.hash) return;
       if (push)

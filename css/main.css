@@ -459,6 +459,13 @@ body.fullnames .btnrow button {
 #whatsnewBtn {
   right: 10px;
 }
+#copyLinkBtn {
+  right: 54px;
+}
+/* no What's New (changelog feed missing): take over its corner spot */
+#main:has(#whatsnewBtn[hidden]) #copyLinkBtn {
+  right: 10px;
+}
 #whatsnewBtn[hidden] {
   display: none;
 }
