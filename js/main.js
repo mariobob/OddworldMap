@@ -6,10 +6,18 @@ import { initGames, selectGame, applyHash } from "./navigate.js";
 import { initSettings, storedLocationHash, clearStoredLocation } from "./settings.js";
 import "./sidebar.js";
 import "./search.js";
-import "./interaction.js";
+import { toggleMenu } from "./interaction.js";
 import "./whatsnew.js";
 
 initSettings();
+
+// ?embed=1: iframe view (wikis, forums) — chrome hides via body.embed, and
+// the hash still works, so an embed can point at an exact screen
+const embedded = new URLSearchParams(location.search).get("embed") === "1";
+if (embedded) {
+  document.body.classList.add("embed");
+  toggleMenu(false);
+}
 
 async function loadOne(file) {
   try {
@@ -35,7 +43,8 @@ Promise.all([loadOne("map_data_ao.json"), loadOne("map_data_ae.json")]).then((da
   resize();
   if (!applyHash()) {
     // no usable permalink in the URL: fall back to the remembered location
-    const stored = storedLocationHash();
+    // (never in an embed, which gets the default view)
+    const stored = embedded ? null : storedLocationHash();
     if (stored) history.replaceState(null, "", stored); // silent: no history entry, no hashchange
     if (!stored || !applyHash()) {
       if (stored) clearStoredLocation(); // its level or path no longer exists

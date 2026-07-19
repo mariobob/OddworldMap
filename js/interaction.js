@@ -2,14 +2,26 @@
 
 import { esc, extrasText, segDist } from "./util.js";
 import { KEY_PAN_PX, KEY_ZOOM_STEP, TOAST_MS, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
-import { $, cv, tip, hud, menuBtn, scrim, copyLinkBtn, narrowMQ, cssVar, toastEl } from "./dom.js";
+import {
+  $,
+  cv,
+  tip,
+  hud,
+  menuBtn,
+  scrim,
+  copyLinkBtn,
+  openSiteBtn,
+  narrowMQ,
+  cssVar,
+  toastEl,
+} from "./dom.js";
 import { state, dX, dY, wX, wY } from "./state.js";
 import { draw, scheduleDraw } from "./render.js";
 import { destOf, isLoopback, zoomAt } from "./model.js";
 import { cyclePath, navigateToDest, objectHash, scheduleHash, viewHash } from "./navigate.js";
 import { toggleShow } from "./sidebar.js";
 import { trapDialogKeys } from "./dialog.js";
-import { HAMBURGER_SVG, CLOSE_SVG, LINK_SVG } from "./icons.js";
+import { HAMBURGER_SVG, CLOSE_SVG, LINK_SVG, EXTERNAL_SVG } from "./icons.js";
 
 const TIP_MAX_W = parseFloat(cssVar("--tip-max-w"));
 
@@ -28,7 +40,7 @@ function syncMenuIcon() {
   menuBtn.setAttribute("aria-label", label);
 }
 document.body.classList.toggle("menu-open", !isNarrow()); // set before first paint: open on wide, out of the way on narrow
-function toggleMenu(open) {
+export function toggleMenu(open) {
   document.body.classList.toggle(
     "menu-open",
     open ?? !document.body.classList.contains("menu-open"),
@@ -175,17 +187,33 @@ cv.addEventListener("contextmenu", (e) => {
   );
 });
 
-// the top-right chain button copies a permalink to the current view — the
-// address bar equivalent, which phones and installed/standalone mode may hide.
-// viewHash(), not location.href: the hash write is debounced and can lag a pan
+// the full-site permalink to the current view. viewHash(), not location.href:
+// the hash write is debounced and can lag a pan
+function fullSiteUrl() {
+  const url = new URL(location.href);
+  url.searchParams.delete("embed");
+  url.hash = state.path ? viewHash() : location.hash;
+  return url.href;
+}
+
+// the top-right chain button copies that permalink — the address bar
+// equivalent, which phones and installed/standalone mode may hide
 copyLinkBtn.innerHTML = LINK_SVG;
 copyLinkBtn.onclick = () => {
   if (!state.path) return;
-  const url = location.href.split("#")[0] + viewHash();
-  (navigator.clipboard?.writeText(url) ?? Promise.reject()).then(
+  (navigator.clipboard?.writeText(fullSiteUrl()) ?? Promise.reject()).then(
     () => toast("view link copied"),
     () => toast("copy failed"),
   );
+};
+
+// in embeds the chain button gives way to this link out to the full site at
+// the same view; the href is seeded at boot (an <a> without one isn't even
+// focusable) and refreshed on pointerdown/click, before navigation reads it
+openSiteBtn.innerHTML = EXTERNAL_SVG;
+openSiteBtn.href = fullSiteUrl();
+openSiteBtn.onpointerdown = openSiteBtn.onclick = () => {
+  openSiteBtn.href = fullSiteUrl();
 };
 
 let toastTimer = null;

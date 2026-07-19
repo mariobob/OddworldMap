@@ -119,15 +119,30 @@
       <noscript><div id="noscript">This interactive map requires JavaScript.</div></noscript>
       <canvas id="cv"></canvas>
       <button id="menuBtn" class="iconbtn" aria-label="Toggle menu" title="Toggle menu"></button>
+      <!-- .chrome marks site furniture that embed mode hides -->
       <button
         id="copyLinkBtn"
-        class="iconbtn"
+        class="iconbtn chrome"
         aria-label="Copy link to this view"
         title="Copy link to this view"
       ></button>
-      <button id="whatsnewBtn" class="iconbtn" hidden aria-label="What's new" title="What's new">
+      <button
+        id="whatsnewBtn"
+        class="iconbtn chrome"
+        hidden
+        aria-label="What's new"
+        title="What's new"
+      >
         <span class="wn-dot"></span>
       </button>
+      <a
+        id="openSiteBtn"
+        class="iconbtn"
+        target="_blank"
+        rel="noopener"
+        aria-label="Open in Oddworld Map"
+        title="Open in Oddworld Map"
+      ></a>
       <div id="tip"></div>
       <div id="help">drag / arrows = pan · wheel / ± = zoom · hover = inspect · ? = shortcuts</div>
       <div id="hud"></div>

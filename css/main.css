@@ -466,6 +466,18 @@ body.fullnames .btnrow button {
 #main:has(#whatsnewBtn[hidden]) #copyLinkBtn {
   right: 10px;
 }
+/* embed mode (?embed=1): .chrome marks the site furniture that hides */
+body.embed .chrome {
+  display: none;
+}
+/* the open-full-site link exists only inside embeds, in the freed corner */
+#openSiteBtn {
+  display: none;
+  right: 10px;
+}
+body.embed #openSiteBtn {
+  display: grid;
+}
 #whatsnewBtn[hidden] {
   display: none;
 }

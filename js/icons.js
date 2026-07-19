@@ -29,6 +29,13 @@ export const LINK_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentCol
   <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
 </svg>`;
 
+// External link — the open-full-site link shown in embeds.
+export const EXTERNAL_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+  <polyline points="15 3 21 3 21 9" />
+  <line x1="10" y1="14" x2="21" y2="3" />
+</svg>`;
+
 // Newspaper — the What's New button.
 export const NEWSPAPER_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
   <rect x="3.5" y="5" width="17" height="14" rx="1.5" />

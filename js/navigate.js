@@ -192,6 +192,10 @@ export function jumpToTlv(G, L, P, t) {
 let applyingHash = false,
   hashTimer = null;
 
+// embeds sit in other people's pages: browsing one must not move the
+// visitor's remembered location
+const inEmbed = () => document.body.classList.contains("embed");
+
 // permalink to the current view (what the address bar shows once the
 // debounced hash write lands)
 export function viewHash() {
@@ -204,7 +208,7 @@ export function scheduleHash(push) {
   hashTimer = setTimeout(
     () => {
       const h = viewHash();
-      rememberLocation(h);
+      if (!inEmbed()) rememberLocation(h);
       if (h === location.hash) return;
       if (push)
         location.hash = h; // history entry (level/path/follow)
@@ -257,5 +261,5 @@ export function applyHash() {
 window.addEventListener("hashchange", () => {
   if (applyingHash) return;
   // back/forward retraces update the remembered spot; a rejected hash must not
-  if (applyHash()) rememberLocation(location.hash);
+  if (applyHash() && !inEmbed()) rememberLocation(location.hash);
 });
