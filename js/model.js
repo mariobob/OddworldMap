@@ -88,6 +88,14 @@ export function camCell(path, camId) {
 export const tlvCell = (t, path, geo) =>
   Math.floor(t.y1 / geo.worldH) * path.w + Math.floor(t.x1 / geo.worldW);
 
+// grid cell under a draw-space point, or null outside the path's grid —
+// the margins must not fold into a neighbouring row's edge cell
+export function cellAt(x, y, path) {
+  const col = Math.floor(x / CELL_W),
+    row = Math.floor(y / CELL_H);
+  return col >= 0 && col < path.w && row >= 0 && row < path.h ? row * path.w + col : null;
+}
+
 // the paired TLV a destination lands on: door numbers are only unique per
 // camera, so match inside the destination camera first, path-wide as a fallback.
 // Positional targets get no fallback — a name-only target (no pair number)

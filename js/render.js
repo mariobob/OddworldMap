@@ -94,6 +94,16 @@ function animateFlash() {
   requestAnimationFrame(animateFlash);
 }
 
+// pointed-at object: a dashed outline around one TLV, for hover affordances
+// that reference an object without selecting it (camera-panel rows)
+let highlight = null;
+export function setHighlight(t) {
+  if (highlight === t) return;
+  highlight = t;
+  scheduleDraw();
+}
+window.addEventListener("selection-changed", () => setHighlight(null)); // TLVs don't outlive their path
+
 // coalesce bursty redraw sources (pointer moves, image loads) into one paint per frame
 let drawPending = false;
 export function scheduleDraw() {
@@ -225,6 +235,21 @@ export function draw() {
       ctx.fillStyle = c.color;
       ctx.fillText(t.name, x1, y1 - 3 / cam.z);
     }
+  }
+
+  if (highlight) {
+    // drawn even when the object's category is toggled off: the outline is
+    // what locates a listed object whose marker is hidden
+    const x1 = dX(highlight.x1),
+      y1 = dY(highlight.y1);
+    const w = Math.max(dX(highlight.x2) - x1, 10),
+      h = Math.max(dY(highlight.y2) - y1, 10);
+    const pad = 3 / cam.z;
+    ctx.strokeStyle = `rgb(${COLOR.accentRgb})`;
+    ctx.lineWidth = 2.5 / cam.z;
+    ctx.setLineDash([7 / cam.z, 5 / cam.z]);
+    ctx.strokeRect(x1 - pad, y1 - pad, w + 2 * pad, h + 2 * pad);
+    ctx.setLineDash([]);
   }
 
   if (ruler) {

@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   camCell,
+  cellAt,
   computeEntryPaths,
   destOf,
   focusView,
@@ -225,6 +226,21 @@ test("camCell: zero-padded C## suffix lookup, null for unknown or missing ids", 
   assert.equal(camCell(P, 12), 3);
   assert.equal(camCell(P, 7), null);
   assert.equal(camCell(P, null), null);
+});
+
+test("cellAt: draw-space point to grid cell, null anywhere outside the grid", () => {
+  setGeometry(SYNTH_GEOMETRY); // 100x50 draw cells
+  const P = path(1, [], [], 3, 2);
+  assert.equal(cellAt(0, 0, P), 0);
+  assert.equal(cellAt(250, 20, P), 2); // row 0, col 2
+  assert.equal(cellAt(150, 75, P), 4); // row 1, col 1
+  // the margins must not fold into a neighbouring row's edge cell:
+  // col -1 is not "last cell of the row above", col w is not "first of the next"
+  assert.equal(cellAt(-1, 75, P), null);
+  assert.equal(cellAt(310, 20, P), null);
+  assert.equal(cellAt(150, -5, P), null);
+  assert.equal(cellAt(150, 101, P), null);
+  setGeometry(AO_GEOMETRY);
 });
 
 test("resolveTarget: matches inside the destination camera before anything else", () => {

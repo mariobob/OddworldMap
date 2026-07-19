@@ -20,6 +20,7 @@ import { draw, scheduleDraw } from "./render.js";
 import { destOf, isLoopback, zoomAt } from "./model.js";
 import { cyclePath, navigateToDest, objectHash, scheduleHash, viewHash } from "./navigate.js";
 import { toggleShow } from "./sidebar.js";
+import { openCamPanel } from "./campanel.js";
 import { trapDialogKeys } from "./dialog.js";
 import { HAMBURGER_SVG, CLOSE_SVG, LINK_SVG, EXTERNAL_SVG } from "./icons.js";
 
@@ -169,6 +170,8 @@ cv.addEventListener("click", () => {
       return;
     }
   }
+  const w = worldAtMouse(); // nothing to follow: list the screen's objects
+  openCamPanel(w.x, w.y);
 });
 
 // right-click (long-press on touch) copies a permalink to the object under

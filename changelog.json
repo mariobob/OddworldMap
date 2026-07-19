@@ -3,6 +3,12 @@
   {
    "date": "2026-07-19",
    "tag": "new",
+   "title": "Tap a screen to see everything on it",
+   "detail": "Click or tap a camera screen (anywhere that isn't a followable object) and a panel lists every object on that screen, grouped by category. Hovering a row outlines the object on the map, and clicking it jumps straight there. On phones, where there's no hover to inspect with, this is the way to see what a screen holds."
+  },
+  {
+   "date": "2026-07-19",
+   "tag": "new",
    "title": "Embed the map in wikis and forums",
    "detail": "Adding ?embed=1 to the address gives a view made to sit in an iframe: the map fills the frame, still fully interactive, with the sidebar starting tucked away behind its menu button. Pair it with any permalink and the embed opens exactly on the screen you mean; a corner button takes visitors to the full site at the very spot they're looking at."
   },
