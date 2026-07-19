@@ -108,6 +108,13 @@ function selectPathById(id) {
   return true;
 }
 
+// the [ / ] shortcuts: step through the current level's paths, wrapping
+export function cyclePath(dir) {
+  if (!state.lvl) return;
+  const paths = state.lvl.paths;
+  selectPath(paths[(paths.indexOf(state.path) + dir + paths.length) % paths.length]);
+}
+
 let camToken = 0; // bumped on explicit positioning to invalidate pending fits
 
 function fitView() {

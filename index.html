@@ -129,7 +129,7 @@
         <span class="wn-dot"></span>
       </button>
       <div id="tip"></div>
-      <div id="help">drag / arrows = pan · wheel / ± = zoom · hover = inspect</div>
+      <div id="help">drag / arrows = pan · wheel / ± = zoom · hover = inspect · ? = shortcuts</div>
       <div id="hud"></div>
       <div id="toast"></div>
     </div>
@@ -140,6 +140,48 @@
           <button id="whatsnewClose" aria-label="Close">×</button>
         </div>
         <div id="whatsnewBody"></div>
+      </aside>
+    </div>
+    <div id="shortcutsOverlay">
+      <aside id="shortcuts" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+        <div class="st-head">
+          <h2 id="shortcutsTitle">Keyboard shortcuts</h2>
+          <button id="shortcutsClose" aria-label="Close">×</button>
+        </div>
+        <div id="shortcutsBody">
+          <div class="sc-row">
+            <span class="sc-keys"><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd></span
+            >pan
+          </div>
+          <div class="sc-row">
+            <span class="sc-keys"><kbd>+</kbd><kbd>−</kbd></span
+            >zoom
+          </div>
+          <div class="sc-row">
+            <span class="sc-keys"><kbd>[</kbd><kbd>]</kbd></span
+            >previous / next path
+          </div>
+          <div class="sc-row">
+            <span class="sc-keys"><kbd>g</kbd></span
+            >camera grid + names
+          </div>
+          <div class="sc-row">
+            <span class="sc-keys"><kbd>c</kbd></span
+            >collision lines
+          </div>
+          <div class="sc-row">
+            <span class="sc-keys"><kbd>f</kbd></span
+            >foreground masks
+          </div>
+          <div class="sc-row">
+            <span class="sc-keys"><kbd>/</kbd></span
+            >search — arrows walk the results, Enter jumps
+          </div>
+          <div class="sc-row">
+            <span class="sc-keys"><kbd>?</kbd></span
+            >this list
+          </div>
+        </div>
       </aside>
     </div>
     <div id="settingsOverlay">

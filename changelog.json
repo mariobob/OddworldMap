@@ -3,6 +3,12 @@
   {
    "date": "2026-07-19",
    "tag": "new",
+   "title": "More keyboard shortcuts, and ? to see them all",
+   "detail": "Press [ and ] to step through the current level's paths, and g, c and f flip the camera grid, collision lines and foreground masks without a trip to the sidebar. Press ? for a card listing every shortcut. Arrows still pan, + and - zoom, / jumps to search."
+  },
+  {
+   "date": "2026-07-19",
+   "tag": "new",
    "title": "Copy a link to the view you're looking at",
    "detail": "The chain button in the top-right corner puts a permalink to the exact spot on screen on your clipboard. The address bar has always carried this link, but on phones (especially with the map opened as an installed app) there may be no address bar to copy from."
   },

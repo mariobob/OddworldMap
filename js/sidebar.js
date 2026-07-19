@@ -66,6 +66,15 @@ for (const [key, id] of Object.entries({
   };
   showUI.set(key, cb);
 }
+// the g/c/f shortcuts flip the same checkboxes the pointer does
+export function toggleShow(key) {
+  const cb = showUI.get(key);
+  cb.checked = !cb.checked;
+  syncShow(key, cb);
+  viewChanged();
+  draw();
+}
+
 $("tReset").onclick = () => {
   for (const [key, cb] of showUI) {
     cb.checked = cb.defaultChecked; // the HTML checked attribute is the source of the defaults

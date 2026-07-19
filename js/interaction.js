@@ -2,11 +2,13 @@
 
 import { esc, extrasText, segDist } from "./util.js";
 import { KEY_PAN_PX, KEY_ZOOM_STEP, TOAST_MS, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
-import { cv, tip, hud, menuBtn, scrim, copyLinkBtn, narrowMQ, cssVar, toastEl } from "./dom.js";
+import { $, cv, tip, hud, menuBtn, scrim, copyLinkBtn, narrowMQ, cssVar, toastEl } from "./dom.js";
 import { state, dX, dY, wX, wY } from "./state.js";
 import { draw, scheduleDraw } from "./render.js";
 import { destOf, isLoopback, zoomAt } from "./model.js";
-import { navigateToDest, objectHash, scheduleHash, viewHash } from "./navigate.js";
+import { cyclePath, navigateToDest, objectHash, scheduleHash, viewHash } from "./navigate.js";
+import { toggleShow } from "./sidebar.js";
+import { trapDialogKeys } from "./dialog.js";
 import { HAMBURGER_SVG, CLOSE_SVG, LINK_SVG } from "./icons.js";
 
 const TIP_MAX_W = parseFloat(cssVar("--tip-max-w"));
@@ -210,9 +212,27 @@ function worldAtMouse() {
   return { x: state.cam.x + mouse.x / state.cam.z, y: state.cam.y + mouse.y / state.cam.z };
 }
 
-// ---- keyboard: arrows pan, + / - zoom about the canvas center -------------
+// ---- keyboard: arrows pan, + / - zoom about the canvas center, [ / ] cycle
+// paths, g / c / f flip display toggles, ? lists the shortcuts ---------------
 window.addEventListener("keydown", (e) => {
-  if (e.ctrlKey || e.metaKey || e.altKey || e.target.matches?.("input, textarea, select")) return;
+  if (e.ctrlKey || e.metaKey || e.target.matches?.("input, textarea, select")) return;
+  // brackets before the Alt guard: several layouts type them via Option/AltGr
+  if (e.key === "[" || e.key === "]") {
+    cyclePath(e.key === "]" ? 1 : -1);
+    e.preventDefault();
+    return;
+  }
+  if (e.altKey) return;
+  const show = { g: "grid", c: "coll", f: "fg" }[e.key];
+  if (show) {
+    toggleShow(show);
+    return;
+  }
+  if (e.key === "?") {
+    openShortcuts();
+    e.preventDefault();
+    return;
+  }
   const pan = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[
     e.key
   ];
@@ -228,6 +248,22 @@ window.addEventListener("keydown", (e) => {
   scheduleDraw();
   scheduleHash(false);
 });
+
+// ---- shortcuts panel (the ? key) -----------------------------------------
+function openShortcuts() {
+  document.body.classList.add("shortcuts-open");
+  $("shortcutsClose").focus();
+}
+const closeShortcuts = () => document.body.classList.remove("shortcuts-open");
+$("shortcutsClose").onclick = closeShortcuts;
+$("shortcutsOverlay").onclick = (e) => {
+  if (e.target === e.currentTarget) closeShortcuts();
+};
+trapDialogKeys(
+  () => document.body.classList.contains("shortcuts-open"),
+  $("shortcuts"),
+  closeShortcuts,
+);
 
 // ---- hover inspection ----------------------------------------------------
 function updateHover() {

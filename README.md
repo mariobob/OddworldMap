@@ -9,7 +9,7 @@ Browse it at **[oddworldmap.com](https://oddworldmap.com/)** — or serve the re
 ## Controls
 
 - **AO / AE** buttons switch between the two games
-- **drag** or **arrow keys** to pan, **mouse wheel** (anchored at the cursor) or **`+` / `-`** to zoom
+- **drag** or **arrow keys** to pan, **mouse wheel** (anchored at the cursor) or **`+` / `-`** to zoom; **`[` / `]`** step through the level's paths and **`g` / `c` / `f`** flip the grid, collision lines and foreground masks — press **`?`** for the full shortcut list
 - **hover** any object for decoded details — door destinations (level/path/door#), switch IDs, path-transition targets, continue-point zones
 - **click** a door, path transition, travel portal, express well, teleporter or hand stone to follow it to its destination (for hand stones, the camera they show), including across levels
 - level and path buttons top-left; object category filters with counts below — hover a path button for its in-game area name where the game defines one (Rupture Farms Return's Zulag 1–4, Exoddus ender areas)
