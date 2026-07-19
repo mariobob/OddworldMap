@@ -2,6 +2,12 @@
  "entries": [
   {
    "date": "2026-07-19",
+   "tag": "improved",
+   "title": "The screen-list panel is now optional",
+   "detail": "A new switch in Settings \"List a screen's objects on click\" which controls the panel that opens when you click or tap a screen. Switch it off if you'd rather those clicks did nothing."
+  },
+  {
+   "date": "2026-07-19",
    "tag": "new",
    "title": "See a path's whole circulation as arrows",
    "detail": "The new \"Connection arrows\" display toggle (or the a key) draws every door, express well, bird portal, teleporter and path transition linked to where it leads, turning the path into a readable routing flowchart. Two-way pairs collapse into one double-headed arrow, transitions to other paths show as short labelled stubs, colours tell the kinds apart, and hovering an object spotlights just its own arrows."

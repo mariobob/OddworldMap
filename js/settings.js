@@ -17,6 +17,7 @@ export const SETTINGS_DEFAULTS = {
   rememberView: true,
   rememberLoc: false,
   fullNames: false,
+  screenList: true,
   cacheImages: false,
 };
 export const SHOW_KEYS = ["grid", "coll", "fg", "conn", "labels", "dim"];
@@ -168,6 +169,8 @@ export function initSettings() {
       rememberLocation(location.hash); // capture the current spot right away
     else store.remove(LOC_KEY);
   });
+
+  bind("sScreenList", "screenList", () => {});
 
   document.body.classList.toggle("fullnames", s.fullNames);
   bind("sFullNames", "fullNames", (on) => {

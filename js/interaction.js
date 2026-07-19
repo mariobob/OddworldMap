@@ -20,6 +20,7 @@ import { draw, scheduleDraw, setConnFocus, setHighlight } from "./render.js";
 import { destOf, isLoopback, resolveTarget, zoomAt } from "./model.js";
 import { cyclePath, navigateToDest, objectHash, scheduleHash, viewHash } from "./navigate.js";
 import { toggleShow } from "./sidebar.js";
+import { getSettings } from "./settings.js";
 import { openCamPanel } from "./campanel.js";
 import { trapDialogKeys } from "./dialog.js";
 import { HAMBURGER_SVG, CLOSE_SVG, LINK_SVG, EXTERNAL_SVG } from "./icons.js";
@@ -172,6 +173,7 @@ cv.addEventListener("click", () => {
       return;
     }
   }
+  if (!getSettings().screenList) return;
   const w = worldAtMouse(); // nothing to follow: list the screen's objects
   openCamPanel(w.x, w.y);
 });
