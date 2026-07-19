@@ -16,7 +16,7 @@ import {
   toastEl,
 } from "./dom.js";
 import { state, GEO, dX, dY, wX, wY } from "./state.js";
-import { draw, scheduleDraw, setHighlight } from "./render.js";
+import { draw, scheduleDraw, setConnFocus, setHighlight } from "./render.js";
 import { destOf, isLoopback, resolveTarget, zoomAt } from "./model.js";
 import { cyclePath, navigateToDest, objectHash, scheduleHash, viewHash } from "./navigate.js";
 import { toggleShow } from "./sidebar.js";
@@ -159,6 +159,7 @@ cv.addEventListener("pointerleave", () => {
   tip.style.display = "none";
   cv.style.cursor = "";
   setHighlight(null);
+  setConnFocus(null);
 });
 
 cv.addEventListener("click", () => {
@@ -255,7 +256,7 @@ window.addEventListener("keydown", (e) => {
     return;
   }
   if (e.altKey) return;
-  const show = { g: "grid", c: "coll", f: "fg" }[e.key];
+  const show = { g: "grid", c: "coll", f: "fg", a: "conn" }[e.key];
   if (show) {
     toggleShow(show);
     return;
@@ -330,6 +331,8 @@ function updateHover() {
     }
   }
   setHighlight(partner);
+  // arrows overlay: spotlight the hovered object's own edges
+  setConnFocus(state.show.conn ? (hoverTlvs.find((t) => destOf(t)) ?? null) : null);
   if (hoverTlvs.length || hoverLines.length) {
     tip.style.display = "block";
     const px = Math.min(mouse.x + 16, cv.clientWidth - (TIP_MAX_W + 10));

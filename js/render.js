@@ -1,8 +1,9 @@
 // Canvas rendering: cameras, overlays, markers, and the image caches.
 
-import { CACHE_MAX_IMAGES, FLASH_MS, LINE_COLORS, catOf } from "./config.js";
+import { CACHE_MAX_IMAGES, CONN_COLORS, FLASH_MS, LINE_COLORS, catOf } from "./config.js";
 import { $, cv, ctx, cssVar } from "./dom.js";
-import { state, CELL_W, CELL_H, dX, dY } from "./state.js";
+import { state, GEO, CELL_W, CELL_H, dX, dY } from "./state.js";
+import { computeConnections } from "./model.js";
 
 // canvas colors shared with the stylesheet, read once from the tokens
 const COLOR = {
@@ -94,6 +95,23 @@ function animateFlash() {
   requestAnimationFrame(animateFlash);
 }
 
+// connection edges, computed lazily and keyed by path object identity —
+// selection-changed alone won't do: it re-fires for the same path on every
+// pushed hash write
+let connCache = { path: null, edges: null };
+
+// hovered followable object: its connection edges render emphasized while
+// the rest dim, so one object's circulation reads out of a dense path
+let connFocus = null;
+export function setConnFocus(t) {
+  if (connFocus === t) return;
+  connFocus = t;
+  scheduleDraw();
+}
+window.addEventListener("selection-changed", () => {
+  connFocus = null;
+});
+
 // pointed-at object: a dashed outline around one TLV, for hover affordances
 // that reference an object without selecting it (camera-panel rows, a hovered
 // door's partner)
@@ -123,6 +141,21 @@ export function resize() {
 }
 window.addEventListener("resize", resize); // catches devicePixelRatio changes, which leave the map box untouched
 new ResizeObserver(resize).observe($("main")); // the sidebar slide resizes the map without a window resize
+
+// filled arrowhead at (tx, ty) pointing along (dx, dy), h long in draw units
+function arrowhead(tx, ty, dx, dy, h) {
+  const l = Math.hypot(dx, dy) || 1;
+  const ux = dx / l,
+    uy = dy / l;
+  const bx = tx - h * ux,
+    by = ty - h * uy;
+  ctx.beginPath();
+  ctx.moveTo(tx, ty);
+  ctx.lineTo(bx - 0.45 * h * uy, by + 0.45 * h * ux);
+  ctx.lineTo(bx + 0.45 * h * uy, by - 0.45 * h * ux);
+  ctx.closePath();
+  ctx.fill();
+}
 
 export function draw() {
   if (!state.path) {
@@ -236,6 +269,69 @@ export function draw() {
       ctx.fillStyle = c.color;
       ctx.fillText(t.name, x1, y1 - 3 / cam.z);
     }
+  }
+
+  // connection arrows: the path's circulation — curves between resolved
+  // pairs (double-headed when mutual), dashed to a bare camera, and fixed
+  // 45° labelled stubs for destinations on other paths
+  if (show.conn) {
+    if (connCache.path !== path)
+      connCache = { path, edges: computeConnections(state.lvl, path, GEO) };
+    const centre = (t) => [(dX(t.x1) + dX(t.x2)) / 2, (dY(t.y1) + dY(t.y2)) / 2];
+    // focus only dims the rest when the hovered object actually has edges
+    const focusActive =
+      connFocus && connCache.edges.some((e) => e.src === connFocus || e.dst === connFocus);
+    const headLen = 12 / cam.z;
+    const stubLen = Math.min(Math.max(56 / cam.z, 60), 150);
+    const S = Math.SQRT1_2;
+    for (const e of connCache.edges) {
+      if (!catOf(e.src).on) continue; // hidden markers keep their arrows hidden too
+      const focused = focusActive && (e.src === connFocus || e.dst === connFocus);
+      ctx.globalAlpha = focusActive ? (focused ? 0.95 : 0.15) : 0.65;
+      ctx.lineWidth = (focused ? 3 : 2) / cam.z;
+      ctx.strokeStyle = ctx.fillStyle = CONN_COLORS[e.src.name] || "#ffffff";
+      const [sx, sy] = centre(e.src);
+      if (e.label !== undefined) {
+        // off-path stub: a constant diagonal reads as "leaves this path"
+        // without pretending to know the direction
+        const tx = sx + stubLen * S,
+          ty = sy - stubLen * S;
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(tx, ty);
+        ctx.stroke();
+        arrowhead(tx, ty, S, -S, Math.min(headLen, 0.25 * stubLen));
+        if (showLabels) {
+          ctx.shadowColor = "rgba(0,0,0,.9)";
+          ctx.shadowBlur = 3 / cam.z;
+          ctx.fillText(`→ ${e.label}`, tx + 8 / cam.z, ty - 4 / cam.z);
+          ctx.shadowBlur = 0;
+        }
+        continue;
+      }
+      const [tx, ty] = e.dst
+        ? centre(e.dst)
+        : [((e.cell % path.w) + 0.5) * CELL_W, (Math.floor(e.cell / path.w) + 0.5) * CELL_H];
+      const dx = tx - sx,
+        dy = ty - sy;
+      const len = Math.hypot(dx, dy);
+      if (len < 1) continue;
+      // control point to the left of travel: near-coincident reversed pairs
+      // (stacked double doors) arc apart instead of overlapping
+      const k = Math.min(Math.max(0.18 * len, 24), 110);
+      const cpx = (sx + tx) / 2 - (dy / len) * k,
+        cpy = (sy + ty) / 2 + (dx / len) * k;
+      if (!e.dst) ctx.setLineDash([6 / cam.z, 5 / cam.z]); // camera, not exact object
+      ctx.beginPath();
+      ctx.moveTo(sx, sy);
+      ctx.quadraticCurveTo(cpx, cpy, tx, ty);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      const h = Math.min(headLen, 0.25 * len);
+      arrowhead(tx, ty, tx - cpx, ty - cpy, h); // the curve's end tangent is P2 − C
+      if (e.twoWay) arrowhead(sx, sy, sx - cpx, sy - cpy, h);
+    }
+    ctx.globalAlpha = 1;
   }
 
   if (highlight) {

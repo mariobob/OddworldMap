@@ -19,7 +19,7 @@ export const SETTINGS_DEFAULTS = {
   fullNames: false,
   cacheImages: false,
 };
-export const SHOW_KEYS = ["grid", "coll", "fg", "labels", "dim"];
+export const SHOW_KEYS = ["grid", "coll", "fg", "conn", "labels", "dim"];
 
 // localStorage may be unavailable (private mode, blocked); never let that break the viewer
 const store = {

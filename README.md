@@ -9,7 +9,7 @@ Browse it at **[oddworldmap.com](https://oddworldmap.com/)** — or serve the re
 ## Controls
 
 - **AO / AE** buttons switch between the two games
-- **drag** or **arrow keys** to pan, **mouse wheel** (anchored at the cursor) or **`+` / `-`** to zoom; **`[` / `]`** step through the level's paths and **`g` / `c` / `f`** flip the grid, collision lines and foreground masks — press **`?`** for the full shortcut list
+- **drag** or **arrow keys** to pan, **mouse wheel** (anchored at the cursor) or **`+` / `-`** to zoom; **`[` / `]`** step through the level's paths and **`g` / `c` / `f` / `a`** flip the grid, collision lines, foreground masks and connection arrows — press **`?`** for the full shortcut list
 - **hover** any object for decoded details — door destinations (level/path/door#), switch IDs, path-transition targets, continue-point zones
 - **click** a door, path transition, travel portal, express well, teleporter or hand stone to follow it to its destination (for hand stones, the camera they show), including across levels; while hovering one, its partner — the object you'd come out of — gets a dashed outline whenever the pair sits on the current path
 - **click/tap** anywhere else on a screen to list everything on it, grouped by category — hover a row to outline that object on the map, click it to jump there. On touch devices, where there is no hover, this panel is how you inspect a screen
@@ -17,6 +17,7 @@ Browse it at **[oddworldmap.com](https://oddworldmap.com/)** — or serve the re
 - **reset** in the Display and Objects headers puts that section back to its defaults
 - **Collision lines**: floors green, walls red/orange, ceilings blue, dashed = background layer
 - **Foreground masks (FG1)**: highlights the scenery drawn in front of the player — every hideable/behind-walkable spot at a glance (pairs well with "Dim backgrounds")
+- **Connection arrows**: draws the path's whole circulation — every door, express well, bird portal, teleporter and path transition linked to where it leads. A double-headed arrow is a two-way pair; a dashed arrow points at the arrival camera when the exact arrival object isn't resolvable; short 45° stubs labelled `→ MI P7` lead to other paths (stub labels appear zoomed in with object labels on). Colours tell the kinds apart: doors yellow, wells pink, bird portals lavender, teleporters teal, path transitions white. Hovering an object spotlights just its own arrows
 - the URL hash (`#LEVEL/path/x/y/zoom`) always reflects the current view — copy it to share an exact location; the browser back button retraces follows. The chain button in the top-right corner copies the same link, for phones and installed-app mode where there may be no address bar
 - add **`?embed=1`** to the URL for a view made for iframes on wikis and forums: the map fills the frame, fully interactive (hover, follow, the screen-list panel), with the sidebar starting closed but reachable through the menu button; a corner button opens the full site at the exact view. Combine it with any permalink hash to embed an exact screen, e.g. `https://oddworldmap.com/?embed=1#AO/R1/15/…`
 - **right-click** an object to copy a direct link to it — opening that link centers the object and holds a marker on it until you've had a chance to look and interact

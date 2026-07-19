@@ -14,6 +14,12 @@ export const LINE_COLORS = { 0:"#43d94c", 1:"#ff5c5c", 2:"#ff9d3d", 3:"#5ca9ff",
 export const LINE_NAMES = { 0:"Floor", 1:"Wall (left)", 2:"Wall (right)", 3:"Ceiling",
                             4:"Background floor", 5:"Background wall (left)", 6:"Background wall (right)" };
 
+// connection-arrow colors by source kind — every transition kind shares the
+// one Doors/Transitions CATS bucket, so the category color can't tell them
+// apart; unlisted kinds fall back to white
+export const CONN_COLORS = { Door:"#ffd23e", WellExpress:"#ff6ee9", BirdPortal:"#b78cff",
+                             Teleporter:"#6ef0e2", PathTransition:"#ffffff" };
+
 // ---- categories (matched by TLV name so both games share the buckets) ----
 export const CATS = [
   { key:"board",  label:"LCD Status Boards", color:"#ff3860", on:true, names:["LCDStatusBoard"] },

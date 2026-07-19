@@ -52,6 +52,7 @@ for (const [key, id] of Object.entries({
   grid: "tGrid",
   coll: "tColl",
   fg: "tFg",
+  conn: "tConn",
   labels: "tLabels",
   dim: "tDim",
   ruler: "tRuler",

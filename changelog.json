@@ -3,6 +3,12 @@
   {
    "date": "2026-07-19",
    "tag": "new",
+   "title": "See a path's whole circulation as arrows",
+   "detail": "The new \"Connection arrows\" display toggle (or the a key) draws every door, express well, bird portal, teleporter and path transition linked to where it leads, turning the path into a readable routing flowchart. Two-way pairs collapse into one double-headed arrow, transitions to other paths show as short labelled stubs, colours tell the kinds apart, and hovering an object spotlights just its own arrows."
+  },
+  {
+   "date": "2026-07-19",
+   "tag": "new",
    "title": "Hover a door to see its other end",
    "detail": "Hovering a linked object (a door, teleporter, well or portal) puts a dashed outline on the object it leads to, whenever both ends sit on the current path. You see where you'd come out before committing to the click."
   },
