@@ -138,6 +138,7 @@ body.fullnames .btnrow button {
   padding: 2.5px 2px;
   cursor: pointer;
   user-select: none;
+  position: relative;
 }
 .filters input {
   position: absolute;
