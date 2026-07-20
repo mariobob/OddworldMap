@@ -37,15 +37,16 @@ test("sanitizeAnnotations: copies only known sections with expected types", () =
   });
 });
 
-test("pathDisplayName: the disc name wins, curated fills the gap, else null", () => {
+test("pathDisplayName: a curated name overrides, the disc name shows otherwise", () => {
   setAnnotations({ AO: { paths: { R1: { 15: "Curated" } } } });
-  assert.equal(pathDisplayName("AO", "R1", { id: 15, name: "Disc Name" }), "Disc Name");
-  assert.equal(pathDisplayName("AO", "R1", { id: 15, name: null }), "Curated");
+  assert.equal(pathDisplayName("AO", "R1", { id: 15, name: "Disc Name" }), "Curated");
   assert.equal(pathDisplayName("AO", "R1", { id: 15 }), "Curated"); // numeric id vs string key
+  assert.equal(pathDisplayName("AO", "R1", { id: 16, name: "Disc Name" }), "Disc Name");
   assert.equal(pathDisplayName("AO", "R1", { id: 16 }), null);
   assert.equal(pathDisplayName("AO", "R2", { id: 15 }), null);
   assert.equal(pathDisplayName("AE", "R1", { id: 15 }), null); // unannotated game
   setAnnotations(null);
+  assert.equal(pathDisplayName("AO", "R1", { id: 15, name: "Disc Name" }), "Disc Name");
   assert.equal(pathDisplayName("AO", "R1", { id: 15 }), null);
 });
 
@@ -58,8 +59,8 @@ test("levelInfo: hit, miss, and unloaded game", () => {
 });
 
 // ---- schema sanity over the shipped file, cross-checked against the shipped
-// map data: annotations are hand-curated, so typos and dead entries (a name
-// shadowed by a disc name, a note for a level the map renders) must not ship
+// map data: annotations are hand-curated, so typos and dead entries (a note
+// for a level the map renders) must not ship
 test("annotations.json entries all point at live targets", () => {
   const ann = load("annotations.json");
   const data = { AO: load("map_data_ao.json"), AE: load("map_data_ae.json") };
@@ -89,11 +90,17 @@ test("annotations.json entries all point at live targets", () => {
         assert.match(id, /^(0|[1-9]\d*)$/, `${game} ${short} P${id}: canonical id key`);
         const P = L.paths.find((p) => p.id === +id);
         assert.ok(P, `${game} ${short} P${id}: path exists`);
-        assert.ok(!P.name, `${game} ${short} P${id}: not shadowed by the disc name "${P.name}"`);
         assert.ok(
           typeof name === "string" && name && name === name.trim(),
           `${game} ${short} P${id}: trimmed non-empty name`,
         );
+        // an override may refine a disc name, never erase it: the authentic
+        // label must stay visible inside the curated one ("Zulag 2 — Lobby")
+        if (P.name)
+          assert.ok(
+            name.includes(P.name),
+            `${game} ${short} P${id}: override "${name}" keeps the disc name "${P.name}"`,
+          );
       }
     }
   }

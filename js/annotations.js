@@ -1,5 +1,6 @@
-// Curated names and notes the discs don't provide, from annotations.json
-// (hand-edited source; see README). Fallback only: in-game names always win.
+// Curated names and notes from annotations.json (hand-edited source; see
+// README). A curated name is a deliberate override — the in-game name shows
+// only where no curated one is defined.
 // The raw file shape stays contained here — callers get plain lookups.
 // Leaf module: no imports, importable in bare Node.
 
@@ -37,9 +38,9 @@ export function setAnnotations(raw) {
   ann = sanitizeAnnotations(raw);
 }
 
-// display name for a path: the disc name, else the curated one, else null
+// display name for a path: the curated override, else the disc name, else null
 export function pathDisplayName(gameId, levelShort, path) {
-  return path.name || ann[gameId]?.paths?.[levelShort]?.[String(path.id)] || null;
+  return ann[gameId]?.paths?.[levelShort]?.[String(path.id)] || path.name || null;
 }
 
 // {name, note?} for a level the map doesn't render, or null
