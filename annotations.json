@@ -6,7 +6,69 @@
     "note": "the menu level (LevelIds::eMenu_0); the attract demos in R1 P19 and L1 P1 return to it, hence the two PathTransitions pointing here"
    }
   },
-  "paths": {}
+  "paths": {
+   "R1": {
+    "15": "Before Packaging",
+    "16": "Packaging",
+    "18": "After Packaging",
+    "19": "Down the Shaft",
+    "20": "To the Stockyards"
+   },
+   "E1": {
+    "1": "Free-Fire Zone",
+    "2": "Free-Fire Zone II",
+    "3": "Free-Fire Zone III",
+    "4": "Free-Fire Zone IV",
+    "6": "Stockyards Entrance"
+   },
+   "F1": {
+    "1": "The Bell Tower",
+    "8": "The Info Tower",
+    "9": "Outside the Temple"
+   },
+   "F2": {
+    "1": "Temple Entrance",
+    "2": "Trial of the Rolling Boulder",
+    "3": "Trial of the Swinging Boulder",
+    "4": "Trial of the Rolling Boulder II",
+    "5": "Trial of the Falling Boulder",
+    "6": "Trial of the No Boulder",
+    "7": "Trial of the Swinging Boulder II",
+    "8": "The Trials"
+   },
+   "F4": {
+    "9": "Paramonian Nests"
+   },
+   "D1": {
+    "1": "The Bell Tower",
+    "2": "The Rings",
+    "7": "Mine Run",
+    "9": "Outside the Temple"
+   },
+   "D2": {
+    "1": "Temple Entrance",
+    "2": "Underground",
+    "3": "Bullet Run",
+    "4": "Carol of the Wells",
+    "5": "Bat Run",
+    "6": "Scrab Battle Royale",
+    "7": "Scrab Run",
+    "8": "Scrab Battle Royale II",
+    "9": "Carol of the Wells II",
+    "10": "The Trials"
+   },
+   "D7": {
+    "11": "Scrabanian Nests"
+   },
+   "E2": {
+    "2": "Free-Fire Zone II Revisited",
+    "3": "Free-Fire Zone III Revisited",
+    "4": "Free-Fire Zone IV Revisited"
+   },
+   "R6": {
+    "6": "To the Board Room"
+   }
+  }
  },
  "AE": {
   "levels": {},

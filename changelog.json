@@ -2,6 +2,12 @@
  "entries": [
   {
    "date": "2026-07-20",
+   "tag": "new",
+   "title": "Oddysee's areas carry their community names",
+   "detail": "Most paths in Abe's Oddysee now have a name (the temple trials, the Free-Fire Zone crossings, the bell towers, the nests) drawn from New 'n' Tasty's chapter names and community walkthroughs. Hover a path button (or turn on \"Show full names\" in Settings) to see them; the few names the game defines itself, like the zulags, stay exactly as the disc says."
+  },
+  {
+   "date": "2026-07-20",
    "tag": "fixed",
    "title": "Doors to nowhere explain themselves",
    "detail": "Some doors point at places the map doesn't render: two Oddysee transitions lead to S1, the main-menu level where the title-screen demos return, and dozens of Exoddus one-way doors (the kind that shut behind Abe) carry placeholder destinations like MI P0. Hovering one now says where it leads and that it's off the map, instead of offering a follow that went nowhere (or worse, dropped you on the wrong path)."

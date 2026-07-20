@@ -62,5 +62,6 @@ Structure layouts (TLV types, path tables, collision records) come from the aliv
 ## Credits & licensing
 
 - Game data formats reverse-engineered by the [AliveTeam / alive_reversing](https://github.com/AliveTeam/alive_reversing) project.
+- Curated path names in [annotations.json](annotations.json) draw on Oddworld: New 'n' Tasty's official chapter names and on the [Barebones walkthrough](https://steamcommunity.com/sharedfiles/filedetails/?id=1812678216) on Steam, whose per-path titles most of the Oddysee names follow; names the games define themselves always take precedence.
 - `tools/PSXMDECDecoder.{cpp,h}` are GPL-2.0 (see file headers; originally from libbs / psxdev). The rest of the tooling and the viewer were written for this project.
 - Oddworld: Abe's Oddysee is © Oddworld Inhabitants. This project ships no game code and is intended for research, speedrunning and preservation; the extracted imagery remains the property of its copyright holders.
