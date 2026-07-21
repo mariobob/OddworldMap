@@ -325,15 +325,39 @@ def load_cache(game):
 # ------------------------------------------------- object field schema
 
 # types whose full disc field set is extracted raw into `fields`, matched by
-# name (per-game type ids differ)
-GAMEPLAY_FIELD_TYPES = {"Mudokon", "Slig", "Slog"}
+# name (per-game type ids differ). Gameplay objects only — pure scenery (hoists,
+# edges, zones, bounds, effects) and cosmetic pickups are left out to keep the
+# data lean; a name absent here just gets no `fields`.
+GAMEPLAY_FIELD_TYPES = {
+    # creatures + spawners
+    "Mudokon", "SlingMudokon", "RingMudokon", "LiftMudokon", "TorturedMudokon", "MudokonPathTrans",
+    "Slig", "Slog", "Paramite", "Scrab", "Bat", "Fleech", "Slurg", "Greeter", "Glukkon",
+    "FlyingSlig", "CrawlingSlig", "SligGetPants", "SligGetWings", "Bees", "SlogHut", "BeeSwarmHole",
+    "SligSpawner", "SlogSpawner", "ScrabSpawner", "SlurgSpawner", "FlyingSligSpawner", "ZzzSpawner",
+    # doors / travel
+    "Door", "SlamDoor", "TrainDoor", "MineCar", "PathTransition", "BirdPortal", "BirdPortalExit",
+    "WellLocal", "LocalWell", "WellExpress", "Teleporter",
+    # switches / triggers
+    "Switch", "Lever", "InvisibleSwitch", "FootSwitch", "BellHammer", "HandStone", "IdSplitter",
+    "SecurityOrb", "SecurityDoor", "BellSongStone", "ChimeLock", "MovieHandStone", "GlukkonSwitch",
+    "CrawlingSligButton", "MultiSwitchController", "WheelSyncer", "WorkWheel", "SlapLock", "PullRingRope",
+    # hazards
+    "DeathDrop", "TimedMine", "Mine", "UXB", "ElectricWall", "DoorFlame", "MovingBomb", "MeatSaw",
+    "BoomMachine", "DeathClock", "GasEmitter", "GasCountdown", "TrapDoor", "FallingItem",
+    "RollingBall", "RollingRock", "ZBall", "Drill", "LaughingGas", "ExplosionSet", "BrewMachine", "Water",
+    # info / interactables
+    "LCDStatusBoard", "LCDScreen", "LCD", "MovieStone", "DemoPlaybackStone", "HintFly",
+    "ContinuePoint", "AbeStart", "ElumStart",
+}
 
 def parse_object_schema(game_key):
     """per-type payload field layout from the relive_api CTOR blocks: each
     ADD("Name", mTlv.field_XX_...) gives a field's payload word (from the hex
-    offset in the member name) and a snake_cased name; members without a
-    field_XX offset fall back to sequential position. Values stay raw —
-    prettifying is a display concern."""
+    offset in the member name) and a snake_cased name. Fields are sequential
+    s16, so the offset holds except where the decomp names sequential members
+    with one offset (Door's 8 hub ids are all "field_22_hubN"): a non-increasing
+    offset means the name lies, so fall back to the next word. Members with no
+    field_XX offset are positional too. Values stay raw — prettifying is display."""
     src = (REPO / f"Source/Tools/relive_api/Tlvs{game_key}.hpp").read_text()
     base = 0x18 if game_key == "AO" else 0x10
     ctor = f"CTOR_{game_key}"
@@ -349,11 +373,19 @@ def parse_object_schema(game_key):
         if not head:
             continue
         fields = []
-        for pos, am in enumerate(re.finditer(r'\bADD(?:_HIDDEN)?\(\s*"([^"]+)",\s*mTlv\.([^\n;]+?)\s*\)', m.group(1))):
+        last = -1
+        for am in re.finditer(r'\bADD(?:_HIDDEN)?\(\s*"([^"]+)",\s*mTlv\.([^\n;]+?)\s*\)', m.group(1)):
             off = re.match(r"field_([0-9A-Fa-f]+)_", am.group(2))
-            word = (int(off.group(1), 16) - base) // 2 if off else pos
-            if word >= 0:
-                fields.append([word, norm(am.group(1))])
+            if off:
+                word = (int(off.group(1), 16) - base) // 2
+                if word < 0:
+                    continue
+                if word <= last:
+                    word = last + 1
+            else:
+                word = last + 1
+            fields.append([word, norm(am.group(1))])
+            last = word
         if fields:
             schema[int(head.group(1))] = fields
     return schema
@@ -385,12 +417,6 @@ def tlv_extra_ao(t, blob, pos, length, level_short):
         v = s16s(3)
         if len(v) >= 2:
             e = {"to_level": level_short.get(v[0], v[0]), "to_path": v[1]}
-    elif t in (26,):
-        v = s16s(2)
-        if v: e = {"switch_id": v[0], "action": v[1] if len(v) > 1 else None}
-    elif t in (81, 60):
-        v = s16s(2)
-        if v: e = {"switch_id": v[0]}
     elif t == 0:
         v = s16s(3)
         if v: e = {"zone": v[0]}
@@ -459,16 +485,10 @@ def tlv_extra_ae(t, blob, pos, length, level_short):
         if len(v) >= 7:
             e = {"to_level": level_short.get(v[0], v[0]), "to_path": v[1], "to_cam": v[2],
                  "door#": v[4] & 0xFFFF, "target_door#": v[6]}
-            if v[5]:
-                e["switch_id"] = v[5]
     elif t == 1:  # PathTransition
         v = s16s(3)
         if len(v) >= 2:
             e = {"to_level": level_short.get(v[0], v[0]), "to_path": v[1]}
-    elif t == 17:  # Lever: action, scale, sounds..., switch id
-        v = s16s(6)
-        if len(v) >= 6:
-            e = {"switch_id": v[5], "action": v[0]}
     elif t == 23:  # WellExpress: WellBase then exit x/y, disabled dest, enabled dest (each with a well id)
         v = s16s(14)
         if len(v) >= 14:
@@ -502,8 +522,6 @@ def tlv_extra_ae(t, blob, pos, length, level_short):
         if len(v) >= 6:
             e = {"tp#": v[0], "target_tp#": v[1]}
             e.update(dest(v[4], v[3], v[2]))
-            if v[5]:
-                e["switch_id"] = v[5]
     elif t == 28:  # BirdPortal: side, dest level/path/camera, scale, movie, type
         v = s16s(7)
         if len(v) >= 7:

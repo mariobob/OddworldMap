@@ -1,39 +1,48 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { visibleFields, prettify, fieldEntries, DEFAULT_VISIBLE } from "../../js/fields.js";
+import { visibleFields, prettify, fieldEntries, defaultVisible } from "../../js/fields.js";
 
-test("visibleFields: default shows DEFAULT_VISIBLE, 'all' shows everything", () => {
-  assert.equal(visibleFields("Slig", undefined), DEFAULT_VISIBLE);
-  assert.equal(visibleFields("Slig", { mode: "default" }), DEFAULT_VISIBLE);
+test("visibleFields: default is the type's default set, 'all' is everything", () => {
+  assert.deepEqual(visibleFields("Slig", undefined), defaultVisible("Slig"));
+  assert.deepEqual(visibleFields("Slig", { mode: "default" }), defaultVisible("Slig"));
   assert.equal(visibleFields("Slig", { mode: "all" }), "all");
 });
 
-test("visibleFields: 'more' uses per-type picks, else the defaults", () => {
-  // no pick for this type yet -> the picker starts from the defaults
-  assert.equal(visibleFields("Slig", { mode: "more", byType: {} }), DEFAULT_VISIBLE);
+test("defaultVisible: type-scoped fields join the global defaults only for their type", () => {
+  assert.ok(
+    defaultVisible("Slig").has("start_state") && defaultVisible("Slig").has("shoot_on_sight_delay"),
+  );
+  assert.ok(!defaultVisible("Door").has("start_state")); // Door's start_state is a different thing
+  assert.ok(defaultVisible("Mudokon").has("state") && !defaultVisible("Slig").has("state"));
+});
+
+test("visibleFields: 'more' uses per-type picks, else the type defaults", () => {
+  // no pick for this type yet -> the picker starts from the type's defaults
+  assert.deepEqual(visibleFields("Slig", { mode: "more", byType: {} }), defaultVisible("Slig"));
   // a per-type pick -> exactly those keys (the picker's contract)
   const picked = visibleFields("Slig", { mode: "more", byType: { Slig: ["start_state"] } });
   assert.ok(picked instanceof Set && picked.has("start_state") && picked.size === 1);
   // an explicit empty pick means "show nothing", not "fall back to defaults"
   const none = visibleFields("Slig", { mode: "more", byType: { Slig: [] } });
   assert.ok(none instanceof Set && none.size === 0);
-  // a pick for a different type doesn't apply -> that type keeps the defaults
-  assert.equal(
+  // a pick for a different type doesn't apply -> that type keeps its defaults
+  assert.deepEqual(
     visibleFields("Slog", { mode: "more", byType: { Slig: ["start_state"] } }),
-    DEFAULT_VISIBLE,
+    defaultVisible("Slog"),
   );
 });
 
-test("prettify: enum ints map to text, Choice fields to booleans, unknowns raw", () => {
-  assert.equal(prettify("job", 2), "sit chant");
-  assert.equal(prettify("state", 4), "health ring giver");
-  assert.equal(prettify("emotion", 2), "sad");
-  assert.equal(prettify("start_state", 0), "listening");
-  assert.equal(prettify("asleep", 1), true); // Choice -> boolean, not 1
-  assert.equal(prettify("asleep", 0), false);
-  assert.equal(prettify("deaf", 1), true);
-  assert.equal(prettify("shoot_on_sight_delay", 0), 0); // not an enum: raw
-  assert.equal(prettify("job", 9), 9); // out-of-range: raw
+test("prettify: enums by field name, type-scoped where names collide, Choice to bool", () => {
+  assert.equal(prettify("Mudokon", "job", 2), "sit chant");
+  assert.equal(prettify("Mudokon", "state", 4), "health ring giver");
+  assert.equal(prettify("Mudokon", "emotion", 2), "sad");
+  assert.equal(prettify("Slig", "start_state", 0), "listening");
+  // start_state is a lock state on a Door, not the Slig AI enum -> raw
+  assert.equal(prettify("Door", "start_state", 0), 0);
+  assert.equal(prettify("Slog", "asleep", 1), true); // Choice -> boolean, not 1
+  assert.equal(prettify("Slog", "asleep", 0), false);
+  assert.equal(prettify("Slig", "shoot_on_sight_delay", 0), 0); // not an enum: raw
+  assert.equal(prettify("Mudokon", "job", 9), 9); // out-of-range: raw
 });
 
 test("fieldEntries: asleep shows both states; deaf/blind show only when set", () => {
@@ -68,13 +77,21 @@ test("fieldEntries: default surfaces notable fields, prettified; nav extra alway
   const all = Object.fromEntries(fieldEntries(slig, { mode: "all" }));
   assert.equal(all.pause_time, 10); // revealed
   assert.equal(all.bullet_shoot_count, 3);
-  assert.equal(all.scale, 0);
+  assert.equal(all.scale, "full"); // Scale_short prettified
 
   // a nav object's derived extra always shows, independent of field policy
   const door = { name: "Door", extra: { to_level: "R2", "door#": 4 }, fields: { door_closed: 1 } };
   const de = Object.fromEntries(fieldEntries(door, { mode: "default" }));
   assert.equal(de.to_level, "R2");
   assert.equal(de["door#"], 4);
+  assert.ok(!("door_closed" in de)); // a raw Door field: not default-visible
+});
+
+test("fieldEntries: a shared field name is prettified by the owning type only", () => {
+  const door = { name: "Door", extra: {}, fields: { start_state: 1 } };
+  assert.equal(Object.fromEntries(fieldEntries(door, { mode: "all" })).start_state, 1); // raw
+  const slig = { name: "Slig", extra: {}, fields: { start_state: 1 } };
+  assert.equal(Object.fromEntries(fieldEntries(slig, { mode: "all" })).start_state, "patrol");
 });
 
 test("fieldEntries: zero-valued switch ids are hidden, non-zero shown", () => {
@@ -85,4 +102,15 @@ test("fieldEntries: zero-valued switch ids are hidden, non-zero shown", () => {
 
   const mud2 = { name: "Mudokon", extra: {}, fields: { job: 1, rescue_switch_id: 70 } };
   assert.equal(Object.fromEntries(fieldEntries(mud2, { mode: "default" })).rescue_switch_id, 70);
+});
+
+test("fieldEntries: a wired object's switch_id/action are default-visible from fields", () => {
+  const sw = { name: "Switch", extra: {}, fields: { switch_id: 3, action: 0, scale: 0 } };
+  const e = Object.fromEntries(fieldEntries(sw, { mode: "default" }));
+  assert.equal(e.switch_id, 3);
+  assert.equal(e.action, 0); // action 0 is a real value, shown
+  assert.ok(!("scale" in e)); // a fields-only key still governed by the picker
+
+  const unwired = { name: "Switch", extra: {}, fields: { switch_id: 0, action: 0 } };
+  assert.ok(!("switch_id" in Object.fromEntries(fieldEntries(unwired, { mode: "default" })))); // 0 hidden
 });

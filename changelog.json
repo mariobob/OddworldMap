@@ -2,6 +2,12 @@
  "entries": [
   {
    "date": "2026-07-22",
+   "tag": "improved",
+   "title": "Every object's fields, not just creatures'",
+   "detail": "\"Show more object fields\" now reaches well beyond Mudokons and enemies: doors, switches, levers, mines, wells and the rest of the game's gameplay objects reveal what the developers stored on them (a door's lock state and which hubs it links, a switch's wiring, a mine's setup, and much more). Pick the fields you care about per type in the Fields panel, or just search for them."
+  },
+  {
+   "date": "2026-07-22",
    "tag": "fixed",
    "title": "Exoddus measurements read true world units",
    "detail": "The ruler and the route planner measured on the artwork, and Exoddus artwork squeezes each screen's 375×260 world units into 368×240 pixels, so lengths read up to 8% short, and hovering a collision line (which has always measured the real coordinates) disagreed with the ruler over the same wall. Both tools now convert to world units: a full Exoddus screen measures 375 across (exactly 15 grid squares) and 260 down, and all the readouts agree. Oddysee numbers were already exact and are unchanged."

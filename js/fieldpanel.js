@@ -5,7 +5,7 @@
 import { $ } from "./dom.js";
 import { state } from "./state.js";
 import { CATS, catOf } from "./config.js";
-import { DEFAULT_VISIBLE } from "./fields.js";
+import { defaultVisible } from "./fields.js";
 import { getSettings, fieldPrefsFor, persistSettings } from "./settings.js";
 
 const section = $("fieldPanel");
@@ -32,7 +32,8 @@ function typesOnPath() {
 // the fields currently shown for a type: its picks, or the defaults it carries
 function shownFor(name, fields) {
   const picks = prefs().byType[name];
-  return new Set(fields.filter((f) => (picks ? picks.includes(f) : DEFAULT_VISIBLE.has(f))));
+  const def = defaultVisible(name);
+  return new Set(fields.filter((f) => (picks ? picks.includes(f) : def.has(f))));
 }
 
 function renderType({ name, fields }) {

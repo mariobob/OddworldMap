@@ -195,31 +195,31 @@
    "hub_1_id"
   ],
   [
-   9,
+   10,
    "hub_2_id"
   ],
   [
-   9,
+   11,
    "hub_3_id"
   ],
   [
-   9,
+   12,
    "hub_4_id"
   ],
   [
-   9,
+   13,
    "hub_5_id"
   ],
   [
-   9,
+   14,
    "hub_6_id"
   ],
   [
-   9,
+   15,
    "hub_7_id"
   ],
   [
-   9,
+   16,
    "hub_8_id"
   ],
   [
@@ -537,43 +537,43 @@
    "teleporter_switch_id"
   ],
   [
-   0,
+   1,
    "other_teleporter_switch_id"
   ],
   [
-   0,
+   2,
    "camera"
   ],
   [
-   0,
+   3,
    "path"
   ],
   [
-   0,
+   4,
    "level"
   ],
   [
-   0,
+   5,
    "switch_id"
   ],
   [
-   0,
+   6,
    "scale"
   ],
   [
-   0,
+   7,
    "camera_swap_effect"
   ],
   [
-   0,
+   8,
    "movie_number"
   ],
   [
-   0,
+   9,
    "electric_x"
   ],
   [
-   0,
+   10,
    "electric_y"
   ]
  ],
@@ -829,11 +829,11 @@
    "camera_id_1"
   ],
   [
-   1,
+   2,
    "camera_id_2"
   ],
   [
-   1,
+   3,
    "camera_id_3"
   ],
   [
@@ -891,23 +891,23 @@
    "max_drops"
   ],
   [
-   0,
+   1,
    "switch_id"
   ],
   [
-   0,
+   2,
    "splash_time"
   ],
   [
-   0,
+   3,
    "splash_x_velocity"
   ],
   [
-   0,
+   4,
    "splash_y_velocity"
   ],
   [
-   0,
+   5,
    "water_duration"
   ]
  ],
@@ -1133,63 +1133,63 @@
    "scale"
   ],
   [
-   0,
+   1,
    "spawn_delay_state"
   ],
   [
-   0,
+   2,
    "spawn_move_delay"
   ],
   [
-   0,
+   3,
    "patrol_pause_min"
   ],
   [
-   0,
+   4,
    "patrol_pause_max"
   ],
   [
-   0,
+   5,
    "start_direction"
   ],
   [
-   0,
+   6,
    "panic_delay"
   ],
   [
-   0,
+   7,
    "give_up_chase_delay"
   ],
   [
-   0,
+   8,
    "pre_chase_delay"
   ],
   [
-   0,
+   9,
    "slig_bound_persist_id"
   ],
   [
-   0,
+   10,
    "alerted_listen_time"
   ],
   [
-   0,
+   11,
    "spawner_switch_id"
   ],
   [
-   0,
+   12,
    "grenade_delay"
   ],
   [
-   0,
+   13,
    "max_velocity"
   ],
   [
-   0,
+   14,
    "launch_grenade_switch_id"
   ],
   [
-   0,
+   15,
    "persistant"
   ]
  ],
@@ -1487,47 +1487,47 @@
    "scale"
   ],
   [
-   0,
+   1,
    "min_off_time"
   ],
   [
-   0,
+   2,
    "max_off_time"
   ],
   [
-   0,
+   3,
    "switch_id"
   ],
   [
-   0,
+   4,
    "behavior"
   ],
   [
-   0,
+   5,
    "speed"
   ],
   [
-   0,
+   6,
    "start_state_on"
   ],
   [
-   0,
+   7,
    "off_speed"
   ],
   [
-   0,
+   8,
    "min_off_time_speed_change"
   ],
   [
-   0,
+   9,
    "max_off_time_speed_change"
   ],
   [
-   0,
+   10,
    "start_position_bottom"
   ],
   [
-   0,
+   11,
    "start_direction"
   ]
  ],
@@ -1901,15 +1901,15 @@
    "time_until_turning_around"
   ],
   [
-   0,
+   1,
    "start_direction"
   ],
   [
-   0,
+   2,
    "scale"
   ],
   [
-   0,
+   3,
    "switch_id"
   ]
  ],
@@ -2671,15 +2671,15 @@
    "time_until_turning_around"
   ],
   [
-   0,
+   1,
    "start_direction"
   ],
   [
-   0,
+   2,
    "scale"
   ],
   [
-   0,
+   3,
    "switch_id"
   ],
   [
@@ -2687,11 +2687,11 @@
    "spawn_interval"
   ],
   [
-   4,
+   5,
    "max_slurgs"
   ],
   [
-   4,
+   6,
    "spawner_switch_id"
   ]
  ],

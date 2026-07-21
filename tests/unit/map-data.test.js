@@ -236,6 +236,35 @@ test("AO R2 P8 has the shoot-on-sight Slig", () => {
   assert.equal(slig.fields.start_state, 1); // patrol
 });
 
+// the extraction now covers gameplay objects broadly, and the schema parser
+// spreads the decomp's union-named Door hub ids across their real words
+test("gameplay objects carry the field archive; Door hubs are distinct words", () => {
+  for (const [file, id] of [
+    ["map_data_ao.json", "AO"],
+    ["map_data_ae.json", "AE"],
+  ]) {
+    const data = load(file);
+    const withFields = new Set();
+    let doorHubsVary = false;
+    for (const L of data.levels)
+      for (const P of L.paths)
+        for (const t of P.tlvs) {
+          if (t.fields) withFields.add(t.name);
+          if (t.name === "Door" && t.fields) {
+            assert.ok("start_state" in t.fields, `${id} Door lock state`); // door_closed is AO-only
+            const hubs = [1, 2, 3, 4, 5, 6, 7, 8].map((i) => t.fields[`hub_${i}_id`]);
+            if (new Set(hubs).size > 1) doorHubsVary = true;
+          }
+        }
+    assert.ok(
+      doorHubsVary,
+      `${id}: Door hub ids never vary — the schema parser's union fix regressed`,
+    );
+    assert.ok(withFields.size > 20, `${id}: only ${withFields.size} types carry fields`);
+    for (const t of ["Door", "Mine"]) assert.ok(withFields.has(t), `${id} ${t} has fields`); // both games
+  }
+});
+
 // the shipped data contains exactly three genuinely self-referencing paired
 // objects. Dangling destinations (e.g. AE MI P11) must not be flagged, and
 // neither must 0-target doors whose camera merely holds them (SV P6, BR P21
