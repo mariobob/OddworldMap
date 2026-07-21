@@ -1,6 +1,6 @@
 // Pointer input on the map (mouse, touch, pen), hover inspection, and the menu toggle.
 
-import { esc, extrasText, segDist } from "./util.js";
+import { esc, extrasText, formatDist, segDist } from "./util.js";
 import { KEY_PAN_PX, KEY_ZOOM_STEP, TOAST_MS, catOf, LINE_COLORS, LINE_NAMES } from "./config.js";
 import {
   $,
@@ -378,7 +378,7 @@ function updateHover() {
             const len = Math.round(Math.hypot(x2 - x1, y2 - y1));
             return (
               `<div><span class="t" style="color:${LINE_COLORS[t] || "#999"}">${LINE_NAMES[t] || "Line type " + t}</span>` +
-              ` <span class="e">(${x1},${y1})→(${x2},${y2}) · ${len}u ≈ ${(len / 25).toFixed(1)} grid</span></div>`
+              ` <span class="e">(${x1},${y1})→(${x2},${y2}) · ${formatDist(len)}</span></div>`
             );
           }),
         )

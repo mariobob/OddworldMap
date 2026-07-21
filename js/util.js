@@ -1,5 +1,7 @@
 // Small pure helpers shared across modules.
 
+import { GRID_UNIT } from "./config.js";
+
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
 export function esc(t) {
@@ -15,6 +17,9 @@ export const extrasText = (t, sep = " ") =>
     .filter(([, v]) => v !== null && v !== "")
     .map(([k, v]) => `${k}=${v}`)
     .join(sep);
+
+// a length in world units with its grid-square equivalent
+export const formatDist = (len) => `${Math.round(len)}u ≈ ${(len / GRID_UNIT).toFixed(1)} grid`;
 
 export function segDist(px, py, x1, y1, x2, y2) {
   const dx = x2 - x1,

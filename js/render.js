@@ -1,5 +1,6 @@
 // Canvas rendering: cameras, overlays, markers, and the image caches.
 
+import { formatDist } from "./util.js";
 import { CACHE_MAX_IMAGES, CONN_COLORS, FLASH_MS, LINE_COLORS, catOf } from "./config.js";
 import { $, cv, ctx, cssVar } from "./dom.js";
 import { state, GEO, CELL_W, CELL_H, dX, dY } from "./state.js";
@@ -370,7 +371,7 @@ export function draw() {
       ctx.fillStyle = "#ffffff";
       ctx.fill();
     }
-    const label = `${Math.round(Math.abs(dx))} × ${Math.round(Math.abs(dy))} · ${Math.round(len)}u ≈ ${(len / 25).toFixed(1)} grid`;
+    const label = `${Math.round(Math.abs(dx))} × ${Math.round(Math.abs(dy))} · ${formatDist(len)}`;
     ctx.font = `${13 / cam.z}px sans-serif`;
     const midx = (ruler.x1 + ruler.x2) / 2,
       midy = (ruler.y1 + ruler.y2) / 2 - 10 / cam.z;

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { clamp, esc, extrasText, segDist } from "../../js/util.js";
+import { clamp, esc, extrasText, formatDist, segDist } from "../../js/util.js";
 
 test("clamp", () => {
   assert.equal(clamp(5, 0, 10), 5);
@@ -18,6 +18,12 @@ test("extrasText skips null and empty values but keeps 0", () => {
   assert.equal(extrasText(t), "door#=0 to_path=3");
   assert.equal(extrasText(t, "  "), "door#=0  to_path=3");
   assert.equal(extrasText({ name: "Slig" }), "");
+});
+
+test("formatDist rounds the units and converts to 25-unit grid squares", () => {
+  assert.equal(formatDist(0), "0u ≈ 0.0 grid");
+  assert.equal(formatDist(50), "50u ≈ 2.0 grid");
+  assert.equal(formatDist(37.4), "37u ≈ 1.5 grid");
 });
 
 test("segDist point-to-segment distance", () => {
