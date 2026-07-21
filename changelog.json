@@ -2,6 +2,12 @@
  "entries": [
   {
    "date": "2026-07-21",
+   "tag": "new",
+   "title": "Plot a route and share it as a link",
+   "detail": "The new \"Route planner\" display toggle (or the r key) turns clicks into waypoints: every leg is labelled with its length, and a bar at the top totals the route in world units and grid squares. This is the ruler's big sibling, made for planning and practising runs. Backspace (or the bar's undo) removes the last point. The whole route travels in the page address, so copying the link shares it exactly as plotted and it shows up in PNG exports too; whoever opens it can still click doors and browse freely, the route stays put until they switch paths or clear it."
+  },
+  {
+   "date": "2026-07-21",
    "tag": "fixed",
    "title": "The ruler keeps its crosshair",
    "detail": "Arming the ruler turns the cursor into a crosshair, but the first mouse move used to snap it straight back to the ordinary pointer. The crosshair now stays for as long as the ruler is armed."

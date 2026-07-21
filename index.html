@@ -104,6 +104,10 @@
         <label
           ><input type="checkbox" id="tRuler" autocomplete="off" /> Ruler (drag to measure)</label
         >
+        <label
+          ><input type="checkbox" id="tRoute" autocomplete="off" /> Route planner (click
+          waypoints)</label
+        >
         <button id="exportBtn" title="save the current view as an image">Export view as PNG</button>
       </div>
       <h2>
@@ -154,6 +158,11 @@
       </div>
       <div id="help">drag / arrows = pan · wheel / ± = zoom · hover = inspect · ? = shortcuts</div>
       <div id="hud"></div>
+      <div id="routeBar" hidden>
+        <span id="routeStats" role="status"></span>
+        <button id="routeUndo" title="Remove the last waypoint (Backspace)">undo</button>
+        <button id="routeClear" title="Remove all waypoints">clear</button>
+      </div>
       <div id="toast"></div>
     </div>
     <div id="whatsnewOverlay">
@@ -199,6 +208,14 @@
           <div class="sc-row">
             <span class="sc-keys"><kbd>a</kbd></span
             >connection arrows
+          </div>
+          <div class="sc-row">
+            <span class="sc-keys"><kbd>r</kbd></span
+            >route planner — clicks add waypoints
+          </div>
+          <div class="sc-row">
+            <span class="sc-keys"><kbd>⌫</kbd></span
+            >remove the last route waypoint
           </div>
           <div class="sc-row">
             <span class="sc-keys"><kbd>/</kbd></span

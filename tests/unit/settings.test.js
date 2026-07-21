@@ -43,7 +43,7 @@ test("sanitizeView: a full snapshot round-trips", () => {
 test("sanitizeView: unknown keys and wrong-typed values are dropped", () => {
   const v = sanitizeView(
     JSON.stringify({
-      show: { grid: false, bogus: true, coll: "yes", ruler: true }, // ruler is never remembered
+      show: { grid: false, bogus: true, coll: "yes", ruler: true, route: true }, // ruler/route are never remembered
       cats: { mud: false, gone: true, door: 1 },
     }),
   );

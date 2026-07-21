@@ -164,7 +164,7 @@ export function draw() {
     ctx.fillRect(0, 0, cv.width, cv.height);
     return;
   }
-  const { cam, path, show, ruler } = state;
+  const { cam, path, show, ruler, route } = state;
   ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
   ctx.fillStyle = COLOR.mapBg;
   ctx.fillRect(0, 0, cv.clientWidth, cv.clientHeight);
@@ -380,6 +380,45 @@ export function draw() {
     ctx.fillRect(midx - tw / 2 - 5 / cam.z, midy - 13 / cam.z, tw + 10 / cam.z, 18 / cam.z);
     ctx.fillStyle = "#ffffff";
     ctx.fillText(label, midx - tw / 2, midy);
+  }
+
+  // route-planner polyline: solid accent (the ruler stays dashed white), a
+  // ring on the start so a shared route reads direction, per-leg lengths
+  if (route) {
+    const col = `rgb(${COLOR.accentRgb})`;
+    ctx.strokeStyle = col;
+    ctx.fillStyle = col;
+    ctx.lineWidth = 2.5 / cam.z;
+    if (route.length > 1) {
+      ctx.beginPath();
+      ctx.moveTo(route[0].x, route[0].y);
+      for (let i = 1; i < route.length; i++) ctx.lineTo(route[i].x, route[i].y);
+      ctx.stroke();
+    }
+    for (const p of route) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 3.5 / cam.z, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.lineWidth = 2 / cam.z;
+    ctx.beginPath();
+    ctx.arc(route[0].x, route[0].y, 6.5 / cam.z, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.font = `${12 / cam.z}px sans-serif`;
+    for (let i = 1; i < route.length; i++) {
+      const a = route[i - 1],
+        b = route[i];
+      const len = Math.hypot(b.x - a.x, b.y - a.y);
+      if (len * cam.z < 60) continue; // zoomed out, the labels would drown the route
+      const label = formatDist(len);
+      const midx = (a.x + b.x) / 2,
+        midy = (a.y + b.y) / 2 - 10 / cam.z;
+      const tw = ctx.measureText(label).width;
+      ctx.fillStyle = `rgba(${COLOR.mapBgRgb},.85)`;
+      ctx.fillRect(midx - tw / 2 - 5 / cam.z, midy - 12 / cam.z, tw + 10 / cam.z, 17 / cam.z);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText(label, midx - tw / 2, midy);
+    }
   }
 
   if (flash) {

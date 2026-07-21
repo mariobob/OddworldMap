@@ -43,10 +43,18 @@ $("fReset").onclick = () => setFilters((c) => catDefaults.get(c.key));
 const showUI = new Map(); // show key -> its checkbox
 function syncShow(key, cb) {
   state.show[key] = cb.checked;
-  if (key === "ruler") {
-    if (!state.show.ruler) state.ruler = null;
-    cv.style.cursor = state.show.ruler ? "crosshair" : "";
+  if (key !== "ruler" && key !== "route") return;
+  if (cb.checked) {
+    const other = key === "ruler" ? "route" : "ruler"; // one measuring tool armed at a time
+    const ocb = showUI.get(other);
+    if (ocb.checked) {
+      ocb.checked = false;
+      syncShow(other, ocb);
+    }
   }
+  if (key === "ruler" && !state.show.ruler) state.ruler = null; // measurements don't outlive the mode
+  cv.style.cursor = state.show.ruler || state.show.route ? "crosshair" : "";
+  if (key === "route") window.dispatchEvent(new CustomEvent("route-changed"));
 }
 for (const [key, id] of Object.entries({
   grid: "tGrid",
@@ -56,6 +64,7 @@ for (const [key, id] of Object.entries({
   labels: "tLabels",
   dim: "tDim",
   ruler: "tRuler",
+  route: "tRoute",
 })) {
   const cb = $(id);
   if (snap && key in snap.show) cb.checked = snap.show[key];

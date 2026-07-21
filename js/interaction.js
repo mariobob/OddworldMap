@@ -23,6 +23,7 @@ import { levelInfo } from "./annotations.js";
 import { toggleShow } from "./sidebar.js";
 import { getSettings } from "./settings.js";
 import { openCamPanel } from "./campanel.js";
+import { addRoutePoint, undoRoutePoint } from "./route.js";
 import { trapDialogKeys } from "./dialog.js";
 import { HAMBURGER_SVG, CLOSE_SVG, LINK_SVG, EXTERNAL_SVG } from "./icons.js";
 
@@ -155,7 +156,7 @@ cv.addEventListener("pointerup", endPointer);
 cv.addEventListener("pointercancel", endPointer);
 
 // the armed measuring tool owns the cursor; hover writes must not overwrite it
-const modeCursor = () => (state.show.ruler ? "crosshair" : "");
+const modeCursor = () => (state.show.ruler || state.show.route ? "crosshair" : "");
 
 cv.addEventListener("pointerleave", () => {
   // moving off the canvas clears hover
@@ -169,6 +170,10 @@ cv.addEventListener("pointerleave", () => {
 
 cv.addEventListener("click", () => {
   if (panMoved || state.show.ruler) return;
+  if (state.show.route) {
+    addRoutePoint(worldAtMouse()); // click-to-add: pan/pinch/wheel gestures stay live
+    return;
+  }
   updateHover(); // taps arrive without a preceding hover move
   for (const t of hoverTlvs) {
     const d = followableDest(t);
@@ -262,9 +267,14 @@ window.addEventListener("keydown", (e) => {
     return;
   }
   if (e.altKey) return;
-  const show = { g: "grid", c: "coll", f: "fg", a: "conn" }[e.key];
+  const show = { g: "grid", c: "coll", f: "fg", a: "conn", r: "route" }[e.key];
   if (show) {
     toggleShow(show);
+    return;
+  }
+  if (e.key === "Backspace" && state.route) {
+    undoRoutePoint();
+    e.preventDefault(); // Backspace must not fall through to history-back
     return;
   }
   if (e.key === "?") {

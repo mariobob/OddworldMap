@@ -153,7 +153,7 @@ export function objectHash(t) {
   const fx = (dX(t.x1) + dX(t.x2)) / 2,
     fy = (dY(t.y1) + dY(t.y2)) / 2;
   const v = focusView(fx, fy, cv.clientWidth, cv.clientHeight);
-  return formatHash(state.data.id, state.lvl.short, state.path.id, v, t);
+  return formatHash(state.data.id, state.lvl.short, state.path.id, v, t, state.route);
 }
 
 // ---- follow (click a door/portal/well to jump to its destination) -----
@@ -201,7 +201,7 @@ const inEmbed = () => document.body.classList.contains("embed");
 // permalink to the current view (what the address bar shows once the
 // debounced hash write lands)
 export function viewHash() {
-  return formatHash(state.data.id, state.lvl.short, state.path.id, state.cam);
+  return formatHash(state.data.id, state.lvl.short, state.path.id, state.cam, null, state.route);
 }
 
 export function scheduleHash(push) {
@@ -256,6 +256,8 @@ export function applyHash() {
       flashAt(fx, fy, true);
     }
   }
+  state.route = p.route; // the hash is the source of truth: absent means no route
+  window.dispatchEvent(new CustomEvent("route-changed"));
   draw();
   return true;
 }

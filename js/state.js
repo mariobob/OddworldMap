@@ -45,4 +45,5 @@ export const state = {
   cam: { x: 0, y: 0, z: 0.3 }, // view offset + zoom (px per draw unit)
   show: {}, // display toggles, mirrored from the sidebar checkboxes
   ruler: null, // {x1, y1, x2, y2} in draw space
+  route: null, // route waypoints [{x, y}, …] in draw space; drawn whenever set (show.route only gates editing)
 };

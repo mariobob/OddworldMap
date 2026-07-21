@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { clamp, esc, extrasText, formatDist, segDist } from "../../js/util.js";
+import { clamp, esc, extrasText, formatDist, routeTotal, segDist } from "../../js/util.js";
 
 test("clamp", () => {
   assert.equal(clamp(5, 0, 10), 5);
@@ -24,6 +24,18 @@ test("formatDist rounds the units and converts to 25-unit grid squares", () => {
   assert.equal(formatDist(0), "0u ≈ 0.0 grid");
   assert.equal(formatDist(50), "50u ≈ 2.0 grid");
   assert.equal(formatDist(37.4), "37u ≈ 1.5 grid");
+});
+
+test("routeTotal sums the polyline legs", () => {
+  assert.equal(routeTotal([{ x: 3, y: 4 }]), 0); // a single waypoint has no legs
+  assert.equal(
+    routeTotal([
+      { x: 0, y: 0 },
+      { x: 30, y: 40 },
+      { x: 30, y: 100 },
+    ]),
+    110,
+  );
 });
 
 test("segDist point-to-segment distance", () => {
