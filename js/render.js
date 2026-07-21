@@ -3,7 +3,7 @@
 import { formatDist } from "./util.js";
 import { CACHE_MAX_IMAGES, CONN_COLORS, FLASH_MS, LINE_COLORS, catOf } from "./config.js";
 import { $, cv, ctx, cssVar } from "./dom.js";
-import { state, GEO, CELL_W, CELL_H, dX, dY } from "./state.js";
+import { state, GEO, CELL_W, CELL_H, dX, dY, worldLen } from "./state.js";
 import { computeConnections } from "./model.js";
 
 // canvas colors shared with the stylesheet, read once from the tokens
@@ -353,7 +353,6 @@ export function draw() {
   if (ruler) {
     const dx = ruler.x2 - ruler.x1,
       dy = ruler.y2 - ruler.y1;
-    const len = Math.hypot(dx, dy);
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 2 / cam.z;
     ctx.setLineDash([6 / cam.z, 5 / cam.z]);
@@ -371,7 +370,7 @@ export function draw() {
       ctx.fillStyle = "#ffffff";
       ctx.fill();
     }
-    const label = `${Math.round(Math.abs(dx))} × ${Math.round(Math.abs(dy))} · ${formatDist(len)}`;
+    const label = `${Math.round(worldLen(dx, 0))} × ${Math.round(worldLen(0, dy))} · ${formatDist(worldLen(dx, dy))}`;
     ctx.font = `${13 / cam.z}px sans-serif`;
     const midx = (ruler.x1 + ruler.x2) / 2,
       midy = (ruler.y1 + ruler.y2) / 2 - 10 / cam.z;
@@ -408,9 +407,10 @@ export function draw() {
     for (let i = 1; i < route.length; i++) {
       const a = route[i - 1],
         b = route[i];
-      const len = Math.hypot(b.x - a.x, b.y - a.y);
-      if (len * cam.z < 60) continue; // zoomed out, the labels would drown the route
-      const label = formatDist(len);
+      const dx = b.x - a.x,
+        dy = b.y - a.y;
+      if (Math.hypot(dx, dy) * cam.z < 60) continue; // zoomed out, the labels would drown the route
+      const label = formatDist(worldLen(dx, dy));
       const midx = (a.x + b.x) / 2,
         midy = (a.y + b.y) / 2 - 10 / cam.z;
       const tw = ctx.measureText(label).width;

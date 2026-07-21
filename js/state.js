@@ -36,6 +36,14 @@ export function wY(dy) {
   return c * GEO.worldH + GEO.winY + (dy - c * CELL_H) / SY;
 }
 
+// world-unit length of a draw-space delta: draw scales world by SX/SY per axis,
+// so lengths convert directly; AO's hidden cell margins deliberately stay uncounted
+export const worldLen = (dx, dy) => Math.hypot(dx / SX, dy / SY);
+
+// total world-unit length over [{x, y}, …] draw-space waypoints
+export const routeTotal = (pts) =>
+  pts.reduce((sum, p, i) => (i ? sum + worldLen(p.x - pts[i - 1].x, p.y - pts[i - 1].y) : 0), 0);
+
 export const state = {
   games: [], // one dataset per available game
   data: null, // current game's dataset

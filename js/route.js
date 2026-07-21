@@ -4,9 +4,9 @@
 // opens visible with click-to-follow still live.
 
 import { MAX_ROUTE_PTS } from "./config.js";
-import { formatDist, routeTotal } from "./util.js";
+import { formatDist } from "./util.js";
 import { $ } from "./dom.js";
-import { state } from "./state.js";
+import { routeTotal, state } from "./state.js";
 import { scheduleDraw } from "./render.js";
 import { scheduleHash } from "./navigate.js";
 

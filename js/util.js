@@ -21,10 +21,6 @@ export const extrasText = (t, sep = " ", prefs) =>
 // a length in world units with its grid-square equivalent
 export const formatDist = (len) => `${Math.round(len)}u ≈ ${(len / GRID_UNIT).toFixed(1)} grid`;
 
-// total polyline length over [{x, y}, …] waypoints
-export const routeTotal = (pts) =>
-  pts.reduce((sum, p, i) => (i ? sum + Math.hypot(p.x - pts[i - 1].x, p.y - pts[i - 1].y) : 0), 0);
-
 export function segDist(px, py, x1, y1, x2, y2) {
   const dx = x2 - x1,
     dy = y2 - y1;

@@ -1,6 +1,16 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { setGeometry, dX, dY, wX, wY, CELL_W, CELL_H } from "../../js/state.js";
+import {
+  setGeometry,
+  dX,
+  dY,
+  wX,
+  wY,
+  CELL_W,
+  CELL_H,
+  worldLen,
+  routeTotal,
+} from "../../js/state.js";
 import { AO_GEOMETRY, AE_GEOMETRY, SYNTH_GEOMETRY } from "./fixtures.js";
 
 const close = (a, b, eps = 1e-6) => assert.ok(Math.abs(a - b) < eps, `${a} ≈ ${b}`);
@@ -38,6 +48,39 @@ test("world<->draw round-trips inside the visible window", () => {
       close(wY(dY(wy)), wy);
     }
   }
+});
+
+test("worldLen converts draw-space lengths to world units", () => {
+  setGeometry(AO_GEOMETRY); // 1:1 — identity
+  assert.equal(worldLen(3, 4), 5);
+  setGeometry(AE_GEOMETRY); // the art squeezes 375x260-unit screens into 368x240
+  close(worldLen(368, 0), 375);
+  close(worldLen(0, -240), 260); // sign-insensitive, like a length should be
+  close(worldLen(368, 240), Math.hypot(375, 260));
+  setGeometry(SYNTH_GEOMETRY); // 2:1 scaling on both axes
+  assert.equal(worldLen(50, 0), 100);
+});
+
+test("routeTotal sums polyline legs in world units", () => {
+  setGeometry(AO_GEOMETRY);
+  assert.equal(routeTotal([{ x: 3, y: 4 }]), 0); // a single waypoint has no legs
+  assert.equal(
+    routeTotal([
+      { x: 0, y: 0 },
+      { x: 30, y: 40 },
+      { x: 30, y: 100 },
+    ]),
+    110,
+  );
+  setGeometry(AE_GEOMETRY);
+  // one full screen down in draw space is 260 world units, not 240
+  close(
+    routeTotal([
+      { x: 0, y: 0 },
+      { x: 0, y: 240 },
+    ]),
+    260,
+  );
 });
 
 test("setGeometry updates the exported cell-size live bindings", () => {

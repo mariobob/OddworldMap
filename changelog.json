@@ -1,6 +1,12 @@
 {
  "entries": [
   {
+   "date": "2026-07-22",
+   "tag": "fixed",
+   "title": "Exoddus measurements read true world units",
+   "detail": "The ruler and the route planner measured on the artwork, and Exoddus artwork squeezes each screen's 375×260 world units into 368×240 pixels, so lengths read up to 8% short, and hovering a collision line (which has always measured the real coordinates) disagreed with the ruler over the same wall. Both tools now convert to world units: a full Exoddus screen measures 375 across (exactly 15 grid squares) and 260 down, and all the readouts agree. Oddysee numbers were already exact and are unchanged."
+  },
+  {
    "date": "2026-07-21",
    "tag": "new",
    "title": "Every object field, yours to pick",
