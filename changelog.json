@@ -1,6 +1,12 @@
 {
  "entries": [
   {
+   "date": "2026-07-21",
+   "tag": "fixed",
+   "title": "The ruler keeps its crosshair",
+   "detail": "Arming the ruler turns the cursor into a crosshair, but the first mouse move used to snap it straight back to the ordinary pointer. The crosshair now stays for as long as the ruler is armed."
+  },
+  {
    "date": "2026-07-20",
    "tag": "new",
    "title": "Oddysee's areas carry their community names",

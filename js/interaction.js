@@ -154,12 +154,15 @@ function endPointer(e) {
 cv.addEventListener("pointerup", endPointer);
 cv.addEventListener("pointercancel", endPointer);
 
+// the armed measuring tool owns the cursor; hover writes must not overwrite it
+const modeCursor = () => (state.show.ruler ? "crosshair" : "");
+
 cv.addEventListener("pointerleave", () => {
   // moving off the canvas clears hover
   if (pointers.size) return; // a captured drag only leaves after release
   hoverTlvs = [];
   tip.style.display = "none";
-  cv.style.cursor = "";
+  cv.style.cursor = modeCursor();
   setHighlight(null);
   setConnFocus(null);
 });
@@ -384,10 +387,11 @@ function updateHover() {
         )
         .join("<hr>") +
       (hoverTlvs.length > 8 ? `<div class="e">+${hoverTlvs.length - 8} more…</div>` : "");
-    if (!panning) cv.style.cursor = hoverTlvs.some((t) => followableDest(t)) ? "pointer" : "";
+    if (!panning)
+      cv.style.cursor = modeCursor() || (hoverTlvs.some((t) => followableDest(t)) ? "pointer" : "");
   } else {
     tip.style.display = "none";
-    if (!panning) cv.style.cursor = "";
+    if (!panning) cv.style.cursor = modeCursor();
   }
   hud.textContent = `world x ${Math.round(wX(w.x))}  y ${Math.round(wY(w.y))}  ·  zoom ${state.cam.z.toFixed(2)}`;
 }
