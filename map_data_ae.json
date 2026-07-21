@@ -208,7 +208,8 @@
        "x2": 900,
        "y2": 360,
        "extra": {
-        "raw": "0 0 0 324 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -219,7 +220,8 @@
        "x2": 975,
        "y2": 360,
        "extra": {
-        "raw": "0 0 0 666 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -241,7 +243,8 @@
        "x2": 925,
        "y2": 360,
        "extra": {
-        "raw": "0 0 0 224 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -252,7 +255,8 @@
        "x2": 850,
        "y2": 360,
        "extra": {
-        "raw": "0 0 0 334 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -263,7 +267,8 @@
        "x2": 824,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 1000 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -1012,7 +1017,8 @@
        "x2": 3874,
        "y2": 984,
        "extra": {
-        "raw": "0 0 0 777 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -1023,7 +1029,8 @@
        "x2": 3924,
        "y2": 984,
        "extra": {
-        "raw": "0 0 0 888 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -1320,7 +1327,8 @@
        "x2": 4924,
        "y2": 884,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -1331,7 +1339,8 @@
        "x2": 4974,
        "y2": 884,
        "extra": {
-        "raw": "0 0 0 333 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -1998,7 +2007,9 @@
        "x2": 1401,
        "y2": 1500,
        "extra": {
-        "raw": "0 0 0 300 100 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 100
        }
       },
       {
@@ -2112,7 +2123,8 @@
        "x2": 1801,
        "y2": 1360,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -2123,7 +2135,8 @@
        "x2": 1722,
        "y2": 1360,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -2167,7 +2180,8 @@
        "x2": 1701,
        "y2": 1400,
        "extra": {
-        "raw": "0 0 0 333 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -2351,7 +2365,10 @@
        "x2": 2125,
        "y2": 1500,
        "extra": {
-        "raw": "0 0 0 300 101 0"
+        "state": "chisle",
+        "emotion": "sad",
+        "rescue_switch_id": 101,
+        "angry_switch_id": 102
        }
       },
       {
@@ -2508,7 +2525,8 @@
        "x2": 2425,
        "y2": 1400,
        "extra": {
-        "raw": "0 0 0 475 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -2616,7 +2634,8 @@
        "x2": 2850,
        "y2": 1501,
        "extra": {
-        "raw": "0 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -2627,7 +2646,8 @@
        "x2": 2925,
        "y2": 1501,
        "extra": {
-        "raw": "0 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -2749,7 +2769,8 @@
        "x2": 3143,
        "y2": 1364,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -2802,7 +2823,8 @@
        "x2": 3175,
        "y2": 1400,
        "extra": {
-        "raw": "0 0 0 623 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -4459,7 +4481,8 @@
        "x2": 624,
        "y2": 724,
        "extra": {
-        "raw": "0 0 1 0 0 0"
+        "state": "chisle",
+        "emotion": "sick"
        }
       },
       {
@@ -4481,7 +4504,8 @@
        "x2": 524,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "state": "chisle",
+        "emotion": "sick"
        }
       },
       {
@@ -4492,7 +4516,8 @@
        "x2": 474,
        "y2": 724,
        "extra": {
-        "raw": "0 0 1 0 0 0"
+        "state": "chisle",
+        "emotion": "sick"
        }
       },
       {
@@ -4503,7 +4528,8 @@
        "x2": 449,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "state": "chisle",
+        "emotion": "sick"
        }
       },
       {
@@ -4558,7 +4584,8 @@
        "x2": 674,
        "y2": 724,
        "extra": {
-        "raw": "0 0 1 0 0 0"
+        "state": "chisle",
+        "emotion": "sick"
        }
       },
       {
@@ -4591,7 +4618,8 @@
        "x2": 699,
        "y2": 984,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -4602,7 +4630,8 @@
        "x2": 599,
        "y2": 984,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -4627,7 +4656,8 @@
        "x2": 549,
        "y2": 984,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -4649,7 +4679,8 @@
        "x2": 649,
        "y2": 984,
        "extra": {
-        "raw": "0 0 0 0 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -5016,7 +5047,8 @@
        "x2": 1992,
        "y2": 1164,
        "extra": {
-        "raw": "1 0 0 666 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -5027,7 +5059,8 @@
        "x2": 1952,
        "y2": 1164,
        "extra": {
-        "raw": "1 0 0 516 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -5038,7 +5071,8 @@
        "x2": 1980,
        "y2": 1164,
        "extra": {
-        "raw": "1 0 0 766 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -5049,7 +5083,8 @@
        "x2": 2010,
        "y2": 1164,
        "extra": {
-        "raw": "1 0 0 842 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -5060,7 +5095,8 @@
        "x2": 2030,
        "y2": 1164,
        "extra": {
-        "raw": "1 0 0 20 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -5341,7 +5377,8 @@
        "x2": 3574,
        "y2": 1404,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -5352,7 +5389,8 @@
        "x2": 3599,
        "y2": 1466,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -5377,7 +5415,8 @@
        "x2": 3650,
        "y2": 1462,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -8715,7 +8754,10 @@
        "x2": 2374,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 666 190 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 190,
+        "blind": true
        }
       },
       {
@@ -8891,7 +8933,9 @@
        "x2": 3149,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -8902,7 +8946,9 @@
        "x2": 3224,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -8913,7 +8959,9 @@
        "x2": 3200,
        "y2": 725,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -8924,7 +8972,9 @@
        "x2": 3274,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -8991,7 +9041,9 @@
        "x2": 3449,
        "y2": 584,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -9002,7 +9054,9 @@
        "x2": 3474,
        "y2": 584,
        "extra": {
-        "raw": "0 0 0 666 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -9013,7 +9067,9 @@
        "x2": 3424,
        "y2": 584,
        "extra": {
-        "raw": "0 0 0 111 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -9439,7 +9495,10 @@
        "x2": 1599,
        "y2": 1144,
        "extra": {
-        "raw": "0 0 1 111 111 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 111,
+        "blind": true
        }
       },
       {
@@ -9450,7 +9509,10 @@
        "x2": 1699,
        "y2": 1144,
        "extra": {
-        "raw": "0 0 1 333 111 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 111,
+        "blind": true
        }
       },
       {
@@ -9582,7 +9644,10 @@
        "x2": 2024,
        "y2": 1144,
        "extra": {
-        "raw": "0 0 1 666 111 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 111,
+        "blind": true
        }
       },
       {
@@ -9662,7 +9727,10 @@
        "x2": 2449,
        "y2": 1144,
        "extra": {
-        "raw": "0 0 1 222 111 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 111,
+        "blind": true
        }
       },
       {
@@ -9673,7 +9741,10 @@
        "x2": 2524,
        "y2": 1144,
        "extra": {
-        "raw": "0 0 1 333 111 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 111,
+        "blind": true
        }
       },
       {
@@ -9817,7 +9888,9 @@
        "x2": 524,
        "y2": 1404,
        "extra": {
-        "raw": "0 0 0 111 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -9828,7 +9901,9 @@
        "x2": 649,
        "y2": 1404,
        "extra": {
-        "raw": "0 0 0 333 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -10082,7 +10157,9 @@
        "x2": 1624,
        "y2": 1504,
        "extra": {
-        "raw": "0 0 1 0 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -10498,7 +10575,9 @@
        "x2": 574,
        "y2": 2024,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -11484,7 +11563,10 @@
        "x2": 824,
        "y2": 2804,
        "extra": {
-        "raw": "0 0 0 -255 183 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 183,
+        "blind": true
        }
       },
       {
@@ -11799,7 +11881,10 @@
        "x2": 2724,
        "y2": 3064,
        "extra": {
-        "raw": "0 0 0 300 192 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 192,
+        "blind": true
        }
       },
       {
@@ -12088,7 +12173,10 @@
        "x2": 3549,
        "y2": 3064,
        "extra": {
-        "raw": "0 0 0 600 10 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 10,
+        "blind": true
        }
       },
       {
@@ -13458,7 +13546,9 @@
        "x2": 3599,
        "y2": 204,
        "extra": {
-        "raw": "0 0 0 777 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -13491,7 +13581,9 @@
        "x2": 3549,
        "y2": 204,
        "extra": {
-        "raw": "0 0 0 555 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -13502,7 +13594,9 @@
        "x2": 3724,
        "y2": 204,
        "extra": {
-        "raw": "0 0 0 999 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -13788,7 +13882,9 @@
        "x2": 1624,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 666 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -13799,7 +13895,9 @@
        "x2": 1824,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 999 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -13810,7 +13908,9 @@
        "x2": 1724,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -13955,7 +14055,9 @@
        "x2": 2949,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 700 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -14013,7 +14115,9 @@
        "x2": 3099,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 700 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -14024,7 +14128,9 @@
        "x2": 3149,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 700 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -14035,7 +14141,9 @@
        "x2": 3074,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 700 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -14387,7 +14495,9 @@
        "x2": 2499,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -14539,7 +14649,9 @@
        "x2": 2949,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 600 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -14550,7 +14662,9 @@
        "x2": 2974,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 700 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -17104,7 +17218,8 @@
        "x2": 1649,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 666 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -17115,7 +17230,8 @@
        "x2": 1699,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 333 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -17126,7 +17242,8 @@
        "x2": 1749,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 888 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -17226,7 +17343,9 @@
        "x2": 550,
        "y2": 984,
        "extra": {
-        "raw": "0 0 1 101 23 0"
+        "state": "chisle",
+        "emotion": "sad",
+        "rescue_switch_id": 23
        }
       },
       {
@@ -17237,7 +17356,9 @@
        "x2": 500,
        "y2": 984,
        "extra": {
-        "raw": "0 0 0 555 20 0"
+        "state": "chisle",
+        "emotion": "sad",
+        "rescue_switch_id": 20
        }
       },
       {
@@ -17248,7 +17369,9 @@
        "x2": 625,
        "y2": 984,
        "extra": {
-        "raw": "0 0 0 444 23 0"
+        "state": "chisle",
+        "emotion": "sad",
+        "rescue_switch_id": 23
        }
       },
       {
@@ -17325,7 +17448,9 @@
        "x2": 450,
        "y2": 844,
        "extra": {
-        "raw": "0 0 0 222 21 0"
+        "state": "chisle",
+        "emotion": "sad",
+        "rescue_switch_id": 21
        }
       },
       {
@@ -17336,7 +17461,8 @@
        "x2": 500,
        "y2": 864,
        "extra": {
-        "raw": "0 0 1 111 0 0"
+        "state": "chisle",
+        "emotion": "sad"
        }
       },
       {
@@ -17347,7 +17473,8 @@
        "x2": 550,
        "y2": 864,
        "extra": {
-        "raw": "0 0 0 333 0 0"
+        "state": "chisle",
+        "emotion": "sad"
        }
       },
       {
@@ -17358,7 +17485,9 @@
        "x2": 575,
        "y2": 904,
        "extra": {
-        "raw": "0 0 1 666 21 0"
+        "state": "chisle",
+        "emotion": "sad",
+        "rescue_switch_id": 21
        }
       },
       {
@@ -17369,7 +17498,9 @@
        "x2": 625,
        "y2": 904,
        "extra": {
-        "raw": "0 0 1 185 21 0"
+        "state": "chisle",
+        "emotion": "sad",
+        "rescue_switch_id": 21
        }
       },
       {
@@ -17380,7 +17511,8 @@
        "x2": 625,
        "y2": 844,
        "extra": {
-        "raw": "0 0 1 666 0 0"
+        "state": "chisle",
+        "emotion": "sad"
        }
       },
       {
@@ -18251,7 +18383,8 @@
        "x2": 1624,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 777 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -18262,7 +18395,8 @@
        "x2": 1674,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 888 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -18592,7 +18726,8 @@
        "x2": 2674,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -18603,7 +18738,8 @@
        "x2": 2724,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 333 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -18732,7 +18868,9 @@
        "x2": 276,
        "y2": 980,
        "extra": {
-        "raw": "0 0 0 300 100 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 100
        }
       },
       {
@@ -18857,7 +18995,8 @@
        "x2": 676,
        "y2": 840,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -18868,7 +19007,8 @@
        "x2": 597,
        "y2": 840,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -18912,7 +19052,8 @@
        "x2": 576,
        "y2": 880,
        "extra": {
-        "raw": "0 0 0 333 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -19105,7 +19246,10 @@
        "x2": 1000,
        "y2": 980,
        "extra": {
-        "raw": "0 0 0 300 101 0"
+        "state": "chisle",
+        "emotion": "sad",
+        "rescue_switch_id": 101,
+        "angry_switch_id": 102
        }
       },
       {
@@ -19262,7 +19406,8 @@
        "x2": 1300,
        "y2": 880,
        "extra": {
-        "raw": "0 0 0 475 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -19370,7 +19515,8 @@
        "x2": 1725,
        "y2": 981,
        "extra": {
-        "raw": "0 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -19381,7 +19527,8 @@
        "x2": 1800,
        "y2": 981,
        "extra": {
-        "raw": "0 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -19512,7 +19659,8 @@
        "x2": 2018,
        "y2": 844,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -19565,7 +19713,8 @@
        "x2": 2050,
        "y2": 880,
        "extra": {
-        "raw": "0 0 0 623 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -20417,7 +20566,8 @@
        "x2": 492,
        "y2": 644,
        "extra": {
-        "raw": "1 0 0 666 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -20428,7 +20578,8 @@
        "x2": 452,
        "y2": 644,
        "extra": {
-        "raw": "1 0 0 516 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -20439,7 +20590,8 @@
        "x2": 480,
        "y2": 644,
        "extra": {
-        "raw": "1 0 0 766 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -20450,7 +20602,8 @@
        "x2": 510,
        "y2": 644,
        "extra": {
-        "raw": "1 0 0 842 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -20461,7 +20614,8 @@
        "x2": 530,
        "y2": 644,
        "extra": {
-        "raw": "1 0 0 20 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -20654,7 +20808,8 @@
        "x2": 2074,
        "y2": 884,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -20665,7 +20820,8 @@
        "x2": 2099,
        "y2": 946,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -20690,7 +20846,8 @@
        "x2": 2150,
        "y2": 942,
        "extra": {
-        "raw": "1 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal"
        }
       },
       {
@@ -21941,7 +22098,9 @@
        "x2": 1024,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -21952,7 +22111,9 @@
        "x2": 824,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -22036,7 +22197,9 @@
        "x2": 1324,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -22047,7 +22210,9 @@
        "x2": 1199,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -23170,7 +23335,10 @@
        "x2": 499,
        "y2": 104,
        "extra": {
-        "raw": "0 0 0 666 190 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 190,
+        "blind": true
        }
       },
       {
@@ -23321,7 +23489,10 @@
        "x2": 99,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 300 192 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 192,
+        "blind": true
        }
       },
       {
@@ -23608,7 +23779,10 @@
        "x2": 924,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 600 10 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "rescue_switch_id": 10,
+        "blind": true
        }
       },
       {
@@ -24002,7 +24176,9 @@
        "x2": 3224,
        "y2": 204,
        "extra": {
-        "raw": "0 0 0 777 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24035,7 +24211,9 @@
        "x2": 3174,
        "y2": 204,
        "extra": {
-        "raw": "0 0 0 555 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24046,7 +24224,9 @@
        "x2": 3349,
        "y2": 204,
        "extra": {
-        "raw": "0 0 0 999 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24152,7 +24332,9 @@
        "x2": 1249,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 666 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24163,7 +24345,9 @@
        "x2": 1449,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 999 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24174,7 +24358,9 @@
        "x2": 1349,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24319,7 +24505,9 @@
        "x2": 2574,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 700 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24366,7 +24554,9 @@
        "x2": 2724,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 700 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24377,7 +24567,9 @@
        "x2": 2774,
        "y2": 464,
        "extra": {
-        "raw": "0 0 0 700 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24388,7 +24580,9 @@
        "x2": 2699,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 700 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24738,7 +24932,9 @@
        "x2": 2124,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 300 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24890,7 +25086,9 @@
        "x2": 2574,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 600 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -24901,7 +25099,9 @@
        "x2": 2599,
        "y2": 724,
        "extra": {
-        "raw": "0 0 0 700 0 0"
+        "state": "chisle",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -27379,7 +27579,9 @@
        "x2": 2124,
        "y2": 1784,
        "extra": {
-        "raw": "0 1 0 0 199 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 199
        }
       },
       {
@@ -27390,7 +27592,9 @@
        "x2": 2099,
        "y2": 1784,
        "extra": {
-        "raw": "0 1 0 0 199 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 199
        }
       },
       {
@@ -27467,7 +27671,9 @@
        "x2": 2114,
        "y2": 1784,
        "extra": {
-        "raw": "0 1 0 0 199 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 199
        }
       },
       {
@@ -29166,7 +29372,8 @@
        "x2": 3824,
        "y2": 1244,
        "extra": {
-        "raw": "0 0 0 666 0 0"
+        "state": "chisle",
+        "emotion": "sick"
        }
       },
       {
@@ -29177,7 +29384,8 @@
        "x2": 3874,
        "y2": 1244,
        "extra": {
-        "raw": "0 0 0 333 0 0"
+        "state": "chisle",
+        "emotion": "sick"
        }
       },
       {
@@ -29188,7 +29396,8 @@
        "x2": 3924,
        "y2": 1244,
        "extra": {
-        "raw": "0 0 0 222 0 0"
+        "state": "chisle",
+        "emotion": "sick"
        }
       },
       {
@@ -29199,7 +29408,8 @@
        "x2": 3999,
        "y2": 1244,
        "extra": {
-        "raw": "0 0 0 999 0 0"
+        "state": "chisle",
+        "emotion": "sick"
        }
       },
       {
@@ -29210,7 +29420,8 @@
        "x2": 4049,
        "y2": 1244,
        "extra": {
-        "raw": "0 0 0 777 0 0"
+        "state": "chisle",
+        "emotion": "sick"
        }
       },
       {
@@ -30834,7 +31045,8 @@
        "x2": 2299,
        "y2": 364,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -30845,7 +31057,9 @@
        "x2": 2299,
        "y2": 364,
        "extra": {
-        "raw": "0 1 1 0 23 0"
+        "state": "scrub",
+        "emotion": "sad",
+        "rescue_switch_id": 23
        }
       },
       {
@@ -49473,7 +49687,8 @@
        "x2": 494,
        "y2": 349,
        "extra": {
-        "raw": "1 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -49500,7 +49715,8 @@
        "x2": 482,
        "y2": 349,
        "extra": {
-        "raw": "1 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -50481,7 +50697,9 @@
        "x2": 1474,
        "y2": 364,
        "extra": {
-        "raw": "0 2 1 -500 0 0"
+        "state": "angry worker",
+        "emotion": "angry",
+        "angry_switch_id": 23
        }
       },
       {
@@ -50856,7 +51074,8 @@
        "x2": 1474,
        "y2": 624,
        "extra": {
-        "raw": "0 1 0 600 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -50922,7 +51141,8 @@
        "x2": 1474,
        "y2": 624,
        "extra": {
-        "raw": "0 1 0 600 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -53111,7 +53331,8 @@
        "x2": 74,
        "y2": 1004,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -53122,7 +53343,8 @@
        "x2": 50,
        "y2": 1004,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -53374,7 +53596,8 @@
        "x2": 49,
        "y2": 1240,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -53385,7 +53608,8 @@
        "x2": 325,
        "y2": 1240,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -62163,7 +62387,8 @@
        "x2": 1025,
        "y2": 984,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -62174,7 +62399,8 @@
        "x2": 1074,
        "y2": 984,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -63784,7 +64010,9 @@
        "x2": 849,
        "y2": 1244,
        "extra": {
-        "raw": "0 1 0 -1000 132 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 132
        }
       },
       {
@@ -63884,7 +64112,9 @@
        "x2": 800,
        "y2": 1244,
        "extra": {
-        "raw": "0 1 0 1000 132 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 132
        }
       },
       {
@@ -63917,7 +64147,9 @@
        "x2": 825,
        "y2": 1244,
        "extra": {
-        "raw": "0 1 0 -1000 132 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 132
        }
       },
       {
@@ -66965,7 +67197,9 @@
        "x2": 301,
        "y2": 120,
        "extra": {
-        "raw": "0 1 0 600 160 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 160
        }
       },
       {
@@ -66998,7 +67232,9 @@
        "x2": 201,
        "y2": 98,
        "extra": {
-        "raw": "0 1 0 45 160 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 160
        }
       },
       {
@@ -67042,7 +67278,9 @@
        "x2": 50,
        "y2": 220,
        "extra": {
-        "raw": "0 1 0 -300 160 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 160
        }
       },
       {
@@ -67086,7 +67324,9 @@
        "x2": 100,
        "y2": 201,
        "extra": {
-        "raw": "0 1 0 -400 160 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 160
        }
       },
       {
@@ -67097,7 +67337,9 @@
        "x2": 51,
        "y2": 120,
        "extra": {
-        "raw": "0 1 0 -200 160 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 160
        }
       },
       {
@@ -70019,7 +70261,8 @@
        "x2": 2849,
        "y2": 924,
        "extra": {
-        "raw": "0 1 0 250 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -70055,7 +70298,8 @@
        "x2": 2799,
        "y2": 924,
        "extra": {
-        "raw": "0 1 1 200 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -70066,7 +70310,8 @@
        "x2": 2899,
        "y2": 924,
        "extra": {
-        "raw": "0 1 1 500 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -71148,7 +71393,8 @@
        "x2": 2074,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -71159,7 +71405,8 @@
        "x2": 2124,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -71282,7 +71529,8 @@
        "x2": 2099,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -76165,7 +76413,9 @@
        "x2": 3099,
        "y2": 485,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -76528,7 +76778,10 @@
        "x2": 425,
        "y2": 720,
        "extra": {
-        "raw": "0 1 1 290 177 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 177,
+        "blind": true
        }
       },
       {
@@ -76600,7 +76853,10 @@
        "x2": 424,
        "y2": 604,
        "extra": {
-        "raw": "0 1 1 320 177 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 177,
+        "blind": true
        }
       },
       {
@@ -76950,7 +77206,10 @@
        "x2": 675,
        "y2": 920,
        "extra": {
-        "raw": "0 1 0 160 177 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 177,
+        "blind": true
        }
       },
       {
@@ -76961,7 +77220,10 @@
        "x2": 651,
        "y2": 923,
        "extra": {
-        "raw": "0 1 1 450 177 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 177,
+        "blind": true
        }
       },
       {
@@ -79048,7 +79310,10 @@
        "x2": 2097,
        "y2": 623,
        "extra": {
-        "raw": "0 1 1 0 154 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 154,
+        "blind": true
        }
       },
       {
@@ -79059,7 +79324,10 @@
        "x2": 2120,
        "y2": 624,
        "extra": {
-        "raw": "0 1 1 0 154 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 154,
+        "blind": true
        }
       },
       {
@@ -79070,7 +79338,10 @@
        "x2": 1974,
        "y2": 724,
        "extra": {
-        "raw": "0 1 0 0 154 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 154,
+        "blind": true
        }
       },
       {
@@ -79081,7 +79352,10 @@
        "x2": 1954,
        "y2": 725,
        "extra": {
-        "raw": "0 1 0 0 154 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 154,
+        "blind": true
        }
       },
       {
@@ -79383,7 +79657,9 @@
        "x2": 1925,
        "y2": 883,
        "extra": {
-        "raw": "0 1 1 246 0 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -90204,7 +90480,8 @@
        "x2": 525,
        "y2": 460,
        "extra": {
-        "raw": "0 1 1 250 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -90215,7 +90492,8 @@
        "x2": 574,
        "y2": 464,
        "extra": {
-        "raw": "0 1 1 300 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -90226,7 +90504,8 @@
        "x2": 600,
        "y2": 460,
        "extra": {
-        "raw": "0 1 0 400 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -90237,7 +90516,8 @@
        "x2": 624,
        "y2": 464,
        "extra": {
-        "raw": "0 1 1 350 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -90248,7 +90528,8 @@
        "x2": 649,
        "y2": 464,
        "extra": {
-        "raw": "0 1 1 500 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -90259,7 +90540,8 @@
        "x2": 699,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 950 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -90270,7 +90552,8 @@
        "x2": 724,
        "y2": 464,
        "extra": {
-        "raw": "0 1 1 724 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -90281,7 +90564,8 @@
        "x2": 499,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 200 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -90325,7 +90609,8 @@
        "x2": 674,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 950 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -90336,7 +90621,8 @@
        "x2": 550,
        "y2": 465,
        "extra": {
-        "raw": "0 1 1 250 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -93966,7 +94252,8 @@
        "x2": 649,
        "y2": 204,
        "extra": {
-        "raw": "0 1 1 500 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -94535,7 +94822,8 @@
        "x2": 474,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 60 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -94546,7 +94834,8 @@
        "x2": 474,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 679 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -97842,7 +98131,8 @@
        "x2": 1024,
        "y2": 724,
        "extra": {
-        "raw": "0 1 1 500 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -98570,7 +98860,8 @@
        "x2": 4449,
        "y2": 984,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -98945,7 +99236,8 @@
        "x2": 849,
        "y2": 1404,
        "extra": {
-        "raw": "0 1 0 60 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -98956,7 +99248,8 @@
        "x2": 849,
        "y2": 1404,
        "extra": {
-        "raw": "0 1 0 679 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -99332,7 +99625,8 @@
        "x2": 3624,
        "y2": 1384,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -99998,7 +100292,8 @@
        "x2": 3224,
        "y2": 2304,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -100009,7 +100304,8 @@
        "x2": 3249,
        "y2": 2304,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -104872,7 +105168,8 @@
        "x2": 623,
        "y2": 364,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -104883,7 +105180,8 @@
        "x2": 574,
        "y2": 364,
        "extra": {
-        "raw": "0 1 1 10 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -104916,7 +105214,8 @@
        "x2": 549,
        "y2": 364,
        "extra": {
-        "raw": "0 1 1 10 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -104927,7 +105226,8 @@
        "x2": 649,
        "y2": 364,
        "extra": {
-        "raw": "0 1 1 10 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -104960,7 +105260,8 @@
        "x2": 474,
        "y2": 364,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -104971,7 +105272,8 @@
        "x2": 498,
        "y2": 362,
        "extra": {
-        "raw": "0 1 1 10 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -105811,7 +106113,8 @@
        "x2": 499,
        "y2": 484,
        "extra": {
-        "raw": "0 1 1 800 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -106021,7 +106324,8 @@
        "x2": 449,
        "y2": 384,
        "extra": {
-        "raw": "0 1 1 100 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -106032,7 +106336,8 @@
        "x2": 424,
        "y2": 484,
        "extra": {
-        "raw": "0 1 1 600 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -106269,7 +106574,8 @@
        "x2": 949,
        "y2": 344,
        "extra": {
-        "raw": "0 1 0 50 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -106280,7 +106586,8 @@
        "x2": 974,
        "y2": 344,
        "extra": {
-        "raw": "0 1 1 500 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -106525,7 +106832,8 @@
        "x2": 1274,
        "y2": 344,
        "extra": {
-        "raw": "0 1 0 10 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -110819,7 +111127,8 @@
        "x2": 49,
        "y2": 204,
        "extra": {
-        "raw": "0 1 1 900 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -111039,7 +111348,8 @@
        "x2": 349,
        "y2": 204,
        "extra": {
-        "raw": "0 1 1 900 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -111084,7 +111394,8 @@
        "x2": 325,
        "y2": 464,
        "extra": {
-        "raw": "0 1 1 300 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -111095,7 +111406,8 @@
        "x2": 325,
        "y2": 364,
        "extra": {
-        "raw": "0 1 1 600 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -111106,7 +111418,8 @@
        "x2": 75,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 100 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -111117,7 +111430,8 @@
        "x2": 75,
        "y2": 364,
        "extra": {
-        "raw": "0 1 0 -600 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -111596,7 +111910,9 @@
        "x2": 1824,
        "y2": 484,
        "extra": {
-        "raw": "0 1 0 0 80 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 80
        }
       },
       {
@@ -111607,7 +111923,9 @@
        "x2": 1799,
        "y2": 484,
        "extra": {
-        "raw": "0 1 0 0 80 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 80
        }
       },
       {
@@ -111964,7 +112282,8 @@
        "x2": 450,
        "y2": 1384,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "wired"
        }
       },
       {
@@ -112179,7 +112498,8 @@
        "x2": 1000,
        "y2": 1381,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "wired"
        }
       },
       {
@@ -112223,7 +112543,8 @@
        "x2": 925,
        "y2": 1380,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "wired"
        }
       },
       {
@@ -112378,7 +112699,8 @@
        "x2": 1825,
        "y2": 1504,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "wired"
        }
       },
       {
@@ -112389,7 +112711,8 @@
        "x2": 1801,
        "y2": 1504,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "wired"
        }
       },
       {
@@ -114008,7 +114331,8 @@
        "x2": 200,
        "y2": 100,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -114075,7 +114399,8 @@
        "x2": 250,
        "y2": 100,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -114208,7 +114533,8 @@
        "x2": 523,
        "y2": 202,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -114357,7 +114683,8 @@
        "x2": 599,
        "y2": 204,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -114368,7 +114695,8 @@
        "x2": 300,
        "y2": 620,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -114407,7 +114735,8 @@
        "x2": 225,
        "y2": 620,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -114660,7 +114989,8 @@
        "x2": 482,
        "y2": 722,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -114722,7 +115052,8 @@
        "x2": 574,
        "y2": 724,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -114744,7 +115075,8 @@
        "x2": 524,
        "y2": 624,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -115010,7 +115342,9 @@
        "x2": 74,
        "y2": 104,
        "extra": {
-        "raw": "0 1 0 800 195 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 195
        }
       },
       {
@@ -115032,7 +115366,9 @@
        "x2": 99,
        "y2": 104,
        "extra": {
-        "raw": "0 1 0 700 195 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 195
        }
       },
       {
@@ -115043,7 +115379,9 @@
        "x2": 74,
        "y2": 204,
        "extra": {
-        "raw": "0 1 0 600 195 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 195
        }
       },
       {
@@ -115054,7 +115392,9 @@
        "x2": 100,
        "y2": 204,
        "extra": {
-        "raw": "0 1 0 500 195 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 195
        }
       },
       {
@@ -115065,7 +115405,9 @@
        "x2": 300,
        "y2": 102,
        "extra": {
-        "raw": "0 1 0 900 195 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 195
        }
       },
       {
@@ -115076,7 +115418,9 @@
        "x2": 325,
        "y2": 102,
        "extra": {
-        "raw": "0 1 0 999 195 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 195
        }
       },
       {
@@ -115087,7 +115431,9 @@
        "x2": 199,
        "y2": 204,
        "extra": {
-        "raw": "0 1 0 300 195 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 195
        }
       },
       {
@@ -115098,7 +115444,9 @@
        "x2": 224,
        "y2": 204,
        "extra": {
-        "raw": "0 1 0 100 195 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 195
        }
       },
       {
@@ -120142,7 +120490,8 @@
        "x2": 1667,
        "y2": 150,
        "extra": {
-        "raw": "1 1 0 750 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -120264,7 +120613,8 @@
        "x2": 2120,
        "y2": 64,
        "extra": {
-        "raw": "1 1 1 152 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -120275,7 +120625,8 @@
        "x2": 2133,
        "y2": 64,
        "extra": {
-        "raw": "1 1 1 600 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -120583,7 +120934,8 @@
        "x2": 2450,
        "y2": 64,
        "extra": {
-        "raw": "1 1 0 134 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -120637,7 +120989,8 @@
        "x2": 2391,
        "y2": 63,
        "extra": {
-        "raw": "1 1 1 345 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -120648,7 +121001,8 @@
        "x2": 2470,
        "y2": 211,
        "extra": {
-        "raw": "1 1 1 345 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -121014,7 +121368,8 @@
        "x2": 2076,
        "y2": 590,
        "extra": {
-        "raw": "1 1 1 150 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -121025,7 +121380,8 @@
        "x2": 2100,
        "y2": 590,
        "extra": {
-        "raw": "1 1 0 350 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -121036,7 +121392,8 @@
        "x2": 2127,
        "y2": 590,
        "extra": {
-        "raw": "1 1 1 550 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -121324,7 +121681,9 @@
        "x2": 499,
        "y2": 864,
        "extra": {
-        "raw": "0 1 0 0 27 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 27
        }
       },
       {
@@ -123467,7 +123826,8 @@
        "x2": 2924,
        "y2": 604,
        "extra": {
-        "raw": "0 1 1 -800 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -123478,7 +123838,8 @@
        "x2": 2899,
        "y2": 604,
        "extra": {
-        "raw": "0 1 0 850 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -123489,7 +123850,8 @@
        "x2": 2724,
        "y2": 604,
        "extra": {
-        "raw": "0 1 1 300 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -123500,7 +123862,8 @@
        "x2": 2750,
        "y2": 600,
        "extra": {
-        "raw": "0 1 0 600 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -126235,7 +126598,8 @@
        "x2": 699,
        "y2": 360,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -126279,7 +126643,8 @@
        "x2": 574,
        "y2": 364,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -126931,7 +127296,9 @@
        "x2": 1328,
        "y2": 1148,
        "extra": {
-        "raw": "0 1 0 120 51 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 51
        }
       },
       {
@@ -127460,7 +127827,8 @@
        "x2": 2774,
        "y2": 1124,
        "extra": {
-        "raw": "0 1 0 210 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -127471,7 +127839,8 @@
        "x2": 2749,
        "y2": 1124,
        "extra": {
-        "raw": "0 1 0 100 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -127482,7 +127851,8 @@
        "x2": 2949,
        "y2": 1125,
        "extra": {
-        "raw": "0 1 0 599 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -127559,7 +127929,8 @@
        "x2": 2928,
        "y2": 1128,
        "extra": {
-        "raw": "0 1 0 120 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -127570,7 +127941,8 @@
        "x2": 2899,
        "y2": 1124,
        "extra": {
-        "raw": "0 1 0 599 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -130226,7 +130598,8 @@
        "x2": 999,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 -780 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -130237,7 +130610,8 @@
        "x2": 849,
        "y2": 463,
        "extra": {
-        "raw": "0 1 1 300 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -130248,7 +130622,8 @@
        "x2": 899,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 485 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -130259,7 +130634,8 @@
        "x2": 874,
        "y2": 464,
        "extra": {
-        "raw": "0 1 1 250 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -130270,7 +130646,8 @@
        "x2": 949,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 340 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -130315,7 +130692,8 @@
        "x2": 924,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 780 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -130326,7 +130704,8 @@
        "x2": 974,
        "y2": 464,
        "extra": {
-        "raw": "0 1 1 100 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -130359,7 +130738,8 @@
        "x2": 1048,
        "y2": 344,
        "extra": {
-        "raw": "0 1 0 340 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -130370,7 +130750,8 @@
        "x2": 824,
        "y2": 464,
        "extra": {
-        "raw": "0 1 1 300 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       }
      ],
@@ -132200,7 +132581,8 @@
        "x2": 924,
        "y2": 364,
        "extra": {
-        "raw": "0 2 1 0 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -132579,7 +132961,8 @@
        "x2": 1775,
        "y2": 360,
        "extra": {
-        "raw": "0 2 0 0 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -134404,7 +134787,8 @@
        "x2": 2599,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -134415,7 +134799,8 @@
        "x2": 2574,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -134499,7 +134884,8 @@
        "x2": 2549,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 666 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -134732,7 +135118,8 @@
        "x2": 1849,
        "y2": 984,
        "extra": {
-        "raw": "0 1 0 666 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -134754,7 +135141,8 @@
        "x2": 1824,
        "y2": 984,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sad"
        }
       },
       {
@@ -136446,7 +136834,9 @@
        "x2": 974,
        "y2": 624,
        "extra": {
-        "raw": "0 1 0 222 5 0"
+        "state": "scrub",
+        "emotion": "sad",
+        "rescue_switch_id": 5
        }
       },
       {
@@ -136535,7 +136925,9 @@
        "x2": 1399,
        "y2": 624,
        "extra": {
-        "raw": "0 1 0 333 5 0"
+        "state": "scrub",
+        "emotion": "sad",
+        "rescue_switch_id": 5
        }
       },
       {
@@ -136658,7 +137050,9 @@
        "x2": 1724,
        "y2": 624,
        "extra": {
-        "raw": "0 1 0 111 5 0"
+        "state": "scrub",
+        "emotion": "sad",
+        "rescue_switch_id": 5
        }
       },
       {
@@ -136747,7 +137141,9 @@
        "x2": 2149,
        "y2": 624,
        "extra": {
-        "raw": "0 1 0 999 5 0"
+        "state": "scrub",
+        "emotion": "sad",
+        "rescue_switch_id": 5
        }
       },
       {
@@ -138093,7 +138489,8 @@
        "x2": 624,
        "y2": 984,
        "extra": {
-        "raw": "0 1 0 666 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -138379,7 +138776,8 @@
        "x2": 1249,
        "y2": 864,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -138390,7 +138788,8 @@
        "x2": 1449,
        "y2": 864,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -138868,7 +139267,8 @@
        "x2": 924,
        "y2": 1404,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -138879,7 +139279,8 @@
        "x2": 999,
        "y2": 1404,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -138978,7 +139379,8 @@
        "x2": 1324,
        "y2": 1404,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -139793,7 +140195,8 @@
        "x2": 1049,
        "y2": 624,
        "extra": {
-        "raw": "0 2 0 666 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -139959,7 +140362,9 @@
        "x2": 599,
        "y2": 884,
        "extra": {
-        "raw": "0 1 1 999 0 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "angry_switch_id": 30
        }
       },
       {
@@ -139970,7 +140375,8 @@
        "x2": 574,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 333 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -139981,7 +140387,8 @@
        "x2": 549,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 666 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -139992,7 +140399,8 @@
        "x2": 624,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 111 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -140003,7 +140411,8 @@
        "x2": 699,
        "y2": 884,
        "extra": {
-        "raw": "0 2 0 222 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -140264,7 +140673,8 @@
        "x2": 1399,
        "y2": 984,
        "extra": {
-        "raw": "0 2 1 222 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -140378,7 +140788,8 @@
        "x2": 1449,
        "y2": 984,
        "extra": {
-        "raw": "0 1 0 888 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -140389,7 +140800,8 @@
        "x2": 1374,
        "y2": 984,
        "extra": {
-        "raw": "0 1 1 666 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -140978,7 +141390,9 @@
        "x2": 524,
        "y2": 124,
        "extra": {
-        "raw": "0 1 1 300 0 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -141158,7 +141572,9 @@
        "x2": 924,
        "y2": 384,
        "extra": {
-        "raw": "0 1 1 100 0 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -141257,7 +141673,9 @@
        "x2": 824,
        "y2": 661,
        "extra": {
-        "raw": "0 1 1 199 0 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "blind": true
        }
       },
       {
@@ -141848,7 +142266,8 @@
        "x2": 1974,
        "y2": 1764,
        "extra": {
-        "raw": "0 1 0 756 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -141884,7 +142303,8 @@
        "x2": 1952,
        "y2": 1660,
        "extra": {
-        "raw": "0 1 1 452 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -141895,7 +142315,8 @@
        "x2": 2024,
        "y2": 1664,
        "extra": {
-        "raw": "0 1 0 760 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -141942,7 +142363,8 @@
        "x2": 1999,
        "y2": 1664,
        "extra": {
-        "raw": "0 1 1 420 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -141953,7 +142375,8 @@
        "x2": 2023,
        "y2": 1764,
        "extra": {
-        "raw": "0 1 0 756 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       }
      ],
@@ -142947,7 +143370,8 @@
        "x2": 549,
        "y2": 364,
        "extra": {
-        "raw": "0 2 1 0 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -143326,7 +143750,8 @@
        "x2": 1400,
        "y2": 360,
        "extra": {
-        "raw": "0 2 0 0 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -145387,7 +145812,8 @@
        "x2": 1362,
        "y2": 340,
        "extra": {
-        "raw": "1 4 0 750 0 0"
+        "state": "health ring giver",
+        "emotion": "normal"
        }
       },
       {
@@ -145476,7 +145902,9 @@
        "x2": 1300,
        "y2": 640,
        "extra": {
-        "raw": "0 1 0 680 100 0"
+        "state": "scrub",
+        "emotion": "sick",
+        "rescue_switch_id": 100
        }
       },
       {
@@ -145487,7 +145915,9 @@
        "x2": 1274,
        "y2": 644,
        "extra": {
-        "raw": "0 1 1 450 100 0"
+        "state": "scrub",
+        "emotion": "sick",
+        "rescue_switch_id": 100
        }
       },
       {
@@ -145509,7 +145939,9 @@
        "x2": 1274,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 680 100 0"
+        "state": "scrub",
+        "emotion": "sick",
+        "rescue_switch_id": 100
        }
       },
       {
@@ -145575,7 +146007,9 @@
        "x2": 1299,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 680 100 0"
+        "state": "scrub",
+        "emotion": "sick",
+        "rescue_switch_id": 100
        }
       },
       {
@@ -145586,7 +146020,9 @@
        "x2": 1324,
        "y2": 1144,
        "extra": {
-        "raw": "0 1 1 970 100 0"
+        "state": "scrub",
+        "emotion": "sick",
+        "rescue_switch_id": 100
        }
       },
       {
@@ -145597,7 +146033,9 @@
        "x2": 1299,
        "y2": 1144,
        "extra": {
-        "raw": "0 1 0 450 100 0"
+        "state": "scrub",
+        "emotion": "sick",
+        "rescue_switch_id": 100
        }
       },
       {
@@ -147774,7 +148212,8 @@
        "x2": 2474,
        "y2": 344,
        "extra": {
-        "raw": "0 1 1 650 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -147972,7 +148411,8 @@
        "x2": 2849,
        "y2": 344,
        "extra": {
-        "raw": "0 1 0 268 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -148318,7 +148758,8 @@
        "x2": 1699,
        "y2": 1184,
        "extra": {
-        "raw": "0 1 0 600 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -148329,7 +148770,8 @@
        "x2": 1749,
        "y2": 1184,
        "extra": {
-        "raw": "0 1 0 400 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -148340,7 +148782,8 @@
        "x2": 1599,
        "y2": 1184,
        "extra": {
-        "raw": "0 1 0 -50 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -148543,7 +148986,8 @@
        "x2": 2850,
        "y2": 1241,
        "extra": {
-        "raw": "0 1 0 430 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -149011,7 +149455,8 @@
        "x2": 2099,
        "y2": 1504,
        "extra": {
-        "raw": "0 1 0 200 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -150152,7 +150597,8 @@
        "x2": 556,
        "y2": 620,
        "extra": {
-        "raw": "1 4 0 0 0 0"
+        "state": "health ring giver",
+        "emotion": "normal"
        }
       },
       {
@@ -150585,7 +151031,8 @@
        "x2": 1649,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sick"
        }
       },
       {
@@ -150596,7 +151043,8 @@
        "x2": 1574,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sick"
        }
       },
       {
@@ -151971,7 +152419,8 @@
        "x2": 2074,
        "y2": 484,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -151982,7 +152431,8 @@
        "x2": 2099,
        "y2": 344,
        "extra": {
-        "raw": "0 2 0 0 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -152094,7 +152544,8 @@
        "x2": 2051,
        "y2": 483,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -152105,7 +152556,8 @@
        "x2": 1924,
        "y2": 344,
        "extra": {
-        "raw": "0 2 1 0 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -152116,7 +152568,8 @@
        "x2": 2099,
        "y2": 484,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       }
      ],
@@ -152400,7 +152853,9 @@
        "x2": 224,
        "y2": 104,
        "extra": {
-        "raw": "0 1 1 999 0 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "angry_switch_id": 30
        }
       },
       {
@@ -152411,7 +152866,8 @@
        "x2": 199,
        "y2": 104,
        "extra": {
-        "raw": "0 1 0 333 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -152422,7 +152878,8 @@
        "x2": 174,
        "y2": 104,
        "extra": {
-        "raw": "0 1 0 666 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -152433,7 +152890,8 @@
        "x2": 249,
        "y2": 104,
        "extra": {
-        "raw": "0 1 0 111 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -152444,7 +152902,8 @@
        "x2": 324,
        "y2": 104,
        "extra": {
-        "raw": "0 2 0 222 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -152694,7 +153153,8 @@
        "x2": 1024,
        "y2": 204,
        "extra": {
-        "raw": "0 2 1 222 0 0"
+        "state": "angry worker",
+        "emotion": "angry"
        }
       },
       {
@@ -152808,7 +153268,8 @@
        "x2": 1074,
        "y2": 204,
        "extra": {
-        "raw": "0 1 0 888 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -152819,7 +153280,8 @@
        "x2": 999,
        "y2": 204,
        "extra": {
-        "raw": "0 1 1 666 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -153351,7 +153813,8 @@
        "x2": 824,
        "y2": 364,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -153584,7 +154047,8 @@
        "x2": 1324,
        "y2": 364,
        "extra": {
-        "raw": "0 2 0 0 0 0"
+        "state": "angry worker",
+        "emotion": "normal"
        }
       },
       {
@@ -153779,7 +154243,8 @@
        "x2": 1724,
        "y2": 364,
        "extra": {
-        "raw": "0 2 0 0 0 0"
+        "state": "angry worker",
+        "emotion": "normal"
        }
       },
       {
@@ -154812,7 +155277,9 @@
        "x2": 1024,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 0 111 0"
+        "state": "chisle",
+        "emotion": "sick",
+        "rescue_switch_id": 111
        }
       },
       {
@@ -154887,7 +155354,9 @@
        "x2": 824,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 0 111 0"
+        "state": "chisle",
+        "emotion": "sick",
+        "rescue_switch_id": 111
        }
       },
       {
@@ -154898,7 +155367,9 @@
        "x2": 924,
        "y2": 364,
        "extra": {
-        "raw": "0 0 0 0 111 0"
+        "state": "chisle",
+        "emotion": "sick",
+        "rescue_switch_id": 111
        }
       },
       {
@@ -155070,7 +155541,8 @@
        "x2": 1332,
        "y2": 360,
        "extra": {
-        "raw": "1 4 1 0 0 0"
+        "state": "health ring giver",
+        "emotion": "normal"
        }
       },
       {
@@ -156621,7 +157093,8 @@
        "x2": 674,
        "y2": 404,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -156867,7 +157340,8 @@
        "x2": 1399,
        "y2": 364,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -157301,7 +157775,8 @@
        "x2": 700,
        "y2": 720,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -158643,7 +159118,8 @@
        "x2": 1649,
        "y2": 1404,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -158714,7 +159190,8 @@
        "x2": 1597,
        "y2": 1402,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -158792,7 +159269,8 @@
        "x2": 700,
        "y2": 1660,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -159206,7 +159684,8 @@
        "x2": 650,
        "y2": 2020,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -160412,7 +160891,8 @@
        "x2": 449,
        "y2": 443,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -160739,7 +161219,8 @@
        "x2": 1274,
        "y2": 444,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -160794,7 +161275,8 @@
        "x2": 1297,
        "y2": 444,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -160904,7 +161386,8 @@
        "x2": 1299,
        "y2": 724,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -161247,7 +161730,8 @@
        "x2": 2099,
        "y2": 724,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -161714,7 +162198,8 @@
        "x2": 924,
        "y2": 402,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sick"
        }
       },
       {
@@ -161736,7 +162221,8 @@
        "x2": 999,
        "y2": 403,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sick"
        }
       },
       {
@@ -161781,7 +162267,8 @@
        "x2": 1074,
        "y2": 404,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sick"
        }
       },
       {
@@ -162891,7 +163378,8 @@
        "x2": 883,
        "y2": 902,
        "extra": {
-        "raw": "1 4 1 5 0 0"
+        "state": "health ring giver",
+        "emotion": "normal"
        }
       },
       {
@@ -164029,7 +164517,8 @@
        "x2": 499,
        "y2": 884,
        "extra": {
-        "raw": "0 1 1 500 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -164040,7 +164529,8 @@
        "x2": 474,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -164051,7 +164541,8 @@
        "x2": 449,
        "y2": 884,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -164062,7 +164553,8 @@
        "x2": 424,
        "y2": 884,
        "extra": {
-        "raw": "0 1 0 600 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -164084,7 +164576,8 @@
        "x2": 474,
        "y2": 884,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -165266,7 +165759,8 @@
        "x2": 474,
        "y2": 364,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -165370,7 +165864,8 @@
        "x2": 999,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "wired"
        }
       },
       {
@@ -165381,7 +165876,8 @@
        "x2": 1023,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "wired"
        }
       },
       {
@@ -165459,7 +165955,8 @@
        "x2": 974,
        "y2": 464,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "wired"
        }
       }
      ],
@@ -167474,7 +167971,8 @@
        "x2": 1349,
        "y2": 344,
        "extra": {
-        "raw": "0 1 1 650 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -167672,7 +168170,8 @@
        "x2": 1724,
        "y2": 344,
        "extra": {
-        "raw": "0 1 0 268 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -167883,7 +168382,8 @@
        "x2": 600,
        "y2": 981,
        "extra": {
-        "raw": "0 1 0 430 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -168815,7 +169315,8 @@
        "x2": 1274,
        "y2": 104,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sick"
        }
       },
       {
@@ -168826,7 +169327,8 @@
        "x2": 1199,
        "y2": 104,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "sick"
        }
       },
       {
@@ -169296,7 +169798,8 @@
        "x2": 74,
        "y2": 443,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -169623,7 +170126,8 @@
        "x2": 899,
        "y2": 444,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -169678,7 +170182,8 @@
        "x2": 922,
        "y2": 444,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "angry"
        }
       },
       {
@@ -170086,7 +170591,8 @@
        "x2": 499,
        "y2": 104,
        "extra": {
-        "raw": "0 1 1 500 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -170097,7 +170603,8 @@
        "x2": 474,
        "y2": 104,
        "extra": {
-        "raw": "0 1 0 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -170108,7 +170615,8 @@
        "x2": 449,
        "y2": 104,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -170119,7 +170627,8 @@
        "x2": 424,
        "y2": 104,
        "extra": {
-        "raw": "0 1 0 600 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -170130,7 +170639,8 @@
        "x2": 449,
        "y2": 104,
        "extra": {
-        "raw": "0 1 0 650 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -170152,7 +170662,8 @@
        "x2": 474,
        "y2": 104,
        "extra": {
-        "raw": "0 1 1 0 0 0"
+        "state": "scrub",
+        "emotion": "normal"
        }
       },
       {
@@ -172016,7 +172527,9 @@
        "x2": 1574,
        "y2": 984,
        "extra": {
-        "raw": "0 1 1 666 200 0"
+        "state": "scrub",
+        "emotion": "sad",
+        "rescue_switch_id": 200
        }
       },
       {
@@ -172770,7 +173283,9 @@
        "x2": 524,
        "y2": 1384,
        "extra": {
-        "raw": "1 1 1 333 27 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 27
        }
       },
       {
@@ -172781,7 +173296,9 @@
        "x2": 574,
        "y2": 1384,
        "extra": {
-        "raw": "1 1 1 333 27 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 27
        }
       },
       {
@@ -172792,7 +173309,9 @@
        "x2": 624,
        "y2": 1384,
        "extra": {
-        "raw": "1 1 1 333 27 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 27
        }
       },
       {
@@ -172803,7 +173322,9 @@
        "x2": 474,
        "y2": 1384,
        "extra": {
-        "raw": "1 1 1 333 27 0"
+        "state": "scrub",
+        "emotion": "normal",
+        "rescue_switch_id": 27
        }
       },
       {
@@ -172947,7 +173468,9 @@
        "x2": 1274,
        "y2": 1404,
        "extra": {
-        "raw": "0 2 1 333 27 0"
+        "state": "angry worker",
+        "emotion": "angry",
+        "rescue_switch_id": 27
        }
       },
       {

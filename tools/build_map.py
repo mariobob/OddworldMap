@@ -392,6 +392,14 @@ def tlv_extra_ao(t, blob, pos, length, level_short):
             e = {"portal": kind}
             if v[6] == 0:  # only travel portals have a real destination
                 e.update({"to_level": level_short.get(v[1], v[1]), "to_path": v[2], "to_cam": v[3]})
+    elif t == 82:  # Mudokon: scale, job, direction, voice, rescue switch, deaf (voice/resources/persist skipped as internal)
+        v = s16s(6)
+        if len(v) >= 6:
+            e = {"job": {0: "stand scrub", 1: "sit scrub", 2: "sit chant"}.get(v[1], v[1])}
+            if v[4]:  # only the rescuable 99 carry a rescue switch; scenery chanters don't
+                e["rescue_switch_id"] = v[4]
+            if v[5]:
+                e["deaf"] = True
     if not e:
         v = s16s(6)
         e = {"raw": " ".join(str(x) for x in v)} if v else {}
@@ -461,6 +469,18 @@ def tlv_extra_ae(t, blob, pos, length, level_short):
         if len(v) >= 7:
             e = {"portal": {0: "travel", 1: "rescue", 2: "shrykull"}.get(v[6], v[6])}
             e.update(dest(v[1], v[2], v[3]))
+    elif t == 49:  # Mudokon: scale, state, direction, voice, rescue switch, deaf, resources, persist, emotion, blind, angry switch
+        v = s16s(11)
+        if len(v) >= 9:  # through the emotion word; the AO-only deaf flag and voice/resources/persist are skipped
+            e = {"state": {0: "chisle", 1: "scrub", 2: "angry worker", 3: "damage ring giver",
+                           4: "health ring giver"}.get(v[1], v[1]),
+                 "emotion": {0: "normal", 1: "angry", 2: "sad", 3: "wired", 4: "sick"}.get(v[8], v[8])}
+            if v[4]:  # rescuable workers carry a rescue switch
+                e["rescue_switch_id"] = v[4]
+            if len(v) >= 10 and v[9]:
+                e["blind"] = True
+            if len(v) >= 11 and v[10]:
+                e["angry_switch_id"] = v[10]
     if not e:
         v = s16s(6)
         e = {"raw": " ".join(str(x) for x in v)} if v else {}

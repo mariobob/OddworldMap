@@ -177,6 +177,45 @@ test("wells in the shipped data carry decoded pair ids", () => {
   assert.ok(express > 0 && locals > 0, "wells found in both roles");
 });
 
+// every Mudokon carries a decoded state, from its own game's vocabulary, and
+// no raw fallback; the rescue switch only appears where the disc sets one, so
+// its presence is the "one of the rescuable set" signal the map relies on
+test("Mudokons in the shipped data carry decoded state", () => {
+  const jobs = new Set(["stand scrub", "sit scrub", "sit chant"]);
+  const states = new Set([
+    "chisle",
+    "scrub",
+    "angry worker",
+    "damage ring giver",
+    "health ring giver",
+  ]);
+  const emotions = new Set(["normal", "angry", "sad", "wired", "sick"]);
+  const counts = {};
+  for (const [file, id] of [
+    ["map_data_ao.json", "AO"],
+    ["map_data_ae.json", "AE"],
+  ]) {
+    const data = load(file);
+    counts[id] = 0;
+    for (const L of data.levels)
+      for (const P of L.paths)
+        for (const t of P.tlvs)
+          if (t.name === "Mudokon") {
+            counts[id]++;
+            const e = t.extra || {};
+            const where = `${id} ${L.short} P${P.id} (${t.x1},${t.y1})`;
+            assert.ok(!("raw" in e), `${where} still raw`);
+            if (id === "AO") {
+              assert.ok(jobs.has(e.job), `${where} bad job ${e.job}`);
+            } else {
+              assert.ok(states.has(e.state), `${where} bad state ${e.state}`);
+              assert.ok(emotions.has(e.emotion), `${where} bad emotion ${e.emotion}`);
+            }
+          }
+  }
+  assert.ok(counts.AO > 0 && counts.AE > 0, "Mudokons found in both games");
+});
+
 // the shipped data contains exactly three genuinely self-referencing paired
 // objects. Dangling destinations (e.g. AE MI P11) must not be flagged, and
 // neither must 0-target doors whose camera merely holds them (SV P6, BR P21

@@ -3,6 +3,12 @@
   {
    "date": "2026-07-21",
    "tag": "new",
+   "title": "Mudokons show what they're doing",
+   "detail": "Hover a Mudokon (or search for one) to see its decoded state, straight from the disc: in Oddysee its job (standing scrub, sitting scrub, or the sitting chant that marks the Monsaic natives) and in Exoddus its work state (chiselling, scrubbing, angry worker, ring-giver) and mood (normal, angry, sad, wired, sick). Try searching emotion=sad or job=sit chant."
+  },
+  {
+   "date": "2026-07-21",
+   "tag": "new",
    "title": "Plot a route and share it as a link",
    "detail": "The new \"Route planner\" display toggle (or the r key) turns clicks into waypoints: every leg is labelled with its length, and a bar at the top totals the route in world units and grid squares. This is the ruler's big sibling, made for planning and practising runs. Backspace (or the bar's undo) removes the last point. The whole route travels in the page address, so copying the link shares it exactly as plotted and it shows up in PNG exports too; whoever opens it can still click doors and browse freely, the route stays put until they switch paths or clear it."
   },
