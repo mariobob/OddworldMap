@@ -368,7 +368,7 @@ function updateHover() {
       hoverTlvs
         .slice(0, 8)
         .map((t) => {
-          const ex = extrasText(t, "  ");
+          const ex = extrasText(t, "  ", getSettings().fieldPrefs);
           const d = destOf(t);
           let follow = "";
           if (d && isLoopback(t)) {

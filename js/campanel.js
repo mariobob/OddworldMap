@@ -8,6 +8,7 @@ import { $ } from "./dom.js";
 import { state, dX, dY } from "./state.js";
 import { cellAt } from "./model.js";
 import { setHighlight } from "./render.js";
+import { getSettings } from "./settings.js";
 import { jumpToTlv } from "./navigate.js";
 
 const panel = $("camPanel"),
@@ -59,7 +60,7 @@ export function openCamPanel(x, y, focus = null) {
       const b = document.createElement("button");
       b.className = "cp-row";
       if (t === focus) b.classList.add("active");
-      const ex = extrasText(t);
+      const ex = extrasText(t, " ", getSettings().fieldPrefs);
       b.innerHTML = esc(t.name) + (ex ? ` <span class="e">${esc(ex)}</span>` : "");
       b.onclick = () => jumpToTlv(state.data, state.lvl, state.path, t);
       b.onmouseenter = () => setHighlight(t);

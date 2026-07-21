@@ -10,8 +10,10 @@ const HIT_CAP = 1500,
 let searchTimer = null;
 let searchScope = "all"; // all | game | level | path (relative to the current selection)
 
+// search matches the full field set regardless of the user's display prefs, so
+// any field is findable even when it isn't shown by default
 function tlvSearchText(t) {
-  return (t.name + " " + extrasText(t)).toLowerCase();
+  return (t.name + " " + extrasText(t, " ", { mode: "all" })).toLowerCase();
 }
 
 function scopeAccepts(h) {

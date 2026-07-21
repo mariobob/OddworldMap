@@ -322,6 +322,52 @@ def load_cache(game):
     cache.write_text(json.dumps(out, indent=1))
     return out
 
+# ------------------------------------------------- object field schema
+
+# types whose full disc field set is extracted raw into `fields`, matched by
+# name (per-game type ids differ)
+GAMEPLAY_FIELD_TYPES = {"Mudokon", "Slig", "Slog"}
+
+def parse_object_schema(game_key):
+    """per-type payload field layout from the relive_api CTOR blocks: each
+    ADD("Name", mTlv.field_XX_...) gives a field's payload word (from the hex
+    offset in the member name) and a snake_cased name; members without a
+    field_XX offset fall back to sequential position. Values stay raw —
+    prettifying is a display concern."""
+    src = (REPO / f"Source/Tools/relive_api/Tlvs{game_key}.hpp").read_text()
+    base = 0x18 if game_key == "AO" else 0x10
+    ctor = f"CTOR_{game_key}"
+
+    def norm(label):
+        label = re.sub(r"\([^)]*\)", "", label).replace("'", "")
+        return re.sub(r"[^A-Za-z0-9]+", "_", label).strip("_").lower()
+
+    schema = {}
+    for m in re.finditer(rf"{ctor}\([^)]*\)\s*\{{(.*?)\n    \}}", src, re.S):
+        head = re.search(rf'{ctor}\(\s*Path_\w+\s*,\s*"[^"]+"\s*,\s*(?:\w+::)?TlvTypes::\w+_(\d+)\s*\)',
+                         src[m.start():m.start() + 300])
+        if not head:
+            continue
+        fields = []
+        for pos, am in enumerate(re.finditer(r'\bADD(?:_HIDDEN)?\(\s*"([^"]+)",\s*mTlv\.([^\n;]+?)\s*\)', m.group(1))):
+            off = re.match(r"field_([0-9A-Fa-f]+)_", am.group(2))
+            word = (int(off.group(1), 16) - base) // 2 if off else pos
+            if word >= 0:
+                fields.append([word, norm(am.group(1))])
+        if fields:
+            schema[int(head.group(1))] = fields
+    return schema
+
+def load_object_schema(game_key, game):
+    cache = HERE / "data" / game["schema_cache"]
+    if cache.exists():
+        raw = json.loads(cache.read_text())
+    else:
+        raw = parse_object_schema(game_key)
+        cache.parent.mkdir(exist_ok=True)
+        cache.write_text(json.dumps(raw, indent=1))
+    return {int(k): v for k, v in raw.items()}
+
 # ------------------------------------------------------------- TLV extraction
 
 def tlv_extra_ao(t, blob, pos, length, level_short):
@@ -392,25 +438,8 @@ def tlv_extra_ao(t, blob, pos, length, level_short):
             e = {"portal": kind}
             if v[6] == 0:  # only travel portals have a real destination
                 e.update({"to_level": level_short.get(v[1], v[1]), "to_path": v[2], "to_cam": v[3]})
-    elif t == 82:  # Mudokon: scale, job, direction, voice, rescue switch, deaf (voice/resources/persist skipped as internal)
-        v = s16s(6)
-        if len(v) >= 6:
-            e = {"job": {0: "stand scrub", 1: "sit scrub", 2: "sit chant"}.get(v[1], v[1])}
-            if v[4]:  # only the rescuable 99 carry a rescue switch; scenery chanters don't
-                e["rescue_switch_id"] = v[4]
-            if v[5]:
-                e["deaf"] = True
-    elif t == 24:  # Slig: scale, start state (pause/shoot AI tuning skipped)
-        v = s16s(2)
-        if len(v) >= 2:
-            e = {"start_state": {0: "listening", 1: "patrol", 2: "sleeping", 3: "chase",
-                                 4: "chase and disappear", 5: "falling to chase"}.get(v[1], v[1])}
-    elif t == 25:  # Slog: scale, direction, asleep, anger thresholds..., anger switch id
-        v = s16s(9)
-        if len(v) >= 3:
-            e = {"asleep": bool(v[2])}
-            if len(v) >= 9 and v[8]:
-                e["anger_switch_id"] = v[8]
+    # gameplay objects get their full field set decoded generically into
+    # `fields`; see walk_obj_region
     if not e:
         v = s16s(6)
         e = {"raw": " ".join(str(x) for x in v)} if v else {}
@@ -480,40 +509,32 @@ def tlv_extra_ae(t, blob, pos, length, level_short):
         if len(v) >= 7:
             e = {"portal": {0: "travel", 1: "rescue", 2: "shrykull"}.get(v[6], v[6])}
             e.update(dest(v[1], v[2], v[3]))
-    elif t == 49:  # Mudokon: scale, state, direction, voice, rescue switch, deaf, resources, persist, emotion, blind, angry switch
-        v = s16s(11)
-        if len(v) >= 9:  # through the emotion word; the AO-only deaf flag and voice/resources/persist are skipped
-            e = {"state": {0: "chisle", 1: "scrub", 2: "angry worker", 3: "damage ring giver",
-                           4: "health ring giver"}.get(v[1], v[1]),
-                 "emotion": {0: "normal", 1: "angry", 2: "sad", 3: "wired", 4: "sick"}.get(v[8], v[8])}
-            if v[4]:  # rescuable workers carry a rescue switch
-                e["rescue_switch_id"] = v[4]
-            if len(v) >= 10 and v[9]:
-                e["blind"] = True
-            if len(v) >= 11 and v[10]:
-                e["angry_switch_id"] = v[10]
-    elif t == 15:  # Slig: scale, start state (pause/shoot AI tuning skipped)
-        v = s16s(2)
-        if len(v) >= 2:
-            e = {"start_state": {0: "listening", 1: "patrol", 2: "sleeping", 3: "chase",
-                                 4: "chase and disappear", 5: "unused", 6: "listening to glukkon"}.get(v[1], v[1])}
-    elif t == 16:  # Slog: scale, direction, asleep, anger thresholds..., anger switch id
-        v = s16s(9)
-        if len(v) >= 3:
-            e = {"asleep": bool(v[2])}
-            if len(v) >= 9 and v[8]:
-                e["anger_switch_id"] = v[8]
+    # gameplay objects get their full field set decoded generically into
+    # `fields`; see walk_obj_region
     if not e:
         v = s16s(6)
         e = {"raw": " ".join(str(x) for x in v)} if v else {}
     return e
+
+def object_fields(schema, t, blob, pos, length, header_len):
+    """the complete raw field set for a gameplay object, every field read as an
+    s16 at its schema word (values fit s16 in practice, even nominal s32 ids)"""
+    layout = schema.get(t)
+    if not layout:
+        return None
+    navail = (length - header_len) // 2
+    if navail <= 0:
+        return None
+    words = struct.unpack_from(f"<{navail}h", blob, pos + header_len)
+    fields = {name: words[w] for w, name in layout if 0 <= w < navail}
+    return fields or None
 
 def walk_obj_region(blob, obj_off, region_end, game, level_short):
     """linear walk of the packed TLV region with resync on garbage"""
     fmt = game["tlv"]
     rect_off, payload = fmt["rect_off"], fmt["extra_fn"]
     min_len, max_len, max_type = fmt["min_len"], fmt["max_len"], fmt["max_type"]
-    names = game["tlv_names"]
+    names, schema = game["tlv_names"], game["schema"]
     tlvs = []
     pos = obj_off
     end = min(region_end, len(blob))
@@ -523,9 +544,16 @@ def walk_obj_region(blob, obj_off, region_end, game, level_short):
         flags_ok = not (flags & ~7) if fmt["check_flags"] else True
         if min_len <= length <= max_len and t <= max_type and flags_ok:
             x1, y1, x2, y2 = struct.unpack_from("<hhhh", blob, pos + rect_off)
-            tlvs.append({"t": t, "name": names.get(t, f"type{t}"),
-                         "x1": x1, "y1": y1, "x2": x2, "y2": y2,
-                         "extra": payload(t, blob, pos, length, level_short)})
+            name = names.get(t, f"type{t}")
+            extra = payload(t, blob, pos, length, level_short)
+            fields = object_fields(schema, t, blob, pos, length, fmt["header_len"]) \
+                if name in GAMEPLAY_FIELD_TYPES else None
+            if fields:  # the raw archive supersedes the placeholder raw dump
+                extra = {k: v for k, v in extra.items() if k != "raw"}
+            tlv = {"t": t, "name": name, "x1": x1, "y1": y1, "x2": x2, "y2": y2, "extra": extra}
+            if fields:
+                tlv["fields"] = fields
+            tlvs.append(tlv)
             pos += length
         else:
             pos += 2  # resync
@@ -698,6 +726,7 @@ GAMES = {
         "data_file": "map_data_ao.json",
         "cams_dir": "cams/ao",
         "cache": "pathdata_ao.json",
+        "schema_cache": "objects_ao.json",
         "env": "ODDWORLD_DISC_AO",
         "geometry": {"cellW": 368, "cellH": 240, "worldW": 1024, "worldH": 480,
                      "winX": 256, "winY": 120, "visW": 368, "visH": 240},
@@ -711,6 +740,7 @@ GAMES = {
         "data_file": "map_data_ae.json",
         "cams_dir": "cams/ae",
         "cache": "pathdata_ae.json",
+        "schema_cache": "objects_ae.json",
         "env": "ODDWORLD_DISC_AE",
         "geometry": {"cellW": 368, "cellH": 240, "worldW": 375, "worldH": 260,
                      "winX": 0, "winY": 0, "visW": 375, "visH": 260},
@@ -724,6 +754,7 @@ GAMES = {
 def game_setup(game_key):
     """resolve per-game level list, tlv names and tables (loading the cache)"""
     game = dict(GAMES[game_key])
+    game["schema"] = load_object_schema(game_key, game)
     cache = load_cache(game)
     if game_key == "AO":
         game["levels"] = AO_LEVELS

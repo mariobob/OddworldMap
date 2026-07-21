@@ -20,6 +20,9 @@ export const SETTINGS_DEFAULTS = {
   screenList: true,
   cacheImages: false,
 };
+// fieldPrefs (not a boolean; added by sanitizeSettings) — which object fields
+// to show: mode "default" (the notable ones) or "more" (per-type picks in
+// byType, falling back to the defaults).
 export const SHOW_KEYS = ["grid", "coll", "fg", "conn", "labels", "dim"];
 
 // localStorage may be unavailable (private mode, blocked); never let that break the viewer
@@ -47,9 +50,22 @@ const store = {
   },
 };
 
+// a fresh, validated fieldPrefs (never shares a reference with the default, so
+// callers may mutate byType without corrupting it)
+function sanitizeFieldPrefs(p) {
+  const out = { mode: "default", byType: {} };
+  if (p && typeof p === "object") {
+    if (p.mode === "more") out.mode = "more";
+    if (p.byType && typeof p.byType === "object")
+      for (const [type, keys] of Object.entries(p.byType))
+        if (Array.isArray(keys)) out.byType[type] = keys.filter((k) => typeof k === "string");
+  }
+  return out;
+}
+
 // copy only known keys with the expected type; anything else keeps its default
 export function sanitizeSettings(raw) {
-  const s = { ...SETTINGS_DEFAULTS };
+  const s = { ...SETTINGS_DEFAULTS, fieldPrefs: sanitizeFieldPrefs(null) };
   let p;
   try {
     p = JSON.parse(raw);
@@ -58,6 +74,7 @@ export function sanitizeSettings(raw) {
   }
   if (!p || typeof p !== "object") return s;
   for (const k of Object.keys(SETTINGS_DEFAULTS)) if (typeof p[k] === "boolean") s[k] = p[k];
+  s.fieldPrefs = sanitizeFieldPrefs(p.fieldPrefs);
   return s;
 }
 
@@ -171,6 +188,16 @@ export function initSettings() {
   });
 
   bind("sScreenList", "screenList", () => {});
+
+  // fieldPrefs isn't a boolean setting, so it gets a custom binding: the
+  // checkbox flips mode between "default" and "more"
+  const showMore = $("sShowMore");
+  showMore.checked = s.fieldPrefs.mode === "more";
+  showMore.onchange = () => {
+    s.fieldPrefs.mode = showMore.checked ? "more" : "default";
+    store.set(SETTINGS_KEY, JSON.stringify(s));
+    window.dispatchEvent(new CustomEvent("settings-changed", { detail: { key: "fieldPrefs" } }));
+  };
 
   document.body.classList.toggle("fullnames", s.fullNames);
   bind("sFullNames", "fullNames", (on) => {

@@ -3,6 +3,12 @@
   {
    "date": "2026-07-21",
    "tag": "new",
+   "title": "Every object field, one toggle away",
+   "detail": "Hover a Slig and you'll now see how it attacks, for example shoot_on_sight_delay=0 means it shoots the instant it sees you, with no \"FREEZE!\" warning - a nasty surprise at some screens. And there's much more underneath: turn on \"Show more object fields\" in Settings to reveal every value the developers stored for an object (patrol timings, panic behaviour, and the rest) in tooltips, the screen list, and search. Search reaches every field even when it's hidden, so shoot_on_sight_delay=0 finds every ambush Slig in a level."
+  },
+  {
+   "date": "2026-07-21",
+   "tag": "new",
    "title": "See how enemies start out",
    "detail": "Hover a Slig or Slog (or search for one) to read its starting state: whether a Slig starts off patrolling or sleeping, whether a Slog starts asleep, and the switch id that wakes a Slog into anger where one is wired. Try searching start_state=sleeping or asleep=true to spot the dormant ones."
   },

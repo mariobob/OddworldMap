@@ -1,6 +1,7 @@
 // Small pure helpers shared across modules.
 
 import { GRID_UNIT } from "./config.js";
+import { fieldEntries } from "./fields.js";
 
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
@@ -12,9 +13,8 @@ export function esc(t) {
 }
 
 // decoded extra fields as "k=v k=v", skipping empty values
-export const extrasText = (t, sep = " ") =>
-  Object.entries(t.extra || {})
-    .filter(([, v]) => v !== null && v !== "")
+export const extrasText = (t, sep = " ", prefs) =>
+  fieldEntries(t, prefs)
     .map(([k, v]) => `${k}=${v}`)
     .join(sep);
 

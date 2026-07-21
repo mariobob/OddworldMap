@@ -10,17 +10,36 @@ import {
 } from "../../js/settings.js";
 import { CATS } from "../../js/config.js";
 
+// sanitizeSettings adds fieldPrefs (a non-boolean) on top of the boolean defaults
+const DEFAULTS = { ...SETTINGS_DEFAULTS, fieldPrefs: { mode: "default", byType: {} } };
+
 test("sanitizeSettings: absent or unreadable storage yields the defaults", () => {
-  assert.deepEqual(sanitizeSettings(null), SETTINGS_DEFAULTS);
-  assert.deepEqual(sanitizeSettings("{not json"), SETTINGS_DEFAULTS);
-  assert.deepEqual(sanitizeSettings('"a string"'), SETTINGS_DEFAULTS);
-  assert.deepEqual(sanitizeSettings("null"), SETTINGS_DEFAULTS);
+  assert.deepEqual(sanitizeSettings(null), DEFAULTS);
+  assert.deepEqual(sanitizeSettings("{not json"), DEFAULTS);
+  assert.deepEqual(sanitizeSettings('"a string"'), DEFAULTS);
+  assert.deepEqual(sanitizeSettings("null"), DEFAULTS);
 });
 
 test("sanitizeSettings: known boolean keys apply, everything else is dropped", () => {
   const s = sanitizeSettings('{"rememberView":false,"bogus":true}');
   assert.equal(s.rememberView, false);
-  assert.deepEqual(Object.keys(s).sort(), Object.keys(SETTINGS_DEFAULTS).sort());
+  assert.deepEqual(Object.keys(s).sort(), Object.keys(DEFAULTS).sort());
+});
+
+test("sanitizeSettings: fieldPrefs validates mode and per-type key lists", () => {
+  const good = sanitizeSettings(
+    '{"fieldPrefs":{"mode":"more","byType":{"Slig":["start_state","pause_time"]}}}',
+  );
+  assert.deepEqual(good.fieldPrefs, {
+    mode: "more",
+    byType: { Slig: ["start_state", "pause_time"] },
+  });
+  // garbage mode/byType fall back cleanly; non-string keys are filtered out
+  const bad = sanitizeSettings('{"fieldPrefs":{"mode":"bogus","byType":{"Slig":[1,"ok",null]}}}');
+  assert.deepEqual(bad.fieldPrefs, { mode: "default", byType: { Slig: ["ok"] } });
+  // a fresh byType each time: mutating one result must not leak into the next
+  good.fieldPrefs.byType.Slig.push("leaked");
+  assert.deepEqual(sanitizeSettings(null).fieldPrefs, { mode: "default", byType: {} });
 });
 
 test("sanitizeSettings: a wrong-typed value keeps its default", () => {

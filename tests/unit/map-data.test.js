@@ -177,80 +177,63 @@ test("wells in the shipped data carry decoded pair ids", () => {
   assert.ok(express > 0 && locals > 0, "wells found in both roles");
 });
 
-// every Mudokon carries a decoded state, from its own game's vocabulary, and
-// no raw fallback; the rescue switch only appears where the disc sets one, so
-// its presence is the "one of the rescuable set" signal the map relies on
-test("Mudokons in the shipped data carry decoded state", () => {
-  const jobs = new Set(["stand scrub", "sit scrub", "sit chant"]);
-  const states = new Set([
-    "chisle",
-    "scrub",
-    "angry worker",
-    "damage ring giver",
-    "health ring giver",
-  ]);
-  const emotions = new Set(["normal", "angry", "sad", "wired", "sick"]);
-  const counts = {};
+// creatures carry the complete raw field archive (the viewer prettifies + picks
+// what to show): every one has `fields`, no `raw` fallback, and the key state
+// fields are decoded to their expected value ranges. Distributions are pinned
+// as a regression guard on the schema-driven extraction.
+test("creatures in the shipped data carry a raw field archive", () => {
+  const found = { AO: {}, AE: {} };
   for (const [file, id] of [
     ["map_data_ao.json", "AO"],
     ["map_data_ae.json", "AE"],
   ]) {
     const data = load(file);
-    counts[id] = 0;
+    const jobs = {},
+      emotions = {};
+    let creatures = 0;
     for (const L of data.levels)
       for (const P of L.paths)
         for (const t of P.tlvs)
-          if (t.name === "Mudokon") {
-            counts[id]++;
-            const e = t.extra || {};
-            const where = `${id} ${L.short} P${P.id} (${t.x1},${t.y1})`;
-            assert.ok(!("raw" in e), `${where} still raw`);
-            if (id === "AO") {
-              assert.ok(jobs.has(e.job), `${where} bad job ${e.job}`);
+          if (t.name === "Mudokon" || t.name === "Slig" || t.name === "Slog") {
+            creatures++;
+            const f = t.fields;
+            const where = `${id} ${L.short} P${P.id} ${t.name} (${t.x1},${t.y1})`;
+            assert.ok(f && typeof f === "object", `${where} lacks fields`);
+            assert.ok(!("raw" in (t.extra || {})), `${where} still raw`);
+            if (t.name === "Mudokon") {
+              const s = id === "AO" ? f.job : f.state;
+              assert.ok(s >= 0 && s <= 4, `${where} state ${s} out of range`);
+              if (id === "AO") jobs[s] = (jobs[s] || 0) + 1;
+              if (id === "AE") emotions[f.emotion] = (emotions[f.emotion] || 0) + 1;
+            } else if (t.name === "Slig") {
+              assert.ok(
+                typeof f.shoot_on_sight_delay === "number",
+                `${where} lacks shoot_on_sight_delay`,
+              );
+              assert.ok(f.start_state >= 0 && f.start_state <= 6, `${where} start_state range`);
             } else {
-              assert.ok(states.has(e.state), `${where} bad state ${e.state}`);
-              assert.ok(emotions.has(e.emotion), `${where} bad emotion ${e.emotion}`);
+              assert.ok(f.asleep === 0 || f.asleep === 1, `${where} asleep ${f.asleep}`);
             }
           }
+    found[id] = { creatures, jobs, emotions };
   }
-  assert.ok(counts.AO > 0 && counts.AE > 0, "Mudokons found in both games");
+  // ground-truth pins from the disc: AO's 11 sit-chant (job=2) Monsaic natives,
+  // and the AE Mudokon emotion spread
+  assert.equal(found.AO.jobs[2], 11, "AO sit-chant Mudokons");
+  assert.deepEqual(found.AE.emotions, { 0: 270, 1: 33, 2: 42, 3: 8, 4: 26 });
+  assert.ok(found.AO.creatures > 0 && found.AE.creatures > 0, "creatures found in both games");
 });
 
-// enemies carry their start state and no raw fallback: a Slig its start_state,
-// a Slog its asleep flag (always present, so an awake anger-switchless Slog
-// still decodes) plus its anger switch where the disc wires one
-test("Sligs and Slogs in the shipped data carry decoded state", () => {
-  const sligStates = new Set([
-    "listening",
-    "patrol",
-    "sleeping",
-    "chase",
-    "chase and disappear",
-    "unused",
-    "listening to glukkon",
-    "falling to chase",
-  ]);
-  let sligs = 0,
-    slogs = 0;
-  for (const file of ["map_data_ao.json", "map_data_ae.json"]) {
-    const data = load(file);
-    for (const L of data.levels)
-      for (const P of L.paths)
-        for (const t of P.tlvs) {
-          const e = t.extra || {};
-          const where = `${data.id} ${L.short} P${P.id} (${t.x1},${t.y1})`;
-          if (t.name === "Slig") {
-            sligs++;
-            assert.ok(!("raw" in e), `${where} slig still raw`);
-            assert.ok(sligStates.has(e.start_state), `${where} bad slig state ${e.start_state}`);
-          } else if (t.name === "Slog") {
-            slogs++;
-            assert.ok(!("raw" in e), `${where} slog still raw`);
-            assert.ok(typeof e.asleep === "boolean", `${where} slog lacks asleep`);
-          }
-        }
-  }
-  assert.ok(sligs > 0 && slogs > 0, "sligs and slogs found");
+// the gotcha the whole feature turned on: R2 P8's patrolling Slig shoots on
+// sight (shoot_on_sight_delay 0, no FREEZE warning), three-round burst
+test("AO R2 P8 has the shoot-on-sight Slig", () => {
+  const data = load("map_data_ao.json");
+  const P = data.levels.find((l) => l.short === "R2").paths.find((p) => p.id === 8);
+  const slig = P.tlvs.find((t) => t.name === "Slig" && t.x1 === 3500 && t.y1 === 191);
+  assert.ok(slig, "gotcha Slig present");
+  assert.equal(slig.fields.shoot_on_sight_delay, 0);
+  assert.equal(slig.fields.bullet_shoot_count, 3);
+  assert.equal(slig.fields.start_state, 1); // patrol
 });
 
 // the shipped data contains exactly three genuinely self-referencing paired
