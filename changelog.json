@@ -3,6 +3,12 @@
   {
    "date": "2026-07-21",
    "tag": "new",
+   "title": "See how enemies start out",
+   "detail": "Hover a Slig or Slog (or search for one) to read its starting state: whether a Slig starts off patrolling or sleeping, whether a Slog starts asleep, and the switch id that wakes a Slog into anger where one is wired. Try searching start_state=sleeping or asleep=true to spot the dormant ones."
+  },
+  {
+   "date": "2026-07-21",
+   "tag": "new",
    "title": "Mudokons show what they're doing",
    "detail": "Hover a Mudokon (or search for one) to see its decoded state, straight from the disc: in Oddysee its job (standing scrub, sitting scrub, or the sitting chant that marks the Monsaic natives) and in Exoddus its work state (chiselling, scrubbing, angry worker, ring-giver) and mood (normal, angry, sad, wired, sick). Try searching emotion=sad or job=sit chant."
   },

@@ -400,6 +400,17 @@ def tlv_extra_ao(t, blob, pos, length, level_short):
                 e["rescue_switch_id"] = v[4]
             if v[5]:
                 e["deaf"] = True
+    elif t == 24:  # Slig: scale, start state (pause/shoot AI tuning skipped)
+        v = s16s(2)
+        if len(v) >= 2:
+            e = {"start_state": {0: "listening", 1: "patrol", 2: "sleeping", 3: "chase",
+                                 4: "chase and disappear", 5: "falling to chase"}.get(v[1], v[1])}
+    elif t == 25:  # Slog: scale, direction, asleep, anger thresholds..., anger switch id
+        v = s16s(9)
+        if len(v) >= 3:
+            e = {"asleep": bool(v[2])}
+            if len(v) >= 9 and v[8]:
+                e["anger_switch_id"] = v[8]
     if not e:
         v = s16s(6)
         e = {"raw": " ".join(str(x) for x in v)} if v else {}
@@ -481,6 +492,17 @@ def tlv_extra_ae(t, blob, pos, length, level_short):
                 e["blind"] = True
             if len(v) >= 11 and v[10]:
                 e["angry_switch_id"] = v[10]
+    elif t == 15:  # Slig: scale, start state (pause/shoot AI tuning skipped)
+        v = s16s(2)
+        if len(v) >= 2:
+            e = {"start_state": {0: "listening", 1: "patrol", 2: "sleeping", 3: "chase",
+                                 4: "chase and disappear", 5: "unused", 6: "listening to glukkon"}.get(v[1], v[1])}
+    elif t == 16:  # Slog: scale, direction, asleep, anger thresholds..., anger switch id
+        v = s16s(9)
+        if len(v) >= 3:
+            e = {"asleep": bool(v[2])}
+            if len(v) >= 9 and v[8]:
+                e["anger_switch_id"] = v[8]
     if not e:
         v = s16s(6)
         e = {"raw": " ".join(str(x) for x in v)} if v else {}

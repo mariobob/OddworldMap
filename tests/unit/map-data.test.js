@@ -216,6 +216,43 @@ test("Mudokons in the shipped data carry decoded state", () => {
   assert.ok(counts.AO > 0 && counts.AE > 0, "Mudokons found in both games");
 });
 
+// enemies carry their start state and no raw fallback: a Slig its start_state,
+// a Slog its asleep flag (always present, so an awake anger-switchless Slog
+// still decodes) plus its anger switch where the disc wires one
+test("Sligs and Slogs in the shipped data carry decoded state", () => {
+  const sligStates = new Set([
+    "listening",
+    "patrol",
+    "sleeping",
+    "chase",
+    "chase and disappear",
+    "unused",
+    "listening to glukkon",
+    "falling to chase",
+  ]);
+  let sligs = 0,
+    slogs = 0;
+  for (const file of ["map_data_ao.json", "map_data_ae.json"]) {
+    const data = load(file);
+    for (const L of data.levels)
+      for (const P of L.paths)
+        for (const t of P.tlvs) {
+          const e = t.extra || {};
+          const where = `${data.id} ${L.short} P${P.id} (${t.x1},${t.y1})`;
+          if (t.name === "Slig") {
+            sligs++;
+            assert.ok(!("raw" in e), `${where} slig still raw`);
+            assert.ok(sligStates.has(e.start_state), `${where} bad slig state ${e.start_state}`);
+          } else if (t.name === "Slog") {
+            slogs++;
+            assert.ok(!("raw" in e), `${where} slog still raw`);
+            assert.ok(typeof e.asleep === "boolean", `${where} slog lacks asleep`);
+          }
+        }
+  }
+  assert.ok(sligs > 0 && slogs > 0, "sligs and slogs found");
+});
+
 // the shipped data contains exactly three genuinely self-referencing paired
 // objects. Dangling destinations (e.g. AE MI P11) must not be flagged, and
 // neither must 0-target doors whose camera merely holds them (SV P6, BR P21
