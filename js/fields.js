@@ -49,8 +49,8 @@ const HIDE_WHEN_ZERO = new Set([
   "blind",
 ]);
 
-// value transforms keyed by the field's game type: one entry then serves every
-// object that shares that type, and unrelated same-named fields never collide.
+// value-type transforms the viewer owns (semantic, not decomp labels), keyed by
+// the field's game type; a hand entry here wins over the generated enum labels.
 const CHOICE = { 0: false, 1: true };
 const SCALE = { 0: "full", 1: "half" };
 const TRANSFORM = {
@@ -58,31 +58,18 @@ const TRANSFORM = {
   Choice_int: CHOICE,
   Scale_short: SCALE,
   Scale_int: SCALE,
-  "Path_Slig::StartState": {
-    0: "listening",
-    1: "patrol",
-    2: "sleeping",
-    3: "chase",
-    4: "chase and disappear",
-    5: "falling to chase", // AE calls 5 "unused"; neither value occurs in shipped data
-    6: "listening to glukkon",
-  },
-  "Path_Mudokon::MudJobs": { 0: "stand scrub", 1: "sit scrub", 2: "sit chant" },
-  Mud_State: {
-    0: "chisle",
-    1: "scrub",
-    2: "angry worker",
-    3: "damage ring giver",
-    4: "health ring giver",
-  },
-  Mud_TLV_Emotion: { 0: "normal", 1: "angry", 2: "sad", 3: "wired", 4: "sick" },
 };
 
-// object -> field -> game type, per game; the boot loads the field_types sidecar
-// and hands it over. Empty until then, so prettify degrades to raw (bare tests).
+// object -> field -> game type, and the generated enum labels (type -> value ->
+// text), both per game; the boot loads the sidecars and hands them over. Empty
+// until then, so prettify degrades to raw (bare tests).
 let FIELD_TYPES = {};
+let ENUM_LABELS = {};
 export function setFieldTypes(byGame) {
   FIELD_TYPES = byGame || {};
+}
+export function setEnumLabels(byGame) {
+  ENUM_LABELS = byGame || {};
 }
 
 // a transform entry against a value: a lookup map, or a function for open-ended
@@ -91,8 +78,10 @@ export function setFieldTypes(byGame) {
 export const resolve = (entry, value) =>
   entry == null ? undefined : typeof entry === "function" ? entry(value) : entry[value];
 
-export const prettify = (game, type, key, value) =>
-  resolve(TRANSFORM[FIELD_TYPES[game]?.[type]?.[key]], value) ?? value;
+export const prettify = (game, type, key, value) => {
+  const t = FIELD_TYPES[game]?.[type]?.[key];
+  return resolve(TRANSFORM[t] ?? ENUM_LABELS[game]?.[t], value) ?? value;
+};
 
 // the field keys to display for a type, given the user's prefs — the "all"
 // sentinel or a Set. The one indirection point for the display policy:

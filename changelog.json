@@ -2,6 +2,12 @@
  "entries": [
   {
    "date": "2026-07-22",
+   "tag": "improved",
+   "title": "Object fields read in plain language",
+   "detail": "Object fields now read as words instead of raw numbers, taken from the labels the developers wrote in the game's own code: on/off fields as true/false, a door's state (open, closed, hub door closed), an enemy spawner's start state read like a Slig's (patrol, sleeping, listening to glukkon), and dozens more per game. See them via \"Show more object fields\" or search; \"Show raw field values\" turns it all back to the numbers."
+  },
+  {
+   "date": "2026-07-22",
    "tag": "new",
    "title": "See the raw numbers behind the labels",
    "detail": "A new \"Show raw field values\" setting (off by default) swaps the friendly translations for the exact values the game stores (1/0 instead of true/false, a Slig's start_state as a number, a Mudokon's job as 1 rather than \"sit scrub\"). Handy if you're building custom levels or just curious what's under the hood. Search still understands the translated text either way."

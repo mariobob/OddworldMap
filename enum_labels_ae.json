@@ -1,0 +1,974 @@
+{
+ "AbeDoorStates": {
+  "0": "abe comes in",
+  "1": "padding",
+  "2": "wait abit",
+  "3": "to state4",
+  "4": "set new active camera",
+  "5": "set new abe position",
+  "6": "abe comes out"
+ },
+ "BoneStateFlags": {
+  "0": "bit5_b hit object"
+ },
+ "BoneStates": {
+  "0": "spawned",
+  "1": "airborne",
+  "2": "collided",
+  "3": "on ground",
+  "4": "edible",
+  "5": "falling"
+ },
+ "BoomMachineStates": {
+  "0": "inactive",
+  "1": "already used",
+  "2": "drop grenade animation",
+  "3": "drop grenade"
+ },
+ "ChantStates": {
+  "0": "idle chanting",
+  "1": "possess victim",
+  "2": "possessed victim",
+  "3": "wait for unpossessing",
+  "4": "unpossessing",
+  "5": "padding",
+  "6": "chanting for bird portal"
+ },
+ "CrawlingSligButtonSounds": {
+  "0": "none",
+  "1": "sack hit",
+  "2": "falling item presence 2",
+  "3": "security orb",
+  "4": "sack hit (duplicate)",
+  "5": "bullet",
+  "6": "abe generic movement"
+ },
+ "CrawlingSligMotion": {
+  "0": "m_idle_0_41 b260",
+  "1": "m_using button_1_41 b890",
+  "2": "m_waking up_2_41 bf00",
+  "3": "m_crawling_3_41 b280",
+  "4": "m_start falling_4_41 b620",
+  "5": "m_falling_5_41 b650",
+  "6": "m_landing_6_41 b870",
+  "7": "m_to shaking to idle_7_41 c010",
+  "8": "m_speaking_8_41 bf70",
+  "9": "m_snoozing_9_41 bd80",
+  "10": "m_pushing wall_10_41 b400",
+  "11": "m_turn around_11_41 b590",
+  "12": "m_shaking_12_418 c30",
+  "13": "m_empty_13_418 c50",
+  "14": "m_shaking to idle_14_41 c040",
+  "15": "m_end crawling_15_41 b600",
+  "16": "m_idle to pushing wall_16_41 b3 c0",
+  "17": "m_end pushing wall_17_41 b3 a0"
+ },
+ "DoorStates": {
+  "0": "open",
+  "1": "closed",
+  "2": "opening",
+  "3": "closing"
+ },
+ "DoorTypes": {
+  "0": "basic door",
+  "1": "padding (ignore)",
+  "2": "tasks door with secret music",
+  "3": "tasks door"
+ },
+ "DrillBehavior": {
+  "0": "not interactable",
+  "1": "toggle",
+  "2": "use"
+ },
+ "DrillDirection": {
+  "0": "down",
+  "1": "right",
+  "2": "left"
+ },
+ "DrillStates": {
+  "0": "state_0_restart_cycle",
+  "1": "state_1_going_down",
+  "2": "state_2_going up"
+ },
+ "ElectricWallStartState": {
+  "0": "off",
+  "1": "on"
+ },
+ "EnvironmentSfx": {
+  "0": "slide stop",
+  "1": "walking footstep",
+  "2": "running footstep",
+  "3": "sneak footstep",
+  "4": "run slide",
+  "5": "landing soft",
+  "6": "hit ground soft",
+  "7": "death noise",
+  "8": "rolling noise",
+  "9": "generic movement",
+  "10": "exhausting hoist noise",
+  "12": "all oya",
+  "13": "knockback",
+  "14": "elum hit wall"
+ },
+ "Flags": {
+  "0": "bit6_start pos is bottom"
+ },
+ "Flags_100": {
+  "0": "bit2_persist_offscreen"
+ },
+ "Flags_160": {
+  "0": "bit15_padding"
+ },
+ "Flags_16A": {
+  "0": "bit25_padding",
+  "1": "then"
+ },
+ "Flags_16C": {
+  "0": "bit3_unknown"
+ },
+ "Flags_174": {
+  "0": "bit15"
+ },
+ "Flags_178": {
+  "0": "bit15_padding"
+ },
+ "Flags_18A": {
+  "0": "e18 a_bit7"
+ },
+ "Flags_1AA": {
+  "0": "bit15_padding"
+ },
+ "Flags_1AC": {
+  "0": "e1 ac_e bit16_is_mudanchee_vault_ender"
+ },
+ "Flags_1AE": {
+  "0": "e1 ae_bit2_do_quicksave"
+ },
+ "Flags_216": {
+  "0": "bit5_padding"
+ },
+ "Flags_24": {
+  "0": "e24_bit3_set music to none on dtor"
+ },
+ "Flags_40": {
+  "0": "bit1_is_on"
+ },
+ "Flags_5C": {
+  "0": "bit16"
+ },
+ "Flags_6A": {
+  "0": "bit16_get_depressed"
+ },
+ "Flags_6E": {
+  "0": "e6 e_bit6"
+ },
+ "Flags_74": {
+  "0": "bit10_listen to sligs"
+ },
+ "Flags_76": {
+  "0": "bit7_can_be_possessed"
+ },
+ "Flags_9E": {
+  "0": "bit6_persistant"
+ },
+ "Flags_A2": {
+  "0": "bit5_heard glukkon"
+ },
+ "Flags_B0": {
+  "0": "bit7"
+ },
+ "Flags_D4": {
+  "0": "d4_e bit16_shadow_enabled"
+ },
+ "Flags_D6": {
+  "0": "d6_bit1_shadow_at_bottom"
+ },
+ "FleechSound": {
+  "0": "patrol cry",
+  "1": "burp",
+  "2": "digesting",
+  "3": "sleeping inhale",
+  "4": "sleeping exhale",
+  "5": "unknown",
+  "7": "scared",
+  "8": "devour",
+  "9": "land on floor",
+  "10": "lick target",
+  "11": "ledge hoist",
+  "12": "death by height",
+  "13": "dismember",
+  "14": "crawl rng1",
+  "15": "crawl rng2",
+  "16": "crawl rng3"
+ },
+ "FootSwitchTriggerBy": {
+  "0": "abe",
+  "1": "anyone"
+ },
+ "GasColour": {
+  "0": "yellow",
+  "1": "red",
+  "2": "green",
+  "3": "blue",
+  "4": "white"
+ },
+ "GlukkonSpeak": {
+  "-1": "none",
+  "0": "hey",
+  "1": "do it",
+  "2": "stay here",
+  "3": "commere",
+  "4": "all oya",
+  "5": "heh",
+  "6": "help",
+  "7": "laugh",
+  "8": "kill em",
+  "9": "unused",
+  "10": "unused",
+  "11": "what",
+  "12": "unused",
+  "13": "unused",
+  "14": "unused"
+ },
+ "GlukkonTypes": {
+  "0": "normal",
+  "1": "story aslik",
+  "2": "story dripik",
+  "3": "story phleg",
+  "4": "normal 4",
+  "5": "normal 5"
+ },
+ "GreeterBrainStates": {
+  "0": "brain_0_patrol",
+  "1": "brain_1_patrol turn",
+  "2": "brain_2_speak",
+  "3": "brain_3_chase speak",
+  "4": "brain_4_chase",
+  "5": "brain_5_knockback",
+  "6": "brain_6_to chase",
+  "7": "brain_7_fall"
+ },
+ "GreeterSpeak": {
+  "0": "hi",
+  "1": "here boy",
+  "2": "get him",
+  "3": "laugh",
+  "9": "what",
+  "1000": "randomized"
+ },
+ "InvisibleSwitchScale": {
+  "0": "half",
+  "1": "full",
+  "2": "any"
+ },
+ "LeverSoundDirection": {
+  "0": "left and right",
+  "1": "left",
+  "2": "right"
+ },
+ "LeverSoundType": {
+  "0": "none",
+  "1": "well",
+  "2": "unknown",
+  "3": "door",
+  "4": "electric wall",
+  "5": "security orb",
+  "6": "lift"
+ },
+ "LeverState": {
+  "0": "waiting",
+  "1": "pulled",
+  "2": "finished"
+ },
+ "LiftFlags": {
+  "0": "bit8_b ignore lift mover"
+ },
+ "LiftMoverStates": {
+  "0": "inactive",
+  "1": "start moving down",
+  "2": "moving down",
+  "3": "start moving up",
+  "4": "moving up",
+  "5": "moving done"
+ },
+ "LiftPointStopType": {
+  "0": "top floor",
+  "1": "bottom floor",
+  "2": "middle floor",
+  "3": "middle lock floor",
+  "4": "start point only"
+ },
+ "MeatStateFlags": {
+  "0": "bit4_b interactive"
+ },
+ "MeatStates": {
+  "0": "created",
+  "1": "idle",
+  "2": "being thrown",
+  "3": "become apick up",
+  "4": "wait for pick up",
+  "5": "fall"
+ },
+ "MineCarDirs": {
+  "0": "down",
+  "1": "right",
+  "2": "left",
+  "3": "up"
+ },
+ "MineCarStates": {
+  "0": "parked without abe",
+  "1": "parked with abe",
+  "2": "moving",
+  "3": "falling"
+ },
+ "Mine_Flags_1BC": {
+  "0": "bit1_persist offscreen"
+ },
+ "MovementDirection": {
+  "0": "left",
+  "1": "right"
+ },
+ "MudAction": {
+  "0": "hello or all ya",
+  "1": "follow me",
+  "2": "wait",
+  "3": "unused",
+  "4": "stop it",
+  "5": "unused",
+  "6": "fart",
+  "7": "slap or water",
+  "8": "sorry",
+  "9": "mud abuse",
+  "10": "comfort",
+  "11": "smack into wall",
+  "12": "laugh",
+  "13": "duck",
+  "14": "mud died",
+  "15": "unknown",
+  "16": "unknown",
+  "17": "none"
+ },
+ "MudSounds": {
+  "-1": "none",
+  "0": "empty",
+  "1": "empty",
+  "2": "empty",
+  "3": "hello neutral",
+  "4": "follow me",
+  "5": "anger",
+  "6": "wait",
+  "7": "fart",
+  "8": "giggle",
+  "9": "hurt2",
+  "10": "laugh",
+  "11": "goodbye",
+  "12": "okay",
+  "13": "nuh uh",
+  "14": "oops",
+  "15": "death drop scream",
+  "16": "hurt1",
+  "17": "all oya",
+  "18": "hi angry",
+  "19": "hi happy",
+  "20": "hi sad",
+  "21": "no angry",
+  "22": "no sad",
+  "23": "fart puh",
+  "24": "sick",
+  "25": "work",
+  "26": "stop it",
+  "27": "sorry",
+  "28": "sad ugh"
+ },
+ "Mud_Brain_State": {
+  "0": "mud_brain_states_enum"
+ },
+ "Mud_Emotion": {
+  "0": "normal",
+  "1": "angry",
+  "2": "aggressive",
+  "3": "sad",
+  "4": "suicidal",
+  "5": "happy",
+  "7": "sick"
+ },
+ "Mud_State": {
+  "0": "chisle",
+  "1": "scrub",
+  "2": "angry worker",
+  "3": "damage ring giver",
+  "4": "health ring giver"
+ },
+ "Mud_TLV_Emotion": {
+  "0": "normal",
+  "1": "angry",
+  "2": "sad",
+  "3": "wired",
+  "4": "sick"
+ },
+ "MusicTriggerMusicType": {
+  "0": "drum ambience",
+  "1": "death drum short",
+  "2": "secret area long",
+  "3": "soft chase",
+  "4": "intense chase",
+  "5": "chime",
+  "6": "secret area short"
+ },
+ "ParamiteSpeak": {
+  "0": "cmon_or_attack",
+  "1": "stay",
+  "2": "do it",
+  "3": "loud step",
+  "4": "slight step",
+  "5": "howdy",
+  "6": "climbing web",
+  "7": "detected meat",
+  "8": "none",
+  "9": "all ya",
+  "10": "none",
+  "11": "none"
+ },
+ "Path_BoomMachine::NozzleSide": {
+  "0": "right",
+  "1": "left"
+ },
+ "Path_ContinuePoint::Scale": {
+  "0": "none",
+  "1": "half",
+  "2": "full"
+ },
+ "Path_CrawlingSlig::CrawlDirection": {
+  "0": "left",
+  "1": "right",
+  "2": "random"
+ },
+ "Path_CrawlingSlig::State": {
+  "0": "sleeping",
+  "1": "sleeping2 (duplicate)",
+  "2": "awake"
+ },
+ "Path_Edge::GrabDirection": {
+  "0": "facing left",
+  "1": "facing right",
+  "2": "facing any direction"
+ },
+ "Path_EnemyStopper::StopDirection": {
+  "0": "left",
+  "1": "right",
+  "2": "both"
+ },
+ "Path_FlyingSlig_Data::SpawnDelayStates": {
+  "0": "move immediately",
+  "1": "use custom spawn move delay"
+ },
+ "Path_Glukkon::Behavior": {
+  "0": "ignore walls",
+  "1": "check for walls"
+ },
+ "Path_Glukkon::SpawnType": {
+  "0": "regular spawn",
+  "1": "facing left",
+  "2": "facing right",
+  "3": "full spawn effects"
+ },
+ "Path_Glukkon::StartDirection": {
+  "0": "right",
+  "1": "left"
+ },
+ "Path_GlukkonSwitch::Scale": {
+  "0": "half",
+  "1": "full"
+ },
+ "Path_Hoist::GrabDirection": {
+  "0": "facing left",
+  "1": "facing right",
+  "2": "facing any direction"
+ },
+ "Path_Hoist::Type": {
+  "0": "next floor",
+  "1": "next edge",
+  "2": "off screen"
+ },
+ "Path_LiftMover::YDirection": {
+  "0": "down",
+  "1": "up"
+ },
+ "Path_MotionDetector::InitialMoveDirection": {
+  "0": "right",
+  "1": "left"
+ },
+ "Path_Paramite::EntranceType": {
+  "0": "normal patrol",
+  "1": "normal surprise web",
+  "2": "slightly higher spawn surprise web",
+  "3": "unused scale to left grid size",
+  "4": "unused scale to right grid size"
+ },
+ "Path_Slig::ShootPossessedSligs": {
+  "0": "yes",
+  "1": "yes",
+  "3": "no"
+ },
+ "Path_Slig::StartState": {
+  "0": "listening",
+  "1": "patrol",
+  "2": "sleeping",
+  "3": "chase",
+  "4": "chase and disappear",
+  "5": "unused",
+  "6": "listening to glukkon"
+ },
+ "Path_TrapDoor::StartState": {
+  "0": "open",
+  "1": "closed"
+ },
+ "Path_UXB::StartState": {
+  "0": "on",
+  "1": "off"
+ },
+ "PortalSide": {
+  "0": "right",
+  "1": "left"
+ },
+ "PortalStates": {
+  "0": "create portal",
+  "1": "idle portal",
+  "2": "join doves in center",
+  "3": "kill doves",
+  "4": "create terminators",
+  "5": "expand terminators",
+  "6": "active portal",
+  "7": "shrykull get doves",
+  "8": "unused",
+  "9": "get shrykull",
+  "10": "collapse terminators",
+  "11": "stop sound",
+  "12": "create flash1",
+  "13": "create flash2",
+  "14": "create flash3",
+  "15": "kill portal",
+  "16": "abe inside portal",
+  "17": "portal exit_set position",
+  "18": "portal exit_create terminators",
+  "19": "portal exit_expand terminators",
+  "20": "portal exit_abe exitting",
+  "21": "kill portal clipper",
+  "22": "fadeout terminators"
+ },
+ "PortalSubStates": {
+  "0": "jumping inside portal",
+  "1": "set new active camera",
+  "2": "hop out of portal",
+  "3": "padding",
+  "4": "set new abe position"
+ },
+ "PortalType": {
+  "0": "abe",
+  "1": "worker",
+  "2": "shrykull"
+ },
+ "PullRingSoundDirection": {
+  "0": "left and right",
+  "1": "left",
+  "2": "right"
+ },
+ "PullRingSwitchSound": {
+  "0": "none",
+  "1": "well exit",
+  "2": "ring unknown trigger",
+  "3": "door effect"
+ },
+ "ScrabSounds": {
+  "0": "howl",
+  "1": "death howl",
+  "2": "empty",
+  "3": "empty",
+  "4": "hit collision",
+  "5": "shredding",
+  "6": "walk1",
+  "7": "walk2",
+  "8": "yell"
+ },
+ "ScrabSpawnDirection": {
+  "0": "none",
+  "1": "left",
+  "2": "right"
+ },
+ "ScrabSpawnerStates": {
+  "0": "inactive",
+  "1": "scrab spawned"
+ },
+ "SecurityDoorStates": {
+  "0": "inactive",
+  "1": "success chime",
+  "2": "saying hi",
+  "3": "listening for hi",
+  "4": "waiting to say password",
+  "5": "preparing to say password",
+  "6": "saying password",
+  "7": "pausing",
+  "9": "listening for password",
+  "10": "checking if password matches",
+  "11": "success",
+  "12": "failure",
+  "13": "laugh at failure"
+ },
+ "ShadowZoneScale": {
+  "0": "both",
+  "1": "half",
+  "2": "full"
+ },
+ "SlamDoor_Flags_118": {
+  "0": "e118_bit5_delete"
+ },
+ "SlapLockStates": {
+  "0": "shaking",
+  "1": "idle",
+  "2": "slapped",
+  "3": "broken",
+  "4": "emit invisibility powerup ring",
+  "5": "flicker hero",
+  "6": "give invisibility from flicker",
+  "7": "give invisibility"
+ },
+ "SligSfx": {
+  "1": "standing turn",
+  "2": "walking step",
+  "3": "running step",
+  "4": "snooze2",
+  "5": "snooze1",
+  "6": "reload1",
+  "7": "reload2",
+  "9": "propeller1",
+  "10": "propeller2",
+  "11": "propeller3",
+  "13": "collide with wall2",
+  "14": "padding",
+  "15": "padding",
+  "16": "padding"
+ },
+ "SlogSound": {
+  "0": "padding",
+  "1": "padding",
+  "2": "idle woof",
+  "3": "idle grrr",
+  "4": "idle grr alt",
+  "5": "cautious woof",
+  "6": "jump bite",
+  "7": "padding",
+  "8": "attack growl",
+  "9": "death whine",
+  "10": "yawn start",
+  "11": "yawn end",
+  "12": "padding",
+  "13": "hungry yip",
+  "14": "skid",
+  "15": "padding",
+  "16": "landing",
+  "17": "fast step",
+  "18": "slow step"
+ },
+ "SlurgFlags": {
+  "0": "bit2_start to move"
+ },
+ "Slurg_States": {
+  "0": "moving",
+  "1": "stopped",
+  "2": "burst"
+ },
+ "StartDirection": {
+  "0": "right",
+  "1": "left"
+ },
+ "State": {
+  "0": "wait for id enable",
+  "1": "go wait for delay",
+  "2": "wait for fall delay",
+  "3": "falling",
+  "4": "smashed"
+ },
+ "States": {
+  "0": "wait for step on me",
+  "1": "wait for get off me"
+ },
+ "StoneStates": {
+  "0": "handstone begin",
+  "1": "get handstone type",
+  "2": "handstone movie done",
+  "3": "handstone end",
+  "4": "wait for input",
+  "5": "cam change transition",
+  "6": "set active cam to abe",
+  "7": "circular fade exit"
+ },
+ "TLV_Flags": {
+  "0": "bit3_end_tlv_list"
+ },
+ "TimedMine_Flags_1C4": {
+  "0": "stick to lift point"
+ },
+ "TimerTriggerStates": {
+  "0": "wait for enabled",
+  "1": "wait for first trigger",
+  "2": "check for start again",
+  "3": "wait for second trigger"
+ },
+ "TlvTypes": {
+  "-1": "none_m1",
+  "0": "continue point",
+  "1": "path transition",
+  "2": "hoist",
+  "3": "edge",
+  "4": "death drop",
+  "5": "door",
+  "6": "shadow zone",
+  "7": "lift point",
+  "8": "local well",
+  "9": "dove",
+  "10": "rock sack",
+  "11": "falling item",
+  "12": "pull ring rope",
+  "13": "background animation",
+  "14": "timed mine",
+  "15": "slig",
+  "16": "slog",
+  "17": "lever",
+  "18": "null",
+  "19": "security orb",
+  "20": "null",
+  "21": "pulley",
+  "22": "abe start",
+  "23": "well express",
+  "24": "mine",
+  "25": "uxb",
+  "26": "paramite",
+  "27": "movie hand stone",
+  "28": "bird portal",
+  "29": "bird portal exit",
+  "30": "trap door",
+  "31": "rolling rock",
+  "32": "slig bound left",
+  "33": "invisible zone",
+  "34": "foot switch",
+  "35": "security claw",
+  "36": "motion detector",
+  "37": "slig spawner",
+  "38": "electric wall",
+  "39": "lift mover",
+  "40": "meat sack",
+  "41": "scrab",
+  "42": "null",
+  "43": "scrab left bound",
+  "44": "scrab right bound",
+  "45": "slig bound right",
+  "46": "slig persist",
+  "47": "enemy stopper",
+  "48": "invisible switch",
+  "49": "mudokon",
+  "50": "zslig cover",
+  "51": "door flame",
+  "52": "moving bomb",
+  "53": "moving bomb stopper",
+  "54": "main menu controller",
+  "55": "unknown",
+  "56": "null",
+  "57": "timer trigger",
+  "58": "security door",
+  "59": "boom machine",
+  "60": "lcd",
+  "61": "hand stone",
+  "62": "credits controller",
+  "63": "null",
+  "64": "lcdstatus board",
+  "65": "wheel syncer",
+  "66": "music trigger",
+  "67": "light",
+  "68": "slog spawner",
+  "69": "gas countdown",
+  "70": "unknown",
+  "71": "gas emitter",
+  "72": "zzz spawner",
+  "73": "glukkon",
+  "74": "kill unsaved mudokons",
+  "75": "soft landing",
+  "76": "reset switch range",
+  "77": "water",
+  "78": "null",
+  "79": "work wheel",
+  "80": "null",
+  "81": "laughing gas",
+  "82": "flying slig",
+  "83": "fleech",
+  "84": "slurg",
+  "85": "slam door",
+  "86": "level loader",
+  "87": "demo spawn point",
+  "88": "teleporter",
+  "89": "slurg spawner",
+  "90": "drill",
+  "91": "colourful meter",
+  "92": "flying slig spawner",
+  "93": "mine car",
+  "94": "bone bag",
+  "95": "explosion set",
+  "96": "multi switch controller",
+  "97": "status light",
+  "98": "slap lock",
+  "99": "paramite web line",
+  "100": "alarm",
+  "101": "brew machine",
+  "102": "scrab spawner",
+  "103": "crawling slig",
+  "104": "slig get pants",
+  "105": "slig get wings",
+  "106": "greeter",
+  "107": "crawling slig button",
+  "108": "glukkon switch",
+  "109": "door blocker",
+  "110": "tortured mudokon",
+  "111": "train door"
+ },
+ "TorturedMudokonState": {
+  "0": "being tortured",
+  "1": "killed",
+  "2": "released"
+ },
+ "TrapDoorState": {
+  "0": "closed",
+  "1": "opening",
+  "2": "open",
+  "3": "closing"
+ },
+ "TriggeredBy": {
+  "0": "timer",
+  "1": "touching"
+ },
+ "UXBState": {
+  "0": "delay",
+  "1": "active",
+  "2": "exploding",
+  "3": "deactivated"
+ },
+ "UXB_Flags_1C8": {
+  "0": "is red_bit1"
+ },
+ "WaterState": {
+  "0": "init",
+  "1": "starting",
+  "2": "flowing",
+  "3": "stopping",
+  "4": "inactive"
+ },
+ "WheelStates": {
+  "0": "idle",
+  "1": "turning"
+ },
+ "WheelSyncerOutputRequirement": {
+  "0": "all on",
+  "1": "1 on and 2 off",
+  "2": "1 or 2 on",
+  "3": "1 on or 2 off"
+ },
+ "WorkWheelStates": {
+  "0": "turning wheel",
+  "1": "check for no longer turning wheel",
+  "2": "map changing"
+ },
+ "XDirection_int": {
+  "0": "left",
+  "1": "right"
+ },
+ "as": {
+  "0": "tlv types"
+ },
+ "created": {
+  "0": "play1 fmv",
+  "1": "right to left",
+  "2": "left to right",
+  "3": "bottom to top",
+  "4": "top to bottom",
+  "5": "box out",
+  "6": "vertical split",
+  "7": "horizontal split",
+  "8": "unknown",
+  "9": "instant change"
+ },
+ "eAbeMotions": {
+  "0": "abe_motions_enum"
+ },
+ "eGlukkonMotions": {
+  "0": "glukkon_motions_enum"
+ },
+ "eMudMotions": {
+  "0": "m_idle_0_4724 e0",
+  "1": "m_walk loop_1_4728 b0",
+  "2": "m_standing turn_2_472 bf0",
+  "3": "added",
+  "4": "m_speak_4_472 fa0",
+  "5": "m_speak_5_472 fa0",
+  "6": "m_speak_6_472 fa0",
+  "7": "m_walk begin_7_472 ab0",
+  "8": "m_walk to idle_8_472 b30",
+  "9": "m_mid walk to idle_9_472 bd0",
+  "10": "m_lever use_10",
+  "11": "m_chisel_11_4732 d0",
+  "12": "m_start chisel_12",
+  "13": "m_stop chisel_13",
+  "14": "m_crouch scrub_14",
+  "15": "m_crouch idle_15",
+  "16": "m_crouch turn_16_4740 e0",
+  "17": "m_stand to crouch_17",
+  "18": "m_crouch to stand_18",
+  "19": "m_walk to run_19",
+  "20": "m_mid walk to run_20_4736 d0",
+  "21": "m_run loop_21",
+  "22": "m_run to walk_22_4738 e0",
+  "23": "m_mid run to walk_23_4739 b0",
+  "24": "m_run slide stop_24_473 a00",
+  "25": "m_run slide turn_25_473 aa0",
+  "26": "m_run turn to run_26_473 bb0",
+  "27": "m_sneak loop_27_473 c40",
+  "28": "m_mid walk to sneak_28_473 d60",
+  "29": "m_sneak to walk_29_473 e20",
+  "30": "m_walk to sneak_30_473 ee0",
+  "31": "m_mid sneak to walk_31_473 f30",
+  "32": "m_sneak begin_32_473 f80",
+  "33": "m_sneak to idle_33_473 ff0",
+  "34": "m_mid sneak to idle_34",
+  "35": "m_run jump begin_35",
+  "36": "m_run jump mid_36",
+  "37": "m_stand to run_37_4749 a0",
+  "38": "m_punch_38_474 aa0",
+  "39": "m_hoist begin_39_4748 e0",
+  "40": "m_hoist land_40",
+  "41": "m_land soft1_41",
+  "42": "m_land soft2_42_4743 f0",
+  "43": "m_dunno begin_43",
+  "44": "m_dunno end_44_4727 b0",
+  "45": "m_knock forward_45",
+  "46": "m_knockback_46_4742 a0",
+  "47": "m_knockback get up_47",
+  "48": "m_walk off edge_48_4743 c0",
+  "49": "m_fall_49_472 c60",
+  "50": "m_chant_50",
+  "51": "m_chant end_51_4730 d0",
+  "52": "m_to duck_52_474 a20",
+  "53": "m_duck_53_474 a40",
+  "54": "m_duck to crouch_54_474 a80",
+  "55": "m_duck knockback_55",
+  "56": "m_slap own head_56_4727 d0",
+  "57": "m_turn wheel begin_57_474 c00",
+  "58": "m_turn wheel loop_58_474 cc0",
+  "59": "m_turn wheel end_59_474 d30"
+ },
+ "eParamiteMotions": {
+  "0": "paramite_motions_enum"
+ },
+ "eScrabMotions": {
+  "0": "scrab_motions_enum"
+ },
+ "eSligMotions": {
+  "0": "slig_motions_enum"
+ }
+}

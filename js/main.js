@@ -4,7 +4,7 @@ import { $ } from "./dom.js";
 import { resize } from "./render.js";
 import { initGames, selectGame, applyHash } from "./navigate.js";
 import { setAnnotations } from "./annotations.js";
-import { setFieldTypes } from "./fields.js";
+import { setFieldTypes, setEnumLabels } from "./fields.js";
 import { initSettings, storedLocationHash, clearStoredLocation } from "./settings.js";
 import "./sidebar.js";
 import "./search.js";
@@ -41,9 +41,13 @@ Promise.all([
   loadOne("annotations.json"),
   loadOne("field_types_ao.json"),
   loadOne("field_types_ae.json"),
-]).then(([ao, ae, annotations, ftAo, ftAe]) => {
+  loadOne("enum_labels_ao.json"),
+  loadOne("enum_labels_ae.json"),
+]).then(([ao, ae, annotations, ftAo, ftAe, elAo, elAe]) => {
   setAnnotations(annotations); // before the path buttons build their labels
-  setFieldTypes({ AO: ftAo || {}, AE: ftAe || {} }); // before any tooltip/search prettifies
+  // before any tooltip/search prettifies
+  setFieldTypes({ AO: ftAo || {}, AE: ftAe || {} });
+  setEnumLabels({ AO: elAo || {}, AE: elAe || {} });
   const games = [ao, ae].filter((d) => d && d.levels && d.levels.length);
   if (!games.length) {
     $("gameName").textContent = "Map data failed to load.";

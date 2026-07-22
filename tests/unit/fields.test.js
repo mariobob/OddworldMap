@@ -7,12 +7,14 @@ import {
   fieldEntries,
   defaultVisible,
   setFieldTypes,
+  setEnumLabels,
 } from "../../js/fields.js";
 
-// prettify keys value transforms by each field's game type, which the viewer
-// loads from the field_types sidecar. Inject a small stand-in so the tests
-// exercise the object -> field -> type -> transform path. One game "G" suffices:
-// the real per-game vocabulary is a data concern, checked in field-types.test.js.
+// prettify resolves a field's game type (field_types sidecar), then its label —
+// a hand value-type transform, else the generated enum labels (enum_labels
+// sidecar). Inject small stand-ins so the tests exercise that path. One game "G"
+// suffices; the real per-game vocabulary is a data concern (field-types.test.js,
+// enum-labels.test.js).
 setFieldTypes({
   G: {
     Slig: { start_state: "Path_Slig::StartState", scale: "Scale_short" },
@@ -24,7 +26,16 @@ setFieldTypes({
       emotion: "Mud_TLV_Emotion",
       deaf: "Choice_short",
     },
-    Door: { start_state: "DoorStates" }, // a real type with no transform -> stays raw
+    Door: { start_state: "DoorStates" }, // typed, but no label below -> stays raw
+  },
+});
+setEnumLabels({
+  G: {
+    "Path_Slig::StartState": { 0: "listening", 1: "patrol", 2: "sleeping" },
+    "Path_Mudokon::MudJobs": { 0: "stand scrub", 1: "sit scrub", 2: "sit chant" },
+    Mud_State: { 0: "chisle", 4: "health ring giver" },
+    Mud_TLV_Emotion: { 2: "sad" },
+    // DoorStates deliberately absent: a typed field with no label renders raw
   },
 });
 

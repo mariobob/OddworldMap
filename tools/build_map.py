@@ -367,6 +367,30 @@ def _match_brace(text, open_idx):
                 return i + 1
     return len(text)
 
+def _relive_headers(game_key):
+    """the Tlvs header for a game plus the AliveLib headers it includes — where
+    the data structs and enums are declared"""
+    tlv = REPO / f"Source/Tools/relive_api/Tlvs{game_key}.hpp"
+    paths = [tlv]
+    for inc in re.finditer(r'#include\s+"([^"]+)"', tlv.read_text()):
+        p = (tlv.parent / inc.group(1)).resolve()
+        if p.exists():
+            paths.append(p)
+    return paths
+
+# the viewer owns these value-type transforms (bool, full/half, left/right) and
+# keeps them uniform across games, so the label generator leaves them out
+_VALUE_TYPES = {"Choice_short", "Choice_int", "Scale_short", "Scale_int",
+                "XDirection_short", "YDirection_short"}
+
+def _derive_label(enumerator):
+    """a readable label from an enumerator name: drop the value suffix and the
+    decomp's `e` prefix, split CamelCase (eChaseAndDisappear_4 -> Chase And Disappear)"""
+    n = re.sub(r"_\d+$", "", enumerator)
+    n = re.sub(r"^e(?=[A-Z])", "", n)
+    n = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", " ", n)
+    return n[:1].upper() + n[1:] if n else enumerator
+
 def parse_member_types(game_key):
     """(data-struct, member) -> its declared game type, across the Tlvs header
     and the AliveLib data-struct headers it includes. A field's game type is what
@@ -377,13 +401,7 @@ def parse_member_types(game_key):
     MeatSaw enum), so a nested enum is qualified with its owning struct; the
     decomp's own qualified references carry the cross-object sharing. Primitives
     and sub-struct-valued fields carry no type."""
-    api = REPO / "Source/Tools/relive_api"
-    tlv = api / f"Tlvs{game_key}.hpp"
-    paths = [tlv]
-    for inc in re.finditer(r'#include\s+"([^"]+)"', tlv.read_text()):
-        p = (tlv.parent / inc.group(1)).resolve()
-        if p.exists():
-            paths.append(p)
+    paths = _relive_headers(game_key)
 
     struct_names, raw = set(), []
     for p in paths:
@@ -420,6 +438,52 @@ def parse_member_types(game_key):
             continue
         types[(struct, member)] = ty
     return types
+
+def parse_enum_labels(game_key):
+    """canonical enum type -> {value: label}, for the viewer to render enum ints.
+    Values come from the enum definitions (authoritative: explicit `= N` or
+    positional), labels from the AddEnum blocks where the decomp curates one, else
+    derived from the enumerator name. Keyed like parse_member_types so the labels
+    line up with the field types. The basic value-types are left out — the viewer
+    owns those (_VALUE_TYPES)."""
+    # enum definitions across the headers: canonical type -> {value: enumerator},
+    # a nested enum qualified with its owning struct (matching the field types)
+    enums = {}
+    for p in _relive_headers(game_key):
+        src = p.read_text(errors="replace")
+        structs = [(sm.group(1), sm.start(), _match_brace(src, sm.end() - 1))
+                   for sm in re.finditer(r'\bstruct\s+(Path_[A-Za-z0-9_]+)\b[^{;]*\{', src)]
+        for em in re.finditer(_ENUM_RE + r'[^{;]*\{', src):
+            body = src[em.end():_match_brace(src, em.end() - 1) - 1]
+            owner = next((s for s, a, b in structs if a <= em.start() < b), None)
+            key = f"{owner}::{em.group(1)}" if owner else em.group(1)
+            vals, running = {}, 0
+            for part in body.split(","):
+                dm = re.match(r"\s*([A-Za-z_]\w*)\s*(?:=\s*(-?\d+|0x[0-9A-Fa-f]+))?", part)
+                if not dm or not dm.group(1):
+                    continue
+                v = int(dm.group(2), 0) if dm.group(2) else running
+                vals[v] = dm.group(1)
+                running = v + 1
+            if vals:
+                enums[key] = vals
+
+    # AddEnum blocks (in the Tlvs header) give curated labels per enumerator
+    curated = {}
+    src = (REPO / f"Source/Tools/relive_api/Tlvs{game_key}.hpp").read_text()
+    for am in re.finditer(r'AddEnum<\s*([A-Za-z0-9_:]+)\s*>\s*\(\s*"[^"]*"\s*,\s*\{(.*?)\}\s*\)', src, re.S):
+        key = re.sub(r"^(?:AO|AE)?::", "", am.group(1))
+        pairs = dict(re.findall(r'\{\s*[A-Za-z0-9_:]+::([A-Za-z0-9_]+)\s*,\s*"([^"]*)"\s*\}', am.group(2)))
+        if pairs:
+            curated[key] = pairs
+
+    labels = {}
+    for key, vals in enums.items():
+        if key in _VALUE_TYPES:
+            continue
+        c = curated.get(key, {})
+        labels[key] = {v: c.get(en, _derive_label(en)).lower() for v, en in vals.items()}
+    return labels
 
 def parse_object_schema(game_key):
     """per-type payload field layout from the relive_api CTOR blocks: each
@@ -492,6 +556,17 @@ def write_field_types(game_key, out):
     dst = out / game["field_types_file"]
     dst.write_text(json.dumps({k: ft[k] for k in sorted(ft)}, indent=1))
     print(f"field types -> {dst} ({len(ft)} object types)")
+    return dst
+
+def write_enum_labels(game_key, out):
+    """the viewer's enum-value labels sidecar for one game: {type: {value: label}}.
+    Generated from the decomp (no disc) so the viewer renders enum ints as words
+    without hand-maintaining them; keyed by the same game type as field_types."""
+    labels = parse_enum_labels(game_key)
+    out_by_type = {t: {str(v): labels[t][v] for v in sorted(labels[t])} for t in sorted(labels)}
+    dst = out / GAMES[game_key]["enum_labels_file"]
+    dst.write_text(json.dumps(out_by_type, indent=1))
+    print(f"enum labels -> {dst} ({len(labels)} enum types)")
     return dst
 
 # ------------------------------------------------------------- TLV extraction
@@ -840,6 +915,7 @@ GAMES = {
         "cache": "pathdata_ao.json",
         "schema_cache": "objects_ao.json",
         "field_types_file": "field_types_ao.json",
+        "enum_labels_file": "enum_labels_ao.json",
         "env": "ODDWORLD_DISC_AO",
         "geometry": {"cellW": 368, "cellH": 240, "worldW": 1024, "worldH": 480,
                      "winX": 256, "winY": 120, "visW": 368, "visH": 240},
@@ -855,6 +931,7 @@ GAMES = {
         "cache": "pathdata_ae.json",
         "schema_cache": "objects_ae.json",
         "field_types_file": "field_types_ae.json",
+        "enum_labels_file": "enum_labels_ae.json",
         "env": "ODDWORLD_DISC_AE",
         "geometry": {"cellW": 368, "cellH": 240, "worldW": 375, "worldH": 260,
                      "winX": 0, "winY": 0, "visW": 375, "visH": 260},
@@ -912,14 +989,15 @@ def main():
                          "Defaults to $ODDWORLD_DISC_AO / $ODDWORLD_DISC_AE")
     ap.add_argument("--out", default=str(ROOT))
     ap.add_argument("--levels", default="", help="comma list of level shorts to limit (e.g. R2,R6)")
-    ap.add_argument("--emit-field-types", action="store_true",
-                    help="regenerate field_types_{ao,ae}.json from the schema cache "
-                         "(no disc needed) and exit")
+    ap.add_argument("--emit-field-data", action="store_true",
+                    help="regenerate the viewer sidecars field_types_{ao,ae}.json and "
+                         "enum_labels_{ao,ae}.json from the decomp (no disc needed) and exit")
     args = ap.parse_args()
 
-    if args.emit_field_types:
+    if args.emit_field_data:
         for gk in sorted(GAMES):
             write_field_types(gk, Path(args.out))
+            write_enum_labels(gk, Path(args.out))
         return
 
     game = game_setup(args.game)
@@ -1053,7 +1131,8 @@ def main():
         merged += [L for L in data["levels"] if L["short"] not in have]
         data["levels"] = merged
     data_file.write_text(json.dumps(data, indent=1))
-    write_field_types(args.game, out)  # schema-derived; kept in sync with each build
+    write_field_types(args.game, out)  # decomp-derived sidecars, kept in sync each build
+    write_enum_labels(args.game, out)
     print(f"\ndone -> {data_file}")
 
 if __name__ == "__main__":
