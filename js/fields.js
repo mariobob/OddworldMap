@@ -49,15 +49,22 @@ const HIDE_WHEN_ZERO = new Set([
   "blind",
 ]);
 
-// value -> display: enum ints to text, Choice (0/1) fields to true/false. Keyed
-// by field name, or `Type.field` where the enum differs per type.
-const ENUM = {
-  asleep: { 0: false, 1: true },
-  deaf: { 0: false, 1: true },
-  blind: { 0: false, 1: true },
-  scale: { 0: "full", 1: "half" },
-  job: { 0: "stand scrub", 1: "sit scrub", 2: "sit chant" },
-  emotion: { 0: "normal", 1: "angry", 2: "sad", 3: "wired", 4: "sick" },
+// value-type transforms: the field's data type maps every value the same way on
+// whatever object carries the field, so these are keyed by field name alone.
+const CHOICE = { 0: false, 1: true };
+const VALUE_TRANSFORM = {
+  scale: { 0: "full", 1: "half" }, // Scale_short
+  asleep: CHOICE,
+  deaf: CHOICE,
+  blind: CHOICE,
+};
+
+// semantic enums: each int's meaning belongs to one object type, so every key is
+// scoped `Type.field`. No bare-key fallback — a same-named field on another type
+// must not borrow this mapping (a Door's start_state is a lock, not a Slig's AI).
+const SEMANTIC_ENUM = {
+  "Mudokon.job": { 0: "stand scrub", 1: "sit scrub", 2: "sit chant" },
+  "Mudokon.emotion": { 0: "normal", 1: "angry", 2: "sad", 3: "wired", 4: "sick" },
   "Mudokon.state": {
     0: "chisle",
     1: "scrub",
@@ -77,7 +84,7 @@ const ENUM = {
 };
 
 export const prettify = (type, key, value) =>
-  (ENUM[`${type}.${key}`] ?? ENUM[key])?.[value] ?? value;
+  SEMANTIC_ENUM[`${type}.${key}`]?.[value] ?? VALUE_TRANSFORM[key]?.[value] ?? value;
 
 // the field keys to display for a type, given the user's prefs — the "all"
 // sentinel or a Set. The one indirection point for the display policy:

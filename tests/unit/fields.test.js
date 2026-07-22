@@ -32,15 +32,21 @@ test("visibleFields: 'more' uses per-type picks, else the type defaults", () => 
   );
 });
 
-test("prettify: enums by field name, type-scoped where names collide, Choice to bool", () => {
+test("prettify: semantic enums are type-scoped with no bare-key leak; value transforms are global", () => {
+  // a semantic enum resolves only on its owning type
   assert.equal(prettify("Mudokon", "job", 2), "sit chant");
   assert.equal(prettify("Mudokon", "state", 4), "health ring giver");
   assert.equal(prettify("Mudokon", "emotion", 2), "sad");
   assert.equal(prettify("Slig", "start_state", 0), "listening");
-  // start_state is a lock state on a Door, not the Slig AI enum -> raw
-  assert.equal(prettify("Door", "start_state", 0), 0);
+  // the de-fragilized invariant: a same-named field on another type does not
+  // borrow the mapping — no bare-key fallback for job/emotion/state/start_state
+  assert.equal(prettify("Slig", "job", 2), 2);
+  assert.equal(prettify("Slig", "emotion", 2), 2);
+  assert.equal(prettify("Door", "start_state", 0), 0); // Door lock state, not Slig AI
+  // value-type transforms apply on any type that carries the field
   assert.equal(prettify("Slog", "asleep", 1), true); // Choice -> boolean, not 1
   assert.equal(prettify("Slog", "asleep", 0), false);
+  assert.equal(prettify("Slig", "scale", 1), "half"); // Scale_short, global by field name
   assert.equal(prettify("Slig", "shoot_on_sight_delay", 0), 0); // not an enum: raw
   assert.equal(prettify("Mudokon", "job", 9), 9); // out-of-range: raw
 });
