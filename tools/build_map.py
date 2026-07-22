@@ -561,12 +561,18 @@ def write_field_types(game_key, out):
 def write_enum_labels(game_key, out):
     """the viewer's enum-value labels sidecar for one game: {type: {value: label}}.
     Generated from the decomp (no disc) so the viewer renders enum ints as words
-    without hand-maintaining them; keyed by the same game type as field_types."""
+    without hand-maintaining them; keyed by the same game type as field_types and
+    limited to the types some field is actually declared as, so it ships only
+    labels the viewer can use (the decomp defines many enums that aren't fields)."""
+    game = game_setup(game_key)
+    used = {r[2] for tid, rows in game["schema"].items() if game["tlv_names"].get(tid)
+            for r in rows if len(r) > 2}
     labels = parse_enum_labels(game_key)
-    out_by_type = {t: {str(v): labels[t][v] for v in sorted(labels[t])} for t in sorted(labels)}
-    dst = out / GAMES[game_key]["enum_labels_file"]
-    dst.write_text(json.dumps(out_by_type, indent=1))
-    print(f"enum labels -> {dst} ({len(labels)} enum types)")
+    kept = {t: {str(v): labels[t][v] for v in sorted(labels[t])}
+            for t in sorted(labels) if t in used}
+    dst = out / game["enum_labels_file"]
+    dst.write_text(json.dumps(kept, indent=1))
+    print(f"enum labels -> {dst} ({len(kept)} of {len(labels)} enum types used)")
     return dst
 
 # ------------------------------------------------------------- TLV extraction

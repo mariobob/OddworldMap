@@ -37,6 +37,18 @@ test("enum labels: labels are lowercased to match the viewer's style", () => {
   assert.equal(AE["Mud_State"]["2"], "angry worker");
 });
 
+test("enum labels: only types some field is declared as are shipped", () => {
+  for (const [game, el, ftFile] of [
+    ["AO", AO, "field_types_ao.json"],
+    ["AE", AE, "field_types_ae.json"],
+  ]) {
+    const used = new Set();
+    for (const obj of Object.values(load(ftFile))) for (const t of Object.values(obj)) used.add(t);
+    for (const t of Object.keys(el))
+      assert.ok(used.has(t), `${game}: ${t} has labels but no field is typed as it`);
+  }
+});
+
 test("enum labels: the formerly hand-authored enums are covered, plus new ones", () => {
   assert.ok(AO["Path_Slig::StartState"] && AO["Path_Mudokon::MudJobs"]);
   assert.ok(AE["Mud_State"] && AE["Mud_TLV_Emotion"]);
