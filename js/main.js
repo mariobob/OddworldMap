@@ -4,6 +4,7 @@ import { $ } from "./dom.js";
 import { resize } from "./render.js";
 import { initGames, selectGame, applyHash } from "./navigate.js";
 import { setAnnotations } from "./annotations.js";
+import { setFieldTypes } from "./fields.js";
 import { initSettings, storedLocationHash, clearStoredLocation } from "./settings.js";
 import "./sidebar.js";
 import "./search.js";
@@ -38,8 +39,11 @@ Promise.all([
   loadOne("map_data_ao.json"),
   loadOne("map_data_ae.json"),
   loadOne("annotations.json"),
-]).then(([ao, ae, annotations]) => {
+  loadOne("field_types_ao.json"),
+  loadOne("field_types_ae.json"),
+]).then(([ao, ae, annotations, ftAo, ftAe]) => {
   setAnnotations(annotations); // before the path buttons build their labels
+  setFieldTypes({ AO: ftAo || {}, AE: ftAe || {} }); // before any tooltip/search prettifies
   const games = [ao, ae].filter((d) => d && d.levels && d.levels.length);
   if (!games.length) {
     $("gameName").textContent = "Map data failed to load.";

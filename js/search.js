@@ -13,9 +13,10 @@ let searchTimer = null;
 let searchScope = "all"; // all | game | level | path (relative to the current selection)
 
 // search matches the full field set regardless of the user's display prefs, so
-// any field is findable even when it isn't shown by default
-function tlvSearchText(t) {
-  return (t.name + " " + extrasText(t, " ", { mode: "all" })).toLowerCase();
+// any field is findable even when it isn't shown by default. The game is passed
+// through so prettify can key each value transform by the field's per-game type.
+function tlvSearchText(t, game) {
+  return (t.name + " " + extrasText(t, " ", { mode: "all", game })).toLowerCase();
 }
 
 function scopeAccepts(h) {
@@ -84,7 +85,7 @@ function hitButton(h, q) {
   // the index matches every field but the row shows only the visible ones; a
   // hit on a hidden field would look inexplicable, so append what matched
   if (!`${h.t.name} ${ex}`.toLowerCase().includes(q)) {
-    const matched = fieldEntries(h.t, { mode: "all" })
+    const matched = fieldEntries(h.t, { mode: "all", game: h.G.id })
       .map(([k, v]) => `${k}=${v}`)
       .filter((s) => s.toLowerCase().includes(q));
     if (matched.length) ex += (ex ? " " : "") + matched.join(" ");
@@ -110,7 +111,7 @@ function runSearch(q) {
     for (const L of G.levels)
       for (const P of L.paths)
         for (const t of P.tlvs)
-          if (tlvSearchText(t).includes(q)) {
+          if (tlvSearchText(t, G.id).includes(q)) {
             const h = { G, L, P, t };
             if (!scopeAccepts(h)) continue;
             hits.push(h);

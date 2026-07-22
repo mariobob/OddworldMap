@@ -119,6 +119,7 @@ export function persistSettings() {
 export function fieldPrefsFor(gameId) {
   const s = getSettings();
   return {
+    game: gameId,
     mode: s.fieldPrefs.mode,
     byType: (s.fieldPrefs.byType[gameId] ??= {}),
     raw: s.showRawValues,

@@ -49,30 +49,16 @@ const HIDE_WHEN_ZERO = new Set([
   "blind",
 ]);
 
-// value-type transforms: the field's data type maps every value the same way on
-// whatever object carries the field, so these are keyed by field name alone.
+// value transforms keyed by the field's game type: one entry then serves every
+// object that shares that type, and unrelated same-named fields never collide.
 const CHOICE = { 0: false, 1: true };
-const VALUE_TRANSFORM = {
-  scale: { 0: "full", 1: "half" }, // Scale_short
-  asleep: CHOICE,
-  deaf: CHOICE,
-  blind: CHOICE,
-};
-
-// semantic enums: each int's meaning belongs to one object type, so every key is
-// scoped `Type.field`. No bare-key fallback — a same-named field on another type
-// must not borrow this mapping (a Door's start_state is a lock, not a Slig's AI).
-const SEMANTIC_ENUM = {
-  "Mudokon.job": { 0: "stand scrub", 1: "sit scrub", 2: "sit chant" },
-  "Mudokon.emotion": { 0: "normal", 1: "angry", 2: "sad", 3: "wired", 4: "sick" },
-  "Mudokon.state": {
-    0: "chisle",
-    1: "scrub",
-    2: "angry worker",
-    3: "damage ring giver",
-    4: "health ring giver",
-  },
-  "Slig.start_state": {
+const SCALE = { 0: "full", 1: "half" };
+const TRANSFORM = {
+  Choice_short: CHOICE,
+  Choice_int: CHOICE,
+  Scale_short: SCALE,
+  Scale_int: SCALE,
+  "Path_Slig::StartState": {
     0: "listening",
     1: "patrol",
     2: "sleeping",
@@ -81,10 +67,32 @@ const SEMANTIC_ENUM = {
     5: "falling to chase", // AE calls 5 "unused"; neither value occurs in shipped data
     6: "listening to glukkon",
   },
+  "Path_Mudokon::MudJobs": { 0: "stand scrub", 1: "sit scrub", 2: "sit chant" },
+  Mud_State: {
+    0: "chisle",
+    1: "scrub",
+    2: "angry worker",
+    3: "damage ring giver",
+    4: "health ring giver",
+  },
+  Mud_TLV_Emotion: { 0: "normal", 1: "angry", 2: "sad", 3: "wired", 4: "sick" },
 };
 
-export const prettify = (type, key, value) =>
-  SEMANTIC_ENUM[`${type}.${key}`]?.[value] ?? VALUE_TRANSFORM[key]?.[value] ?? value;
+// object -> field -> game type, per game; the boot loads the field_types sidecar
+// and hands it over. Empty until then, so prettify degrades to raw (bare tests).
+let FIELD_TYPES = {};
+export function setFieldTypes(byGame) {
+  FIELD_TYPES = byGame || {};
+}
+
+// a transform entry against a value: a lookup map, or a function for open-ended
+// ranges. A miss (no entry, or value the map omits) yields undefined, so prettify
+// falls back to the raw value.
+export const resolve = (entry, value) =>
+  entry == null ? undefined : typeof entry === "function" ? entry(value) : entry[value];
+
+export const prettify = (game, type, key, value) =>
+  resolve(TRANSFORM[FIELD_TYPES[game]?.[type]?.[key]], value) ?? value;
 
 // the field keys to display for a type, given the user's prefs — the "all"
 // sentinel or a Set. The one indirection point for the display policy:
@@ -113,7 +121,7 @@ export function fieldEntries(t, prefs) {
     for (const [k, v] of Object.entries(t.fields)) {
       if (show !== "all" && !show.has(k)) continue;
       if (v === 0 && HIDE_WHEN_ZERO.has(k)) continue;
-      out.push([k, prefs && prefs.raw ? v : prettify(t.name, k, v)]);
+      out.push([k, prefs && prefs.raw ? v : prettify(prefs && prefs.game, t.name, k, v)]);
     }
   return out;
 }
