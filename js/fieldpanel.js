@@ -12,8 +12,8 @@ const section = $("fieldPanel");
 const body = section.querySelector(".fp-body");
 const prefs = () => fieldPrefsFor(state.data.id);
 
-// gameplay types (those carrying `fields`) on the current path with the union
-// of their field names, ordered by object category then name
+// gameplay types (those carrying `fields`) on the current path, each with the
+// union of its field names sorted for scanning, ordered by object category then name
 function typesOnPath() {
   const byName = new Map();
   for (const t of (state.path && state.path.tlvs) || []) {
@@ -23,7 +23,7 @@ function typesOnPath() {
     for (const k of Object.keys(t.fields)) keys.add(k);
   }
   return [...byName.entries()]
-    .map(([name, keys]) => ({ name, fields: [...keys] }))
+    .map(([name, keys]) => ({ name, fields: [...keys].sort((a, b) => a.localeCompare(b)) }))
     .sort(
       (a, b) => CATS.indexOf(catOf(a)) - CATS.indexOf(catOf(b)) || a.name.localeCompare(b.name),
     );

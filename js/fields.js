@@ -107,7 +107,7 @@ export function fieldEntries(t, prefs) {
   for (const [k, v] of Object.entries(t.extra || {})) if (v !== null && v !== "") out.push([k, v]);
   const show = visibleFields(t.name, prefs);
   if (t.fields)
-    for (const [k, v] of Object.entries(t.fields)) {
+    for (const [k, v] of Object.entries(t.fields).sort(([a], [b]) => a.localeCompare(b))) {
       if (show !== "all" && !show.has(k)) continue;
       if (v === 0 && HIDE_WHEN_ZERO.has(k)) continue;
       out.push([k, prefs && prefs.raw ? v : prettify(prefs && prefs.game, t.name, k, v)]);
