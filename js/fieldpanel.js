@@ -4,7 +4,6 @@
 
 import { $ } from "./dom.js";
 import { state } from "./state.js";
-import { CATS, catOf } from "./config.js";
 import { defaultVisible } from "./fields.js";
 import { getSettings, fieldPrefsFor, persistSettings } from "./settings.js";
 
@@ -12,8 +11,8 @@ const section = $("fieldPanel");
 const body = section.querySelector(".fp-body");
 const prefs = () => fieldPrefsFor(state.data.id);
 
-// gameplay types (those carrying `fields`) on the current path, each with the
-// union of its field names sorted for scanning, ordered by object category then name
+// gameplay types (those carrying `fields`) on the current path, both the types
+// and each one's union of field names sorted by name for scanning
 function typesOnPath() {
   const byName = new Map();
   for (const t of (state.path && state.path.tlvs) || []) {
@@ -24,9 +23,7 @@ function typesOnPath() {
   }
   return [...byName.entries()]
     .map(([name, keys]) => ({ name, fields: [...keys].sort((a, b) => a.localeCompare(b)) }))
-    .sort(
-      (a, b) => CATS.indexOf(catOf(a)) - CATS.indexOf(catOf(b)) || a.name.localeCompare(b.name),
-    );
+    .sort((a, b) => a.name.localeCompare(b.name));
 }
 
 // the fields currently shown for a type: its picks, or the defaults it carries

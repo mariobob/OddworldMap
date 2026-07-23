@@ -3,8 +3,8 @@
   {
    "date": "2026-07-24",
    "tag": "improved",
-   "title": "Object fields sorted by name",
-   "detail": "Fields now appear in alphabetical order in tooltips, the screen list and the Fields picker, instead of the game's internal storage order, so on a type that carries many fields, the one you're after is where you'd expect it."
+   "title": "Objects and their fields sorted by name",
+   "detail": "The Fields panel now lists object types alphabetically, and each type's fields are alphabetical too (in the picker, tooltips and the screen list) instead of the game's internal order, so whatever you're after is where you'd expect it."
   },
   {
    "date": "2026-07-23",
