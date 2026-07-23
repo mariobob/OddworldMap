@@ -439,34 +439,63 @@ def parse_member_types(game_key):
         types[(struct, member)] = ty
     return types
 
+def _lib_headers(game_key):
+    """every header of one game's AliveLib tree plus AliveLibCommon. Enum
+    definitions aren't always reachable through includes (SwitchOp is only
+    forward-declared where fields use it), so definitions are swept by directory."""
+    dirs = [REPO / f"Source/AliveLib{game_key}", REPO / "Source/AliveLibCommon"]
+    return [h for d in dirs for h in sorted(d.rglob("*.hpp"))]
+
+def _strip_comments(src):
+    return re.sub(r"//[^\n]*", "", re.sub(r"/\*.*?\*/", "", src, flags=re.S))
+
 def parse_enum_labels(game_key):
-    """canonical enum type -> {value: label}, for the viewer to render enum ints.
-    Values come from the enum definitions (authoritative: explicit `= N` or
-    positional), labels from the AddEnum blocks where the decomp curates one, else
-    derived from the enumerator name. Keyed like parse_member_types so the labels
-    line up with the field types. The basic value-types are left out — the viewer
-    owns those (_VALUE_TYPES)."""
-    # enum definitions across the headers: canonical type -> {value: enumerator},
-    # a nested enum qualified with its owning struct (matching the field types)
-    enums = {}
-    for p in _relive_headers(game_key):
-        src = p.read_text(errors="replace")
-        structs = [(sm.group(1), sm.start(), _match_brace(src, sm.end() - 1))
-                   for sm in re.finditer(r'\bstruct\s+(Path_[A-Za-z0-9_]+)\b[^{;]*\{', src)]
-        for em in re.finditer(_ENUM_RE + r'[^{;]*\{', src):
-            body = src[em.end():_match_brace(src, em.end() - 1) - 1]
-            owner = next((s for s, a, b in structs if a <= em.start() < b), None)
-            key = f"{owner}::{em.group(1)}" if owner else em.group(1)
-            vals, running = {}, 0
-            for part in body.split(","):
-                dm = re.match(r"\s*([A-Za-z_]\w*)\s*(?:=\s*(-?\d+|0x[0-9A-Fa-f]+))?", part)
-                if not dm or not dm.group(1):
+    """(canonical enum type -> {value: label}, unlabelable type keys) for the
+    viewer to render enum ints. Values come from the enum definitions
+    (authoritative: explicit `= N` or positional), labels from the AddEnum blocks
+    where the decomp curates one, else derived from the enumerator name. Keyed
+    like parse_member_types so the labels line up with the field types; the basic
+    value-types are left out — the viewer owns those (_VALUE_TYPES). The sweep
+    covers the game's own lib and falls back to the sibling lib for shared types
+    (AO fields use AE's XDirection_short). Comments are stripped first: an "enum"
+    inside one otherwise swallows the definition that follows. A bare enum name
+    defined differently twice, or an initializer the parser can't value, makes
+    that key unlabelable rather than silently wrong — the caller fails the emit
+    if a field actually uses one."""
+    own = REPO / f"Source/Tools/relive_api/Tlvs{game_key}.hpp"
+    sibling = _lib_headers("AE" if game_key == "AO" else "AO")
+    enums, bad = {}, set()
+
+    def scan(paths, fill_only):
+        for p in paths:
+            src = _strip_comments(p.read_text(errors="replace"))
+            structs = [(sm.group(1), sm.start(), _match_brace(src, sm.end() - 1))
+                       for sm in re.finditer(r'\bstruct\s+(Path_[A-Za-z0-9_]+)\b[^{;]*\{', src)]
+            for em in re.finditer(_ENUM_RE + r'[^{;]*\{', src):
+                body = src[em.end():_match_brace(src, em.end() - 1) - 1]
+                owner = next((s for s, a, b in structs if a <= em.start() < b), None)
+                key = f"{owner}::{em.group(1)}" if owner else em.group(1)
+                if key in bad or (fill_only and key in enums):
                     continue
-                v = int(dm.group(2), 0) if dm.group(2) else running
-                vals[v] = dm.group(1)
-                running = v + 1
-            if vals:
-                enums[key] = vals
+                vals, running, ok = {}, 0, True
+                for part in body.split(","):
+                    if not part.strip():
+                        continue
+                    dm = re.match(r"\s*([A-Za-z_]\w*)\s*(?:=\s*(-?\d+|0x[0-9A-Fa-f]+))?\s*\Z", part)
+                    if not dm:  # an initializer with no literal value
+                        ok = False
+                        break
+                    v = int(dm.group(2), 0) if dm.group(2) else running
+                    vals[v] = dm.group(1)
+                    running = v + 1
+                if not ok or (key in enums and enums[key] != vals):
+                    bad.add(key)
+                    enums.pop(key, None)
+                elif vals:
+                    enums[key] = vals
+
+    scan([own] + _lib_headers(game_key), fill_only=False)
+    scan(sibling, fill_only=True)
 
     # AddEnum blocks (in the Tlvs header) give curated labels per enumerator
     curated = {}
@@ -483,7 +512,7 @@ def parse_enum_labels(game_key):
             continue
         c = curated.get(key, {})
         labels[key] = {v: c.get(en, _derive_label(en)).lower() for v, en in vals.items()}
-    return labels
+    return labels, bad
 
 def parse_object_schema(game_key):
     """per-type payload field layout from the relive_api CTOR blocks: each
@@ -554,6 +583,7 @@ def write_field_types(game_key, out):
         if name and typed:
             ft[name] = {k: typed[k] for k in sorted(typed)}
     dst = out / game["field_types_file"]
+    dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_text(json.dumps({k: ft[k] for k in sorted(ft)}, indent=1))
     print(f"field types -> {dst} ({len(ft)} object types)")
     return dst
@@ -567,10 +597,14 @@ def write_enum_labels(game_key, out):
     game = game_setup(game_key)
     used = {r[2] for tid, rows in game["schema"].items() if game["tlv_names"].get(tid)
             for r in rows if len(r) > 2}
-    labels = parse_enum_labels(game_key)
+    labels, bad = parse_enum_labels(game_key)
+    broken = used & bad
+    if broken:  # a used type must never ship silently unlabelled or mislabelled
+        raise RuntimeError(f"{game_key}: field types with unlabelable enums: {sorted(broken)}")
     kept = {t: {str(v): labels[t][v] for v in sorted(labels[t])}
             for t in sorted(labels) if t in used}
     dst = out / game["enum_labels_file"]
+    dst.parent.mkdir(parents=True, exist_ok=True)
     dst.write_text(json.dumps(kept, indent=1))
     print(f"enum labels -> {dst} ({len(kept)} of {len(labels)} enum types used)")
     return dst

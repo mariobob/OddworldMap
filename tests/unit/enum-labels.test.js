@@ -53,11 +53,20 @@ test("enum labels: the formerly hand-authored enums are covered, plus new ones",
   assert.ok(AO["Path_Slig::StartState"] && AO["Path_Mudokon::MudJobs"]);
   assert.ok(AE["Mud_State"] && AE["Mud_TLV_Emotion"]);
   assert.equal(AO["DoorStates"]["0"], "open"); // a type we never hand-authored, now readable
+  // definitions the include graph never reaches (SwitchOp is only forward-declared
+  // where fields use it) come from the directory sweep
+  for (const el of [AO, AE]) assert.equal(el["SwitchOp"]["2"], "toggle");
+  assert.equal(AO["LevelIds"]["1"], "rupture farms");
+  assert.equal(AE["ScreenChangeEffects"]["2"], "left to right");
 });
 
-test("enum labels: every type a field is typed as has labels, bar value-types and known gaps", () => {
-  // a handful of enums are defined in headers the parser doesn't reach; those
-  // fields stay raw (no regression). New omissions outside this set are a bug.
+test("enum labels: comments never fabricate enumerators", () => {
+  // a trailing "..., breaks lvl exporting if removed" comment once minted a
+  // phantom value 3 ("breaks") on this enum; the decomp defines exactly 0-2
+  assert.deepEqual(AO["Path_Slig::ShootPossessedSligs"], { 0: "no", 1: "yes", 2: "yes" });
+});
+
+test("enum labels: every type a field is typed as has labels, bar value-types", () => {
   const valueTypes = new Set([
     "Choice_short",
     "Choice_int",
@@ -66,7 +75,6 @@ test("enum labels: every type a field is typed as has labels, bar value-types an
     "XDirection_short",
     "YDirection_short",
   ]);
-  const knownGaps = new Set(["LevelIds", "SwitchOp", "TPageAbr", "Layer", "ScreenChangeEffects"]);
   for (const [game, el, ftFile] of [
     ["AO", AO, "field_types_ao.json"],
     ["AE", AE, "field_types_ae.json"],
@@ -74,7 +82,6 @@ test("enum labels: every type a field is typed as has labels, bar value-types an
     const used = new Set();
     for (const obj of Object.values(load(ftFile))) for (const t of Object.values(obj)) used.add(t);
     for (const t of used)
-      if (!valueTypes.has(t) && !(t in el))
-        assert.ok(knownGaps.has(t), `${game}: field type ${t} has no label and isn't a known gap`);
+      if (!valueTypes.has(t)) assert.ok(t in el, `${game}: field type ${t} has no label`);
   }
 });

@@ -24,6 +24,25 @@
   "1": "full",
   "2": "any"
  },
+ "LevelIds": {
+  "-1": "none",
+  "0": "menu",
+  "1": "rupture farms",
+  "2": "lines",
+  "3": "forest",
+  "4": "forest temple",
+  "5": "stock yards",
+  "6": "stock yards return",
+  "7": "removed",
+  "8": "desert",
+  "9": "desert temple",
+  "10": "credits",
+  "11": "removed",
+  "12": "board room",
+  "13": "rupture farms return",
+  "14": "forest chase",
+  "15": "desert escape"
+ },
  "LeverSoundDirection": {
   "0": "left and right",
   "1": "left",
@@ -138,8 +157,7 @@
  "Path_Slig::ShootPossessedSligs": {
   "0": "no",
   "1": "yes",
-  "2": "yes",
-  "3": "breaks"
+  "2": "yes"
  },
  "Path_Slig::StartState": {
   "0": "listening",
@@ -199,6 +217,19 @@
  "StartDirection": {
   "0": "right",
   "1": "left"
+ },
+ "SwitchOp": {
+  "0": "set true",
+  "1": "set false",
+  "2": "toggle",
+  "3": "increment",
+  "4": "decrement"
+ },
+ "TPageAbr": {
+  "0": "blend_0",
+  "1": "blend_1",
+  "2": "blend_2",
+  "3": "blend_3"
  },
  "TriggeredBy": {
   "0": "timer",
