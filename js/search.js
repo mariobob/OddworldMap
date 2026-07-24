@@ -4,7 +4,7 @@ import { esc, extrasText } from "./util.js";
 import { fieldEntries } from "./fields.js";
 import { searchInput, searchResults, scopeBar } from "./dom.js";
 import { state } from "./state.js";
-import { fieldPrefsFor } from "./settings.js";
+import { fieldPrefsFor, getSettings } from "./settings.js";
 import { jumpToTlv } from "./navigate.js";
 
 const HIT_CAP = 1500,
@@ -13,10 +13,11 @@ let searchTimer = null;
 let searchScope = "all"; // all | game | level | path (relative to the current selection)
 
 // search matches the full field set regardless of the user's display prefs, so
-// any field is findable even when it isn't shown by default. The game is passed
-// through so prettify can key each value transform by the field's per-game type.
-function tlvSearchText(t, game) {
-  return (t.name + " " + extrasText(t, " ", { mode: "all", game })).toLowerCase();
+// any field is findable even when it isn't shown by default. The game keys each
+// value transform by the field's per-game type; raw follows the display setting
+// so a query matches whichever representation the user sees (raw ints or words).
+function tlvSearchText(t, game, raw) {
+  return (t.name + " " + extrasText(t, " ", { mode: "all", game, raw })).toLowerCase();
 }
 
 function scopeAccepts(h) {
@@ -85,7 +86,11 @@ function hitButton(h, q) {
   // the index matches every field but the row shows only the visible ones; a
   // hit on a hidden field would look inexplicable, so append what matched
   if (!`${h.t.name} ${ex}`.toLowerCase().includes(q)) {
-    const matched = fieldEntries(h.t, { mode: "all", game: h.G.id })
+    const matched = fieldEntries(h.t, {
+      mode: "all",
+      game: h.G.id,
+      raw: getSettings().showRawValues,
+    })
       .map(([k, v]) => `${k}=${v}`)
       .filter((s) => s.toLowerCase().includes(q));
     if (matched.length) ex += (ex ? " " : "") + matched.join(" ");
@@ -106,12 +111,13 @@ function runSearch(q) {
     return;
   }
 
+  const raw = getSettings().showRawValues;
   const hits = [];
   outer: for (const G of state.games)
     for (const L of G.levels)
       for (const P of L.paths)
         for (const t of P.tlvs)
-          if (tlvSearchText(t, G.id).includes(q)) {
+          if (tlvSearchText(t, G.id, raw).includes(q)) {
             const h = { G, L, P, t };
             if (!scopeAccepts(h)) continue;
             hits.push(h);
