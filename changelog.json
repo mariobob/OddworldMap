@@ -3,6 +3,12 @@
   {
    "date": "2026-07-24",
    "tag": "improved",
+   "title": "Background-plane objects stand out",
+   "detail": "Objects sitting on the half-scale background plane are now drawn dimmed with a dashed outline (the same \"dashed means background\" cue the collision lines already use) so you can tell a foreground hazard from one tucked in the back when reading a screen or planning a route."
+  },
+  {
+   "date": "2026-07-24",
+   "tag": "improved",
    "title": "Search several terms at once",
    "detail": "Search now takes more than one term. A space means all must match, so \"Mudokon state=chisle\" finds only the chiselling Mudokons (before, you had to type the terms exactly as stored and in order, otherwise the search found nothing). A comma or the word \"or\" means any: \"Slig, Slog\" finds both. Each matched term is highlighted in the result."
   },

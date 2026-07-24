@@ -261,6 +261,12 @@ export function draw() {
       y1 = dY(t.y1);
     const w = Math.max(dX(t.x2) - x1, 10),
       h = Math.max(dY(t.y2) - y1, 10);
+    // half scale = background plane: dim + dash
+    const bg = t.fields?.scale === 1;
+    if (bg) {
+      ctx.globalAlpha = 0.5;
+      ctx.setLineDash([8 / cam.z, 6 / cam.z]);
+    }
     ctx.strokeStyle = c.color;
     ctx.lineWidth = (t.name === "LCDStatusBoard" ? 3.5 : 2) / cam.z;
     ctx.strokeRect(x1, y1, w, h);
@@ -269,6 +275,10 @@ export function draw() {
     if (showLabels) {
       ctx.fillStyle = c.color;
       ctx.fillText(t.name, x1, y1 - 3 / cam.z);
+    }
+    if (bg) {
+      ctx.globalAlpha = 1;
+      ctx.setLineDash([]);
     }
   }
 
