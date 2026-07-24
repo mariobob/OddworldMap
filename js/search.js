@@ -2,6 +2,7 @@
 
 import { esc, extrasText } from "./util.js";
 import { fieldEntries } from "./fields.js";
+import { parseQuery, queryTerms, matchesQuery, rankFor } from "./searchquery.js";
 import { searchInput, searchResults, scopeBar } from "./dom.js";
 import { state } from "./state.js";
 import { fieldPrefsFor, getSettings } from "./settings.js";
@@ -58,66 +59,75 @@ function updateScopeBar() {
 }
 window.addEventListener("selection-changed", updateScopeBar);
 
-function highlight(text, q) {
-  const i = text.toLowerCase().indexOf(q);
-  if (i < 0) return esc(text);
-  return (
-    esc(text.slice(0, i)) +
-    "<mark>" +
-    esc(text.slice(i, i + q.length)) +
-    "</mark>" +
-    esc(text.slice(i + q.length))
-  );
+// mark every occurrence of every term, merging overlaps, escaping each segment
+function highlight(text, terms) {
+  const lower = text.toLowerCase();
+  const ranges = [];
+  for (const term of terms) {
+    if (!term) continue; // indexOf("") would never advance
+    for (let i = lower.indexOf(term); i >= 0; i = lower.indexOf(term, i + term.length))
+      ranges.push([i, i + term.length]);
+  }
+  if (!ranges.length) return esc(text);
+  ranges.sort((a, b) => a[0] - b[0]);
+  const merged = [];
+  for (const [s, e] of ranges) {
+    const last = merged[merged.length - 1];
+    if (last && s <= last[1]) last[1] = Math.max(last[1], e);
+    else merged.push([s, e]);
+  }
+  let out = "",
+    pos = 0;
+  for (const [s, e] of merged) {
+    out += esc(text.slice(pos, s)) + "<mark>" + esc(text.slice(s, e)) + "</mark>";
+    pos = e;
+  }
+  return out + esc(text.slice(pos));
 }
 
-// match quality: exact name, name prefix, name substring, extras-only
-function matchRank(t, q) {
-  const n = t.name.toLowerCase();
-  if (n === q) return 0;
-  if (n.startsWith(q)) return 1;
-  if (n.includes(q)) return 2;
-  return 3;
-}
-
-function hitButton(h, q) {
+function hitButton(h, terms) {
   const b = document.createElement("button");
   b.className = "hit";
   let ex = extrasText(h.t, " ", fieldPrefsFor(h.G.id));
   // the index matches every field but the row shows only the visible ones; a
   // hit on a hidden field would look inexplicable, so append what matched
-  if (!`${h.t.name} ${ex}`.toLowerCase().includes(q)) {
+  const visible = `${h.t.name} ${ex}`.toLowerCase();
+  const missing = terms.filter((term) => !visible.includes(term));
+  if (missing.length) {
     const matched = fieldEntries(h.t, {
       mode: "all",
       game: h.G.id,
       raw: getSettings().showRawValues,
     })
       .map(([k, v]) => `${k}=${v}`)
-      .filter((s) => s.toLowerCase().includes(q));
+      .filter((s) => missing.some((term) => s.toLowerCase().includes(term)));
     if (matched.length) ex += (ex ? " " : "") + matched.join(" ");
   }
   b.innerHTML =
-    `<span class="loc">${h.L.short} P${h.P.id}</span> ${highlight(h.t.name, q)}` +
-    (ex ? ` <span class="ex">${highlight(ex, q)}</span>` : "");
+    `<span class="loc">${h.L.short} P${h.P.id}</span> ${highlight(h.t.name, terms)}` +
+    (ex ? ` <span class="ex">${highlight(ex, terms)}</span>` : "");
   b.onclick = () => jumpToTlv(h.G, h.L, h.P, h.t);
   return b;
 }
 
 function runSearch(q) {
   searchResults.innerHTML = "";
-  q = q.trim().toLowerCase();
+  q = q.trim();
   if (q.length < 2) {
     searchScope = "all";
     updateScopeBar();
     return;
   }
 
+  const orGroups = parseQuery(q);
+  const terms = queryTerms(orGroups);
   const raw = getSettings().showRawValues;
   const hits = [];
   outer: for (const G of state.games)
     for (const L of G.levels)
       for (const P of L.paths)
         for (const t of P.tlvs)
-          if (tlvSearchText(t, G.id, raw).includes(q)) {
+          if (matchesQuery(tlvSearchText(t, G.id, raw), orGroups)) {
             const h = { G, L, P, t };
             if (!scopeAccepts(h)) continue;
             hits.push(h);
@@ -141,19 +151,19 @@ function runSearch(q) {
 
   for (const g of groups) {
     if (!g.hits.length) continue;
-    g.hits.sort((a, b) => matchRank(a.t, q) - matchRank(b.t, q));
+    g.hits.sort((a, b) => rankFor(a.t.name, terms) - rankFor(b.t.name, terms));
     const head = document.createElement("div");
     head.className = "shead";
     head.innerHTML = `<span>${g.label}</span><span>${g.hits.length}</span>`;
     searchResults.appendChild(head);
-    g.hits.slice(0, GROUP_MAX).forEach((h) => searchResults.appendChild(hitButton(h, q)));
+    g.hits.slice(0, GROUP_MAX).forEach((h) => searchResults.appendChild(hitButton(h, terms)));
     if (g.hits.length > GROUP_MAX) {
       const rest = g.hits.slice(GROUP_MAX);
       const btn = document.createElement("button");
       btn.className = "showmore";
       btn.textContent = `show ${rest.length} more`;
       btn.onclick = () => {
-        rest.forEach((h) => searchResults.insertBefore(hitButton(h, q), btn));
+        rest.forEach((h) => searchResults.insertBefore(hitButton(h, terms), btn));
         btn.remove();
       };
       searchResults.appendChild(btn);

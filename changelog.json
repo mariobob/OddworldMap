@@ -2,6 +2,12 @@
  "entries": [
   {
    "date": "2026-07-24",
+   "tag": "improved",
+   "title": "Search several terms at once",
+   "detail": "Search now takes more than one term. A space means all must match, so \"Mudokon state=chisle\" finds only the chiselling Mudokons (before, you had to type the terms exactly as stored and in order, otherwise the search found nothing). A comma or the word \"or\" means any: \"Slig, Slog\" finds both. Each matched term is highlighted in the result."
+  },
+  {
+   "date": "2026-07-24",
    "tag": "fixed",
    "title": "Search follows the raw-values setting",
    "detail": "With \"Show raw field values\" on, search now matches the raw numbers you actually see. For example, start_state=3 finds the chasing Sligs, where before you had to type the translated word even though the rows showed numbers. Matched rows no longer show the value twice, and the highlight lands on it. With the setting off, search works on the translated words as before."
