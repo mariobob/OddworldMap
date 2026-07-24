@@ -6,6 +6,7 @@ import { $ } from "./dom.js";
 import { state } from "./state.js";
 import { defaultVisible } from "./fields.js";
 import { getSettings, fieldPrefsFor, persistSettings } from "./settings.js";
+import { toggleMenu } from "./interaction.js";
 
 const section = $("fieldPanel");
 const body = section.querySelector(".fp-body");
@@ -37,6 +38,7 @@ function renderType({ name, fields }) {
   const shown = shownFor(name, fields);
   const det = document.createElement("details");
   det.className = "fp-type";
+  det.dataset.type = name;
 
   const sum = document.createElement("summary");
   const nameEl = document.createElement("span");
@@ -104,6 +106,17 @@ function renderType({ name, fields }) {
 
 let renderedPath = null; // the path the panel was built from
 
+// open the panel to a type's row, fired by the ⚙ on a screen-list object: bring
+// the sidebar up (it may be a closed drawer) and expand that type into view
+function revealType(name) {
+  if (getSettings().fieldPrefs.mode !== "more") return; // the panel is hidden otherwise
+  toggleMenu(true);
+  const det = body.querySelector(`.fp-type[data-type="${CSS.escape(name)}"]`);
+  if (!det) return;
+  det.open = true;
+  det.scrollIntoView({ block: "nearest" });
+}
+
 export function renderFieldPanel() {
   const on = getSettings().fieldPrefs.mode === "more"; // mode only: no game is selected at boot
   section.hidden = !on;
@@ -123,5 +136,6 @@ export function initFieldPanel() {
   window.addEventListener("settings-changed", (e) => {
     if (!e.detail || e.detail.key === "fieldPrefs") renderFieldPanel(); // show-more toggled
   });
+  window.addEventListener("reveal-field-type", (e) => revealType(e.detail.type));
   renderFieldPanel();
 }

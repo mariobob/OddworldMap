@@ -8,7 +8,7 @@ import { $ } from "./dom.js";
 import { state, dX, dY } from "./state.js";
 import { cellAt } from "./model.js";
 import { setHighlight } from "./render.js";
-import { fieldPrefsFor } from "./settings.js";
+import { fieldPrefsFor, getSettings } from "./settings.js";
 import { jumpToTlv } from "./navigate.js";
 
 const panel = $("camPanel"),
@@ -67,7 +67,21 @@ export function openCamPanel(x, y, focus = null) {
       b.onclick = () => jumpToTlv(state.data, state.lvl, state.path, t);
       b.onmouseenter = () => setHighlight(t);
       b.onmouseleave = () => setHighlight(null);
-      body.appendChild(b);
+      // with the field picker on, a ⚙ jumps to this type's row in it
+      if (t.fields && getSettings().fieldPrefs.mode === "more") {
+        const wrap = document.createElement("div");
+        wrap.className = "cp-row-wrap";
+        const gear = document.createElement("button");
+        gear.className = "cp-fields-btn";
+        gear.type = "button";
+        gear.textContent = "⚙";
+        gear.title = `Configure ${t.name} fields`;
+        gear.setAttribute("aria-label", gear.title);
+        gear.onclick = () =>
+          window.dispatchEvent(new CustomEvent("reveal-field-type", { detail: { type: t.name } }));
+        wrap.append(b, gear);
+        body.appendChild(wrap);
+      } else body.appendChild(b);
     }
   }
   if (!n) body.innerHTML = `<div class="cp-none">no objects on this screen</div>`;
@@ -85,10 +99,14 @@ window.addEventListener("selection-changed", () => {
   if (!panel.hidden && state.path !== listedPath) closeCamPanel();
 });
 
-// the raw-values toggle changes how listed field values render; rebuild the open
-// panel so it doesn't sit stale behind the settings dialog
+// the raw-values toggle changes how listed field values render, and the field
+// mode toggles the ⚙ affordance; rebuild the open panel so it doesn't sit stale
 window.addEventListener("settings-changed", (e) => {
-  if (e.detail?.key === "rawValues" && !panel.hidden && lastOpen)
+  if (
+    (e.detail?.key === "rawValues" || e.detail?.key === "fieldPrefs") &&
+    !panel.hidden &&
+    lastOpen
+  )
     openCamPanel(lastOpen.x, lastOpen.y, lastOpen.focus);
 });
 

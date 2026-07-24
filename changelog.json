@@ -3,6 +3,12 @@
   {
    "date": "2026-07-24",
    "tag": "new",
+   "title": "Configure an object's fields where you found it",
+   "detail": "With \"Show more object fields\" on, every object in a screen's list gets a ⚙ button. Tap it to jump straight to that type's row in the Fields panel, so you set up a Slig's fields right where you're looking at one instead of hunting for it in the sidebar."
+  },
+  {
+   "date": "2026-07-24",
+   "tag": "new",
    "title": "Press \"m\" to measure",
    "detail": "The ruler now has a keyboard shortcut, \"m\" for \"measure\". Tap it and drag to measure a distance without reaching for the sidebar toggle."
   },

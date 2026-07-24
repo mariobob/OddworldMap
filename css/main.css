@@ -500,6 +500,28 @@ body.fullnames .btnrow button {
 .cp-row.active {
   background: var(--panel2);
 }
+.cp-row-wrap {
+  display: flex;
+  align-items: stretch;
+}
+.cp-row-wrap .cp-row {
+  flex: 1;
+  min-width: 0;
+}
+.cp-fields-btn {
+  flex: none;
+  background: none;
+  border: 0;
+  color: var(--dim);
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+.cp-fields-btn:hover {
+  background: var(--panel2);
+  color: var(--text);
+}
 .cp-none {
   color: var(--dim);
   padding: 6px 10px;
