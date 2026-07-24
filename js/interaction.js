@@ -257,7 +257,7 @@ function worldAtMouse() {
 }
 
 // ---- keyboard: arrows pan, + / - zoom about the canvas center, [ / ] cycle
-// paths, g / c / f flip display toggles, ? lists the shortcuts ---------------
+// paths, letter keys flip the display toggles, ? lists the shortcuts --------
 window.addEventListener("keydown", (e) => {
   if (e.ctrlKey || e.metaKey || e.target.matches?.("input, textarea, select")) return;
   // brackets before the Alt guard: several layouts type them via Option/AltGr
@@ -267,7 +267,7 @@ window.addEventListener("keydown", (e) => {
     return;
   }
   if (e.altKey) return;
-  const show = { g: "grid", c: "coll", f: "fg", a: "conn", r: "route" }[e.key];
+  const show = { g: "grid", c: "coll", f: "fg", a: "conn", r: "route", m: "ruler" }[e.key];
   if (show) {
     toggleShow(show);
     return;

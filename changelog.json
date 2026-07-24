@@ -2,6 +2,12 @@
  "entries": [
   {
    "date": "2026-07-24",
+   "tag": "new",
+   "title": "Press \"m\" to measure",
+   "detail": "The ruler now has a keyboard shortcut, \"m\" for \"measure\". Tap it and drag to measure a distance without reaching for the sidebar toggle."
+  },
+  {
+   "date": "2026-07-24",
    "tag": "improved",
    "title": "Connection arrows shown by default",
    "detail": "The map now opens with connection arrows on, so a screen's doors, wells, portals and transitions show where they lead at a glance. Press \"a\" or untick \"Connection arrows\" to turn them off. If you've chosen to remember your display settings, your own choice still wins."
