@@ -99,11 +99,13 @@ window.addEventListener("selection-changed", () => {
   if (!panel.hidden && state.path !== listedPath) closeCamPanel();
 });
 
-// the raw-values toggle changes how listed field values render, and the field
-// mode toggles the ⚙ affordance; rebuild the open panel so it doesn't sit stale
+// field-display settings change how the listed objects render — raw vs
+// prettified values, the ⚙ affordance (mode), and which fields show (per-type
+// picks); rebuild the open panel so it doesn't sit stale
 window.addEventListener("settings-changed", (e) => {
+  const key = e.detail?.key;
   if (
-    (e.detail?.key === "rawValues" || e.detail?.key === "fieldPrefs") &&
+    (key === "rawValues" || key === "fieldPrefs" || key === "fieldPicks") &&
     !panel.hidden &&
     lastOpen
   )

@@ -185,10 +185,14 @@ searchInput.addEventListener("input", () => {
   searchTimer = setTimeout(() => runSearch(searchInput.value), 160);
 });
 
-// the raw-values toggle changes how result rows render their field values;
-// re-render an active search so open rows update
+// field-display settings change what result rows show or how values render (raw
+// vs prettified, the show-more mode, per-type picks); re-render an active search
 window.addEventListener("settings-changed", (e) => {
-  if (e.detail?.key === "rawValues" && searchInput.value.trim().length >= 2)
+  const key = e.detail?.key;
+  if (
+    (key === "rawValues" || key === "fieldPrefs" || key === "fieldPicks") &&
+    searchInput.value.trim().length >= 2
+  )
     runSearch(searchInput.value);
 });
 

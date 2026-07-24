@@ -12,6 +12,14 @@ const section = $("fieldPanel");
 const body = section.querySelector(".fp-body");
 const prefs = () => fieldPrefsFor(state.data.id);
 
+// persist a per-type pick edit and announce it under a key the panel's own
+// listener ignores, so an open row here keeps its state while the edit still
+// propagates outward.
+function persistPicks() {
+  persistSettings();
+  window.dispatchEvent(new CustomEvent("settings-changed", { detail: { key: "fieldPicks" } }));
+}
+
 // gameplay types (those carrying `fields`) on the current path, both the types
 // and each one's union of field names sorted by name for scanning
 function typesOnPath() {
@@ -53,7 +61,7 @@ function renderType({ name, fields }) {
   // pick edits stay local (no re-render) so an open row keeps its state
   const save = () => {
     prefs().byType[name] = [...shown];
-    persistSettings();
+    persistPicks();
   };
 
   const grid = document.createElement("div");
@@ -91,7 +99,7 @@ function renderType({ name, fields }) {
   resetBtn.textContent = "reset";
   resetBtn.onclick = () => {
     delete prefs().byType[name]; // truly back to defaults, so future default tweaks apply
-    persistSettings();
+    persistPicks();
     const def = shownFor(name, fields);
     shown.clear();
     def.forEach((f) => shown.add(f));
